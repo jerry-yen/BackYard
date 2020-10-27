@@ -15,3 +15,8 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
+user_guide/*
+application/config
+
+#Visual Code
+.vscode
