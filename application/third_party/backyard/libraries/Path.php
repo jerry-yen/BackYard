@@ -11,5 +11,12 @@ namespace backyard\libraries;
 
 class Path
 {
-    
+    /**
+     * 將絕對路徑改為網址的相對路徑
+     */
+    public function relative($absolute)
+    {
+        $rootPath = dirname(APPPATH);
+        return str_replace($rootPath, '', $absolute);
+    }
 }
