@@ -42,18 +42,41 @@ class Backyard
     }
 
     /**
-     * 魔術函式
+     * 魔術函式 - 動態函式呼叫
      * 
      * @param string $method 函式名稱
      * @param array $arguments 參數
      */
     public function __call($method, $arguments)
     {
-        foreach ($this->packages as $package) {
-            if (method_exists($package, $method)) {
-                $package->$method($arguments);
+        foreach ($this->packages as $classes) {
+            foreach ($classes as $classObject) {
+                if (method_exists($classObject, $method)) {
+                    $classObject->$method($arguments);
+                    return;
+                }
             }
         }
+    }
+
+    /**
+     * 魔術函式 - 動態變數值取得
+     * 
+     * @param string $name 變數名稱
+     * 
+     * @return Object
+     */
+    public function __get($name)
+    {
+        foreach ($this->packages as $classes) {
+            foreach ($classes as $className => $classObject) {
+                if (strtolower($name) == strtolower($className)) {
+                    return $classObject;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -63,8 +86,36 @@ class Backyard
      */
     public function loadPackage($packageName)
     {
+        $namespace = '\\backyard\\packages\\' . $packageName;
+
         if (!isset($this->packages[$packageName])) {
-            $this->packages[$packageName] = new $packageName();
+            $this->packages[$packageName] = array();
+        }
+
+        $packagePath = dirname(dirname(__FILE__)) . '/packages/' . $packageName;
+        $classFiles = scandir($packagePath);
+
+        foreach ($classFiles as $file) {
+            // 不處理目錄
+            if (
+                in_array($file, array('.', '..')) ||
+                is_dir($packagePath . '/' . $file)
+            ) {
+                continue;
+            }
+
+            $ext = substr(strrchr($file, '.'), 1);
+            if (in_array($ext, array('php'))) {
+                // 載入套件檔案
+                require_once($packagePath . '/' . $file);
+                $dot = strripos($file, '.');
+                $className = substr($file, 0, ($dot !== false) ? $dot : strlen($file));
+
+                if (!isset($this->packages[$packageName][$className])) {
+                    $classPath = $namespace . '\\' . $className;
+                    $this->packages[$packageName][$className] = new $classPath();
+                }
+            }
         }
     }
 

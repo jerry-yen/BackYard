@@ -10,6 +10,8 @@ require_once(APPPATH . '/third_party/backyard/core/Config.php');
 require_once(APPPATH . '/third_party/backyard/core/Database.php');
 require_once(APPPATH . '/third_party/backyard/libraries/Code.php');
 
+require_once(APPPATH . '/third_party/backyard/packages/frontend/Page.php');
+
 class Master extends CI_Controller
 {
 
@@ -20,9 +22,12 @@ class Master extends CI_Controller
 	public function page()
 	{
 		$backyard = new backyard\core\Backyard('master');
+		$backyard->loadPackage('frontend');
+		$backyard->page->render();
+		//$backyard->render();
 		//$backyard->deleteItem();
 		// $res = $backyard->insertItem();
-		$res = $backyard->getItems();
-		print_r($res);
+		//$res = $backyard->getItems();
+		//print_r($res);
 	}
 }
