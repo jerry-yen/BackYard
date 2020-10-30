@@ -171,9 +171,9 @@ class Backyard
             $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
             unset($validator);
 
-            $database = new Database($this->userType);
-            $res = $database->getItem($this->inputs['code'], array(), $res['fields']);
-            unset($database);
+            $data = new Data($this->userType);
+            $res = $data->getItem($this->inputs['code'], array(), $res['fields']);
+            unset($data);
 
             print_r($res);
         }
@@ -205,9 +205,9 @@ class Backyard
             unset($validator);
 
             // 取得資料
-            $database = new Database($this->userType);
-            $response = $database->getItems($this->inputs['code'], array(), $res['fields']);
-            unset($database);
+            $data = new Data($this->userType);
+            $response = $data->getItems($this->inputs['code'], array(), $res['fields']);
+            unset($data);
 
 
             if ($response['status'] != 'success') {
@@ -258,9 +258,9 @@ class Backyard
             }
 
             // 輸入資料
-            $database = new Database($this->userType);
-            $database->insertItem($this->inputs['code'], $res['fields']);
-            unset($database);
+            $data = new Data($this->userType);
+            $data->insertItem($this->inputs['code'], $res['fields']);
+            unset($data);
         }
     }
 
@@ -295,9 +295,9 @@ class Backyard
             }
 
             // 更新資料
-            $database = new Database($this->userType);
-            $database->updateItem($this->inputs['code'], $this->inputs['id'], $res['fields']);
-            unset($database);
+            $data = new Data($this->userType);
+            $data->updateItem($this->inputs['code'], $this->inputs['id'], $res['fields']);
+            unset($data);
         }
     }
 
@@ -333,9 +333,9 @@ class Backyard
             }
 
             // 刪除資料
-            $database = new Database($this->userType);
-            $database->deleteItem($this->inputs['code'], $this->inputs['id']);
-            unset($database);
+            $data = new Data($this->userType);
+            $data->deleteItem($this->inputs['code'], $this->inputs['id']);
+            unset($data);
         }
     }
 }

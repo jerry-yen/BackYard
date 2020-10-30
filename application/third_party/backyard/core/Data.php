@@ -1,14 +1,14 @@
 <?php
 
 /**
- * 後花園 - 資料庫處理
+ * 後花園 - 資料處理
  * 
  * @author Jerry Yen - yenchiawei@gmail.com
  */
 
 namespace backyard\core;
 
-class Database
+class Data
 {
     /**
      * @var string 使用者類型(Admin/Master)
