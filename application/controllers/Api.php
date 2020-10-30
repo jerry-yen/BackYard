@@ -62,10 +62,6 @@ class Api extends \chriskacerguis\RestServer\RestController
         $this->response(json_encode(array('content' => $htmlContent), JSON_UNESCAPED_UNICODE), 200);
     }
 
-    public function widgets_get()
-    {
-    }
-
     /**
      * 取得頁面資料
      * 
@@ -82,10 +78,6 @@ class Api extends \chriskacerguis\RestServer\RestController
         $backyard->loadPackage('frontend');
         $htmlContent = $backyard->page->render($this->get('code'));
         $this->response(json_encode(array('content' => $htmlContent), JSON_UNESCAPED_UNICODE), 200);
-    }
-
-    public function pages_get()
-    {
     }
 
     public function menu_get()
