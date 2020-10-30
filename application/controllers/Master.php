@@ -9,6 +9,7 @@ require_once(APPPATH . '/third_party/backyard/core/Security.php');
 require_once(APPPATH . '/third_party/backyard/core/Config.php');
 require_once(APPPATH . '/third_party/backyard/core/Database.php');
 require_once(APPPATH . '/third_party/backyard/libraries/Code.php');
+require_once(APPPATH . '/third_party/backyard/libraries/Path.php');
 
 require_once(APPPATH . '/third_party/backyard/packages/frontend/Page.php');
 

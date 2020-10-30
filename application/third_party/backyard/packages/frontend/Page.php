@@ -24,7 +24,9 @@ class Page
      */
     private function refinePathInHtmlContent($content)
     {
-        // "/application/third_party/backyard/packages/frontend/views/"
+        // 待處理：根據 htaccess 環境變數的設定，來決定資源檔取代的路徑
+        // $path = new \backyard\libraries\Path();
+        // echo $path->relative($this->viewPath);
         $content = str_replace('{adminlte}', '/adminlte', $content);
         return $content;
     }
