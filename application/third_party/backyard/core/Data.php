@@ -8,13 +8,8 @@
 
 namespace backyard\core;
 
-class Data
+class Data extends \backyard\Package
 {
-    /**
-     * @var string 使用者類型(Admin/Master)
-     */
-    private $userType = 'admin';
-
     /**
      * @var 資料庫物件
      */
@@ -22,18 +17,18 @@ class Data
 
     /**
      * 建構子
-     * 
-     * @param string $userType 使用者類型(Admin/Master)
-     * @param string $connectionName 連線代碼
      */
-    public function __construct($userType = 'admin', $connectionName = 'default')
+    public function __construct(&$backyard)
     {
-        // 設定使用者類型
-        $this->userType = $userType;
+        parent::__construct($backyard);
+        $this->connection();
+    }
 
+    public function connection($connectionName = 'default')
+    {
         // 從設定檔取得資料庫連線
-        $config = new Config('database');
-        $connectionConfigs = $config->getConfig('database');
+        $this->backyard->config->loadConfigFile('database');
+        $connectionConfigs = $this->backyard->config->getConfig('database');
         $connectionConfig = isset($connectionConfigs[$connectionName]) ?
             $connectionConfigs[$connectionName] :
             $connectionConfigs['default'];
@@ -192,11 +187,6 @@ class Data
      */
     public function getItem($code, $fields = array(), $where = array())
     {
-        if ($this->userType == 'master') {
-            $where['code'] = $code;
-            $code = 'module';
-        }
-
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
          */
@@ -232,11 +222,8 @@ class Data
         // 取得結果
         $result = $this->database->get()->row_array();
 
-        if ($this->userType == 'master') {
-            $data = json_decode($result['metadata'], true);
-            $result = array_merge($result, $data);
-            unset($result['metadata']);
-        }
+        // 根據不同使用者，進行資料格式的轉換
+        $result = $this->backyard->getUser()->convertToData($result);
 
         return array('status' => 'success', 'result' => $result);
     }
@@ -268,25 +255,7 @@ class Data
             $value['updated_at'] = date('Y-m-d H:i:s');
         }
 
-        if ($this->userType == 'master') {
-
-            $module['id'] = $value['id'];
-            $module['created_at'] = $value['created_at'];
-            $module['updated_at'] = $value['updated_at'];
-            $module['code'] = $code;
-            $code = $this->database->dbprefix . 'module';
-
-            unset($value['id']);
-            unset($value['created_at']);
-            unset($value['updated_at']);
-            $module['metadata'] = json_encode($value, JSON_UNESCAPED_UNICODE);
-
-            unset($value);
-
-            // 整理好的值，重新付予給value變數
-            $value = $module;
-            unset($module);
-        }
+        $value = $this->backyard->getUser()->convertToDatabase($code, $value['id'], $value);
 
         // 新增記錄
         $this->database->insert($code, $value);
@@ -315,23 +284,7 @@ class Data
             $value['updated_at'] = date('Y-m-d H:i:s');
         }
 
-        if ($this->userType == 'master') {
-
-            $module['id'] = $id;
-            $module['updated_at'] = $value['updated_at'];
-            $module['code'] = $code;
-            $code = $this->database->dbprefix . 'module';
-
-            unset($value['id']);
-            unset($value['updated_at']);
-            $module['metadata'] = json_encode($value, JSON_UNESCAPED_UNICODE);
-
-            unset($value);
-
-            // 整理好的值，重新付予給value變數
-            $value = $module;
-            unset($module);
-        }
+        $value = $this->backyard->getUser()->convertToDatabase($code, $id, $value);
 
         // 更新記錄
         $this->database->where('id', $id);

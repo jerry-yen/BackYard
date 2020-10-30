@@ -6,14 +6,14 @@
  * @author Jerry Yen - yenchiawei@gmail.com
  */
 
-namespace backyard\core;
+namespace backyard;
 
 class Backyard
 {
     /**
-     * @var string 使用者類型(Admin/Master)
+     * var Object 使用者
      */
-    private $userType = 'admin';
+    private $user = null;
 
     /**
      * @var array POST + GET 輸入值
@@ -28,11 +28,10 @@ class Backyard
     /**
      * 建構子
      */
-    public function __construct($userType = 'admin')
+    public function __construct()
     {
 
-        // 使用者類型
-        $this->userType = $userType;
+        $this->loadCorePackage();
 
         // 過濾IP
         $this->filterIPs();
@@ -83,16 +82,15 @@ class Backyard
      * 載入套件
      * 
      * @param string $packageName 套件名稱
+     * @param string $namespace 命名空間
      */
-    public function loadPackage($packageName)
+    private function loadingPackage($packageName, $namespace)
     {
-        $namespace = '\\backyard\\packages\\' . $packageName;
-
         if (!isset($this->packages[$packageName])) {
             $this->packages[$packageName] = array();
         }
 
-        $packagePath = dirname(dirname(__FILE__)) . '/packages/' . $packageName;
+        $packagePath = dirname(__FILE__) . '/' . $packageName;
         $classFiles = scandir($packagePath);
 
         foreach ($classFiles as $file) {
@@ -113,22 +111,77 @@ class Backyard
 
                 if (!isset($this->packages[$packageName][$className])) {
                     $classPath = $namespace . '\\' . $className;
-                    $this->packages[$packageName][$className] = new $classPath();
+                    $this->packages[$packageName][$className] = new $classPath($this);
                 }
             }
         }
     }
 
+    /**
+     * 載入核心套件
+     * 
+     * @param string $packageName 套件名稱
+     */
+    private function loadCorePackage()
+    {
+        $packageName = 'core';
+        $namespace = '\\backyard\\' . $packageName;
+        $this->loadingPackage($packageName, $namespace);
+    }
+
+    /**
+     * 載入擴充套件
+     * 
+     * @param string $packageName 套件名稱
+     */
+    public function loadPackage($packageName)
+    {
+        $namespace = '\\backyard\\packages\\' . $packageName;
+        $this->loadingPackage($packageName, $namespace);
+    }
+
+    /**
+     * 設定使用者
+     * 
+     * @param Object $user (master:開發者, admin:管理者)
+     */
+    public function setUser($userType = 'admin')
+    {
+        $namespace = '\\backyard\\datahandler';
+        $className = ucfirst($userType);
+        require_once(dirname(__FILE__) . '/datahandler/' . $className . '.php');
+
+        $className = $namespace . '\\' . $className;
+        $this->user = new $className($this);
+    }
+
+    /**
+     * 取得使用者類型
+     * 
+     * @return Object
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 
     /**
      * 取得GET、POST資料
      */
     private function getInputs()
     {
-        $this->inputs = array_merge(
-            get_instance()->input->get(),
-            get_instance()->input->post()
-        );
+        // 專用於 Restful API時，取得 GET 所使用
+        if (method_exists(\CI_Controller::get_instance(), 'get')) {
+            $this->inputs = array_merge(
+                \CI_Controller::get_instance()->get(),
+                get_instance()->input->post()
+            );
+        } else {
+            $this->inputs = array_merge(
+                get_instance()->input->get(),
+                get_instance()->input->post()
+            );
+        }
     }
 
     /**
@@ -136,8 +189,7 @@ class Backyard
      */
     private function filterIPs()
     {
-        $security = new Security();
-        $response = $security->filterIPs();
+        $response = $this->security->filterIPs();
         if ($response['status'] == 'deny') {
 
             // [待處理]之後不能直接Exit，要轉向其他畫面
@@ -156,8 +208,8 @@ class Backyard
         if (!isset($this->inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        $metadataObject = new Metadata($this->userType);
-        $metadata = $metadataObject->getItem($this->inputs['code']);
+
+        $metadata = $this->user->getMetadata($this->inputs['code']);
         if ($metadata['status'] == 'failed') {
             return $metadata;
         } else {
@@ -168,7 +220,7 @@ class Backyard
 
             // 驗證輸入參數
             $validator = new Validator();
-            $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
+            $res = $validator->checkInputs($metadata['metadata'], $this->inputs);
             unset($validator);
 
             $data = new Data($this->userType);

@@ -8,7 +8,7 @@
 
 namespace backyard\core;
 
-class Config
+class Config extends \backyard\Package
 {
     /**
      * @var 設定目錄
@@ -21,13 +21,13 @@ class Config
     private $config = array();
 
     /**
-     * 建構子
+     * 載入設定檔
      * 
-     * @param string $configFile 設定檔名稱(不需副檔名)
+     * @param string $configFileName 設定檔名稱
      */
-    public function __construct($configFile)
+    public function loadConfigFile($configFileName)
     {
-        require_once($this->configRootPath . '/' . $configFile . '.php');
+        require_once($this->configRootPath . '/' . $configFileName . '.php');
         $this->config = $config;
     }
 

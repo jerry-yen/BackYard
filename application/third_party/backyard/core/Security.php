@@ -8,7 +8,7 @@
 
 namespace backyard\core;
 
-class Security
+class Security extends \backyard\Package
 {
 
     /**
@@ -31,13 +31,6 @@ class Security
     }
 
     /**
-     * 建構子
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * IP 過濾器
      * 
      * @param string $ip 由程式指定要過濾的IP (option)
@@ -57,7 +50,7 @@ class Security
         $currentIpLong = ip2long($currentIp);
 
         // 取得設定檔中的IP
-        $config = new Config('iptable');
+        $this->backyard->config->loadConfigFile('iptable');
 
         // 取得的IP設定就算是單一，也要把他當作是個範圍
         // 111.252.82.* => 111.252.82.*-111.252.82.*
@@ -65,8 +58,8 @@ class Security
         // 第一區，* = 0
         // 第二區，* = 255
 
-        $deny = $config->getConfig('ip_deny');
-        $allow = $config->getConfig('ip_allow');
+        $deny = $this->backyard->config->getConfig('ip_deny');
+        $allow = $this->backyard->config->getConfig('ip_allow');
 
         if (count($deny) > 0) {
             // 被禁止的IP

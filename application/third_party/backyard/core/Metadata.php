@@ -8,22 +8,8 @@
 
 namespace backyard\core;
 
-class Metadata
+class Metadata extends \backyard\Package
 {
-    /**
-     * @var string 使用者類型(Admin/Master)
-     */
-    private $userType = 'admin';
-
-    /**
-     * 建構子
-     */
-    public function __construct($userType = 'admin')
-    {
-        // 使用者類型
-        $this->userType = $userType;
-    }
-
     /**
      * 取得單筆後設(meta)資料
      * 
@@ -31,10 +17,12 @@ class Metadata
      */
     public function getItem($code)
     {
+
+        return $this->backyard->getUser()->getMetadata($code);
         if ($this->userType == 'master') {
             // 取得設定檔中的Master設定
-            $config = new Config('master');
-            $master = $config->getConfig('master');
+            $this->backyard->config->loadConfigFile('master');
+            $master = $this->backyard->config->getConfig('master');
 
             if (!isset($master['metadata'][$code])) {
                 return array('status' => 'failed', 'message' => '找不到Master設定');
@@ -42,7 +30,7 @@ class Metadata
 
             return array('status' => 'success', 'metadata' => $master['metadata'][$code]);
         } else {
-            $database = new Database();
+            $database = new Data();
             $response = $database->getItem('module', array(), array('code' => $code));
             $metadata = ($response['status'] == 'success') ? $response['result'] : array();
 
