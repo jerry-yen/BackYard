@@ -1,14 +1,14 @@
 <?php
 
 /**
- * 後花園 - 前端頁面處理
+ * 後花園 - 前端組件處理
  * 
  * @author Jerry Yen - yenchiawei@gmail.com
  */
 
 namespace backyard\packages\frontend;
 
-class Page extends \backyard\Package
+class Widget extends \backyard\Package
 {
     /**
      * @var View路徑
@@ -43,8 +43,11 @@ class Page extends \backyard\Package
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
         // 取得組件後設資料
-        $metadata = $this->backyard->getUser()->getMetadataOfPage($code);
-        
+        $metadata = $this->backyard->getUser()->getMetadataOfWidget($code);
+        print_r($metadata);
+        exit;
+
+        // 取得組件內容
         $content = file_get_contents($this->viewPath . '/full.html');
         return $this->refinePathInHtmlContent($content);
     }

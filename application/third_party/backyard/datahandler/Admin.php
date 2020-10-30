@@ -18,7 +18,7 @@ class Admin extends \backyard\Package
      */
     public function getMetadata($code)
     {
-        $response = $this->backyard->data->getItem('module', array(), array('code' => $code));
+        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'metadata'));
         $metadata = ($response['status'] == 'success') ? $response['result'] : array();
 
         return array('status' => 'success', 'metadata' => json_decode($metadata, true));
@@ -30,6 +30,32 @@ class Admin extends \backyard\Package
     public function getMetadatas()
     {
         return array('status' => 'success', 'metadata' => array());
+    }
+
+    /**
+     * 取得組件後設資料
+     * 
+     * @param strin $code 代碼
+     */
+    public function getMetadataOfWidget($code)
+    {
+        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'widget'));
+        $metadata = ($response['status'] == 'success') ? $response['result'] : array();
+
+        return array('status' => 'success', 'metadata' => json_decode($metadata, true));
+    }
+
+    /**
+     * 取得頁面後設資料
+     * 
+     * @param strin $code 代碼
+     */
+    public function getMetadataOfPage($code)
+    {
+        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'page'));
+        $metadata = ($response['status'] == 'success') ? $response['result'] : array();
+
+        return array('status' => 'success', 'metadata' => json_decode($metadata, true));
     }
 
     /**

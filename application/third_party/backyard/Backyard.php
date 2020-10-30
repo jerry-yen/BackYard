@@ -84,15 +84,14 @@ class Backyard
      * @param string $packageName 套件名稱
      * @param string $namespace 命名空間
      */
-    private function loadingPackage($packageName, $namespace)
+    private function loadingPackage($packageName, $namespace, $packagePath)
     {
         if (!isset($this->packages[$packageName])) {
             $this->packages[$packageName] = array();
         }
 
-        $packagePath = dirname(__FILE__) . '/' . $packageName;
+        $packagePath = $packagePath . '/' . $packageName;
         $classFiles = scandir($packagePath);
-
         foreach ($classFiles as $file) {
             // 不處理目錄
             if (
@@ -108,7 +107,6 @@ class Backyard
                 require_once($packagePath . '/' . $file);
                 $dot = strripos($file, '.');
                 $className = substr($file, 0, ($dot !== false) ? $dot : strlen($file));
-
                 if (!isset($this->packages[$packageName][$className])) {
                     $classPath = $namespace . '\\' . $className;
                     $this->packages[$packageName][$className] = new $classPath($this);
@@ -126,7 +124,8 @@ class Backyard
     {
         $packageName = 'core';
         $namespace = '\\backyard\\' . $packageName;
-        $this->loadingPackage($packageName, $namespace);
+        $packagePath = dirname(__FILE__);
+        $this->loadingPackage($packageName, $namespace, $packagePath);
     }
 
     /**
@@ -137,7 +136,8 @@ class Backyard
     public function loadPackage($packageName)
     {
         $namespace = '\\backyard\\packages\\' . $packageName;
-        $this->loadingPackage($packageName, $namespace);
+        $packagePath = dirname(__FILE__) . '/packages';
+        $this->loadingPackage($packageName, $namespace, $packagePath);
     }
 
     /**
