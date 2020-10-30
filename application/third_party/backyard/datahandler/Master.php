@@ -28,11 +28,12 @@ class Master extends \backyard\Package
 
     /**
      * 取得所有後設資料
-     * 
-     * @param strin $code 代碼
      */
     public function getMetadatas()
     {
+        $this->backyard->config->loadConfigFile('master');
+        $master = $this->backyard->config->getConfig('master');
+        return array('status' => 'success', 'metadata' => $master['metadata']);
     }
 
     /**
@@ -61,7 +62,7 @@ class Master extends \backyard\Package
      * 
      * @return array 資料庫資料
      */
-    public function convertToDatabase(& $table, $id, $value)
+    public function convertToDatabase(&$table, $id, $value)
     {
         $module['id'] = $id;
         $module['created_at'] = $value['created_at'];

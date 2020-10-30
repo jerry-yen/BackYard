@@ -29,6 +29,7 @@ class Admin extends \backyard\Package
      */
     public function getMetadatas()
     {
+        return array('status' => 'success', 'metadata' => array());
     }
 
     /**
@@ -57,7 +58,7 @@ class Admin extends \backyard\Package
      * 
      * @return array 資料庫資料
      */
-    public function convertToDatabase(& $table, $id, $value)
+    public function convertToDatabase(&$table, $id, $value)
     {
         return $value;
     }

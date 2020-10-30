@@ -20,4 +20,12 @@ class Api extends \chriskacerguis\RestServer\RestController
         $metadata = $backyard->metadata->getItem($this->get('code'));
         $this->response(json_encode($metadata, JSON_UNESCAPED_UNICODE), 200);
     }
+
+    public function metadatas_get()
+    {
+        $backyard = new \backyard\Backyard();
+        $backyard->setUser($this->get('user'));
+        $metadata = $backyard->metadata->getItems();
+        $this->response(json_encode($metadata, JSON_UNESCAPED_UNICODE), 200);
+    }
 }
