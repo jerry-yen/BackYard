@@ -36,11 +36,11 @@ class Metadata
             $config = new Config('master');
             $master = $config->getConfig('master');
 
-            if (!isset($master[$code])) {
+            if (!isset($master['metadata'][$code])) {
                 return array('status' => 'failed', 'message' => '找不到Master設定');
             }
 
-            return array('status' => 'success', 'metadata' => $master[$code]);
+            return array('status' => 'success', 'metadata' => $master['metadata'][$code]);
         } else {
             $database = new Database();
             $response = $database->getItem('module', array(), array('code' => $code));
@@ -59,7 +59,7 @@ class Metadata
             // 取得設定檔中的Master設定
             $config = new Config('master');
             $master = $config->getConfig('master');
-            return array('status' => 'success', 'metadata' => $master);
+            return array('status' => 'success', 'metadata' => $master['metadata']);
         } else {
             return array('status' => 'failed', 'metadata' => array());
         }
