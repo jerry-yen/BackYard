@@ -158,7 +158,7 @@
                             var widgets = response.widgets;
                             var content = '';
                             for (var key in widgets) {
-                                content += '<div class="col-' + widgets[key].mobile + ' col-sm-' + widgets[key].mobile + ' col-md-' + widgets[key].pad + ' col-lg-' + widgets[key].desktop + ' col-xl-' + widgets[key].desktop + '">';
+                                content += '<div widget="' + widgets[key].code + '" class="col-' + widgets[key].mobile + ' col-sm-' + widgets[key].mobile + ' col-md-' + widgets[key].pad + ' col-lg-' + widgets[key].desktop + ' col-xl-' + widgets[key].desktop + '">';
                                 content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
                                 content += '</div>';
                             }
