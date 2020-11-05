@@ -95,14 +95,45 @@
                         '/index.php/api/widgethtml/user/' + settings.userType + '/code/' + code,
                         'GET',
                         function (response) {
-                            response = JSON.parse(response);
                             content = response.content;
                         },
                         null,
                         false
                     );
 
-                    return content
+                    return content;
+                }
+            },
+
+            /**
+             * @var 後設資料
+             */
+            metadata: {
+                metadata: function (code) {
+                    var content = '';
+                    $.backyard({ 'userType': settings.userType }).process.api(
+                        '/index.php/api/metadata/user/' + settings.userType + '/code/' + code,
+                        'GET',
+                        function (response) {
+                            content = response;
+                        },
+                        null,
+                        false
+                    );
+                    return content;
+                },
+                widget: function (code) {
+                    var content = '';
+                    $.backyard({ 'userType': settings.userType }).process.api(
+                        '/index.php/api/widget/user/' + settings.userType + '/code/' + code,
+                        'GET',
+                        function (response) {
+                            content = response;
+                        },
+                        null,
+                        false
+                    );
+                    return content;
                 }
             },
 
@@ -139,6 +170,30 @@
                         'async': async,
                         'dataType': 'json',
                         'type': method,
+                        'success': success_feedback,
+                        'error': error_feedback
+                    });
+                },
+
+                /**
+                 * 載入元件的腳本
+                 * 
+                 * @param {*} url 腳本路徑
+                 * @param {*} success_feedback 自訂呼叫成功後的處理方法
+                 * @param {*} error_feedback 自訂呼叫失敗後的處理方法
+                 * @param {*} async 是否以非同步方式載入腳本
+                 */
+                component: function (url, success_feedback, error_feedback, async) {
+
+                    success_feedback = (success_feedback == 'undefined' || success_feedback == null) ? function () { } : success_feedback;
+                    error_feedback = (error_feedback == 'undefined' || error_feedback == null) ? function (thrownError) { console.log(thrownError); } : error_feedback;
+                    async = (async == 'undefined' || async == null) ? false : async;
+
+                    $.ajax({
+                        'url': url,
+                        'async': async,
+                        'dataType': 'script',
+                        'type': 'GET',
                         'success': success_feedback,
                         'error': error_feedback
                     });

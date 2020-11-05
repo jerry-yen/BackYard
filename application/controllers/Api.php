@@ -21,10 +21,6 @@ class Api extends \chriskacerguis\RestServer\RestController
         $this->backyard->setUser($this->get('user'));
     }
 
-    public function index()
-    {
-    }
-
     /**
      * 取得後設資料
      * 
@@ -36,7 +32,7 @@ class Api extends \chriskacerguis\RestServer\RestController
     public function metadata_get()
     {
         $metadata = $this->backyard->metadata->getItem($this->get('code'));
-        $this->response(json_encode($metadata, JSON_UNESCAPED_UNICODE), 200);
+        $this->response($metadata, 200);
     }
 
     /**
@@ -79,7 +75,7 @@ class Api extends \chriskacerguis\RestServer\RestController
     {
         $this->backyard->loadPackage('frontend');
         $htmlContent = $this->backyard->widget->render($this->get('code'));
-        $this->response(json_encode(array('content' => $htmlContent), JSON_UNESCAPED_UNICODE), 200);
+        $this->response(array('content' => $htmlContent), 200);
     }
 
     /**
@@ -124,6 +120,18 @@ class Api extends \chriskacerguis\RestServer\RestController
         $this->backyard->loadPackage('frontend');
         $metadata = $this->backyard->page->getMetadata($this->get('code'));
         $this->response($metadata['metadata'], 200);
+    }
+
+    /**
+     * 取得元件
+     * @param string $code 元件名稱
+     */
+    public function component_get(){
+        $this->backyard->loadPackage('frontend');
+        $metadata = $this->backyard->component->getScript($this->get('code'));
+
+        header('Content-Type: application/javascript');
+        echo $metadata;
     }
 
     public function item_get()

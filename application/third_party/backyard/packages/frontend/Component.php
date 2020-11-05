@@ -8,7 +8,7 @@
 
 namespace backyard\packages\frontend;
 
-class Widget extends \backyard\Package
+class Component extends \backyard\Package
 {
     /**
      * @var View路徑
@@ -32,44 +32,23 @@ class Widget extends \backyard\Package
     }
 
     /**
-     * 取得組件後設資料
-     * 
-     * @param string $code 代碼
-     */
-    public function getMetadata($code)
-    {
-        $widget = $this->backyard->getUser()->getMetadataOfWidget($code);
-        if ($widget['status'] != 'success') {
-            return '頁面載入錯誤';
-        }
-
-        return $widget;
-    }
-
-    /**
-     * 取得組件HTML語法
+     * 取得元件HTML語法
      * 
      * @param string $code 模組代碼
      */
-    public function render($code)
+    public function getScript($code)
     {
         // 取得View基本路徑
         $this->backyard->config->loadConfigFile('frontend');
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
-        // 取得組件後設資料
-        $metadata = $this->getMetadata($code);
-
-        // 組件名稱
-        $widget = $metadata['metadata']['widget'];
-
         // 取得組件內容
-        if (file_exists($this->viewPath . 'widgets/' . $widget . '/template.php')) {
-            $content = file_get_contents($this->viewPath . 'widgets/' . $widget . '/template.php');
+        if (file_exists($this->viewPath . 'components/' . $code . '/component.js')) {
+            $content = file_get_contents($this->viewPath . 'components/' . $code . '/component.js');
             $content = $this->refinePathInHtmlContent($content);
             return str_replace('{code}', $code, $content);
         } else {
-            return '找不到' . $widget . '組件介面(' . $this->viewPath . 'widgets/' . $widget . '/template.php)';
+            return '找不到' . $code . '元件腳本(' . $this->viewPath . 'components/' . $code . '/component.js)';
         }
     }
 }
