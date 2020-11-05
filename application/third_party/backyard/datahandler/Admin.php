@@ -59,6 +59,18 @@ class Admin extends \backyard\Package
     }
 
     /**
+     * 取得版面後設資料
+     * 
+     * @param strin $code 代碼
+     */
+    public function getMetadataOfTemplate()
+    {
+        $this->backyard->config->loadConfigFile('master');
+        $master = $this->backyard->config->getConfig('master');
+        return array('status' => 'success', 'metadata' => $master['template']);
+    }
+
+    /**
      * 將資料庫資料轉換成一般欄位的資料
      * 
      * @param array $result 資料庫資料

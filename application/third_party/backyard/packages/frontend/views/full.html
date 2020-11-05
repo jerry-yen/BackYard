@@ -153,8 +153,8 @@
 
     <!-- 左邊側欄 -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <div class="backyard-logo"></div>
-      <div class="backyard-menu"></div>
+      <div class="logo"></div>
+      <div class="leftside"></div>
     </aside>
 
     <!-- 主要內容區 -->
@@ -164,7 +164,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Page Name</h1>
+              <h1 class="m-0 text-dark">{pageTitle}</h1>
             </div><!-- /.col -->
             <div class="backyard-breadcrumb"></div>
           </div><!-- /.row -->
@@ -177,6 +177,7 @@
         <div class="container-fluid">
           <!-- Small boxes (Stat box) -->
           <div class="row">
+
             <div class="col-lg-3 col-6">
               <div class="backyard-sticky"></div>
             </div>
@@ -229,13 +230,26 @@
   <!-- Bbootstrap 4 日期時間元件 -->
   <script src="{adminlte}/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
   <!-- overlayScrollbars -->
-  <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <script src="{adminlte}/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
   <!-- AdminLTE App -->
   <script src="{adminlte}/dist/js/adminlte.js"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-  <script src="{adminlte}/dist/js/pages/dashboard.js"></script>
+  <!--
+  <script src="{adminlte}/dist/js/pages/dashboard.js"></script>-->
   <!-- AdminLTE for demo purposes -->
   <script src="{adminlte}/dist/js/demo.js"></script>
+
+  <!-- Backyard -->
+  <script src="{adminlte}/backyard/backyard.js"></script>
+  <script>
+    $('document').ready(function () {
+      $.backyard({ 'userType': 'master' }).template.logo();
+      $.backyard({ 'userType': 'master' }).template.content('login');
+      $.backyard({ 'userType': 'master' }).template.header();
+      $.backyard({ 'userType': 'master' }).template.footer();
+      $.backyard({ 'userType': 'master' }).template.leftSide();
+    });
+  </script>
 </body>
 
 </html>

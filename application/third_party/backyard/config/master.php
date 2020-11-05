@@ -45,6 +45,24 @@ $config['master']['metadata']['email'] = array(
  *               組件
  *************************************/
 
+ /**
+ * 選單組件
+ */
+$config['master']['widget']['menu'] = array(
+    'name'              => '選單',
+    'code'              => 'menu',
+    'widget'            => 'menu',
+    'metadata'          => '',
+    'permission'        => array(
+        'ADD', 'MODIFY'
+    ),
+    'events' => array(
+        'submit'        => '',
+        'cancel'        => '',
+        'dataSource'    => '/api/menu'
+    )
+);
+
 
 /**
  * 登入組件
@@ -70,7 +88,7 @@ $config['master']['widget']['login'] = array(
 $config['master']['widget']['email'] = array(
     'name'              => '登入設定',
     'code'              => 'login',
-    'widget'            => 'table',
+    'widget'            => 'data',
     'metadata'          => 'email',
     'classLevelCount'   => 0,
     'permission'        => array(
@@ -83,6 +101,72 @@ $config['master']['widget']['email'] = array(
         'batchDelete'   => '',
         'dataSource'    => '',
 
+    )
+);
+
+/**
+ * 頁尾組件
+ */
+$config['master']['widget']['logo'] = array(
+    'name'              => '頁尾',
+    'code'              => 'logo',
+    'widget'            => 'logo',
+    'metadata'          => '',
+    'classLevelCount'   => 0,
+    'permission'        => array(),
+    'events' => array()
+);
+
+/**
+ * 頁尾組件
+ */
+$config['master']['widget']['footer'] = array(
+    'name'              => '頁尾',
+    'code'              => 'footer',
+    'widget'            => 'footer',
+    'metadata'          => '',
+    'classLevelCount'   => 0,
+    'permission'        => array(),
+    'events' => array()
+);
+
+/*************************************
+ *               版面
+ *************************************/
+
+ // 左側版面
+$config['master']['template']['logo'] = array(
+    'name'      => 'LOGO',
+    'code'      => 'logo',
+    'widgets'   => array(
+        array('code' => 'logo', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+// 左側版面
+$config['master']['template']['leftside'] = array(
+    'name'      => '選單',
+    'code'      => 'menu',
+    'widgets'   => array(
+        array('code' => 'menu', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+// 頁頭版面
+$config['master']['template']['header'] = array(
+    'name'      => '選單',
+    'code'      => 'menu',
+    'widgets'   => array(
+        array('code' => 'notify', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+// 頁尾版面
+$config['master']['template']['footer'] = array(
+    'name'      => '頁尾',
+    'code'      => 'footer',
+    'widgets'   => array(
+        array('code' => 'footer', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
     )
 );
 

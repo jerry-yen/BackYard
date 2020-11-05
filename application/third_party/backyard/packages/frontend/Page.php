@@ -32,6 +32,21 @@ class Page extends \backyard\Package
     }
 
     /**
+     * 取得頁面後設資料
+     * 
+     * @param string $code 代碼
+     */
+    public function getMetadata($code)
+    {
+        $page = $this->backyard->getUser()->getMetadataOfPage($code);
+        if ($page['status'] != 'success') {
+            return '頁面載入錯誤';
+        }
+
+        return $page;
+    }
+
+    /**
      * 取得頁面HTML語法
      * 
      * @param string $code 模組代碼
@@ -42,10 +57,13 @@ class Page extends \backyard\Package
         $this->backyard->config->loadConfigFile('frontend');
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
-        // 取得組件後設資料
-        $metadata = $this->backyard->getUser()->getMetadataOfPage($code);
-        
+        // 取得頁面後設資料
+        $page = $this->getMetadata($code);
+
         $content = file_get_contents($this->viewPath . '/full.html');
-        return $this->refinePathInHtmlContent($content);
+        $content = $this->refinePathInHtmlContent($content);
+        $content = str_replace('{pageTitle}', $page['metadata']['name'], $content);
+
+        return $content;
     }
 }

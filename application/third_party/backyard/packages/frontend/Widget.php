@@ -32,7 +32,22 @@ class Widget extends \backyard\Package
     }
 
     /**
-     * 取得頁面HTML語法
+     * 取得組件後設資料
+     * 
+     * @param string $code 代碼
+     */
+    public function getMetadata($code)
+    {
+        $widget = $this->backyard->getUser()->getMetadataOfWidget($code);
+        if ($widget['status'] != 'success') {
+            return '頁面載入錯誤';
+        }
+
+        return $widget;
+    }
+
+    /**
+     * 取得組件HTML語法
      * 
      * @param string $code 模組代碼
      */
@@ -43,12 +58,17 @@ class Widget extends \backyard\Package
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
         // 取得組件後設資料
-        $metadata = $this->backyard->getUser()->getMetadataOfWidget($code);
-        print_r($metadata);
-        exit;
+        $metadata = $this->getMetadata($code);
+
+        // 組件名稱
+        $widget = $metadata['metadata']['widget'];
 
         // 取得組件內容
-        $content = file_get_contents($this->viewPath . '/full.html');
-        return $this->refinePathInHtmlContent($content);
+        if (file_exists($this->viewPath . 'widgets/' . $widget . '/template.php')) {
+            $content = file_get_contents($this->viewPath . 'widgets/' . $widget . '/template.php');
+            return $this->refinePathInHtmlContent($content);
+        } else {
+            return '找不到' . $widget . '組件介面(' . $this->viewPath . 'widgets/' . $widget . '/template.php' . ')';
+        }
     }
 }
