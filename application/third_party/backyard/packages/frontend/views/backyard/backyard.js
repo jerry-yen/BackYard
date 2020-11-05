@@ -28,90 +28,45 @@
                  * 載入LOGO版面組件
                  */
                 logo: function () {
-                    $.backyard().process.api(
-                        '/index.php/api/template/user/' + settings.userType + '/code/logo',
-                        'GET',
-                        function (response) {
-                            var widgets = response.widgets;
-                            var content = '';
-                            for (var key in widgets) {
-                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
-                            }
-                            $(settings.template.logo).html(content);
-                        }
-                    );
+                    var templateName = 'logo';
+                    var templateMetadataApiPath = '/index.php/api/template/user/' + settings.userType + '/code/' + templateName;
+                    $.backyard({ 'userType': settings.userType }).process.template(templateMetadataApiPath, templateName);
                 },
 
                 /**
                  * 載入左側版面組件
                  */
                 leftSide: function () {
-                    $.backyard().process.api(
-                        '/index.php/api/template/user/' + settings.userType + '/code/leftside',
-                        'GET',
-                        function (response) {
-                            var widgets = response.widgets;
-                            var content = '';
-                            for (var key in widgets) {
-                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
-                            }
-                            $(settings.template.leftside).html(content);
-                        }
-                    );
+                    var templateName = 'leftside';
+                    var templateMetadataApiPath = '/index.php/api/template/user/' + settings.userType + '/code/' + templateName;
+                    $.backyard({ 'userType': settings.userType }).process.template(templateMetadataApiPath, templateName);
                 },
 
                 /**
                  * 載入右側版面組件
                  */
                 rightSide: function () {
-                    $.backyard().process.api(
-                        '/index.php/api/template/user/' + settings.userType + '/code/rightside',
-                        'GET',
-                        function (response) {
-                            var widgets = response.widgets;
-                            var content = '';
-                            for (var key in widgets) {
-                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
-                            }
-                            $(settings.template.rightside).html(content);
-                        }
-                    );
+                    var templateName = 'rightside';
+                    var templateMetadataApiPath = '/index.php/api/template/user/' + settings.userType + '/code/' + templateName;
+                    $.backyard({ 'userType': settings.userType }).process.template(templateMetadataApiPath, templateName);
                 },
 
                 /**
                  * 載入頁頭版面的組件
                  */
                 header: function () {
-                    $.backyard().process.api(
-                        '/index.php/api/template/user/' + settings.userType + '/code/header',
-                        'GET',
-                        function (response) {
-                            var widgets = response.widgets;
-                            var content = '';
-                            for (var key in widgets) {
-                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
-                            }
-                            $(settings.template.header).html(content);
-                        }
-                    );
+                    var templateName = 'header';
+                    var templateMetadataApiPath = '/index.php/api/template/user/' + settings.userType + '/code/' + templateName;
+                    $.backyard({ 'userType': settings.userType }).process.template(templateMetadataApiPath, templateName);
                 },
 
                 /**
                  * 載入頁尾的組件
                  */
                 footer: function () {
-                    $.backyard().process.api(
-                        '/index.php/api/template/user/' + settings.userType + '/code/footer',
-                        'GET',
-                        function (response) {
-                            var widgets = response.widgets;
-                            var content = '';
-                            for (var key in widgets) {
-                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
-                            }
-                            $(settings.template.footer).html(content);
-                        }
-                    );
+                    var templateName = 'footer';
+                    var templateMetadataApiPath = '/index.php/api/template/user/' + settings.userType + '/code/' + templateName;
+                    $.backyard({ 'userType': settings.userType }).process.template(templateMetadataApiPath, templateName);
                 },
 
                 /**
@@ -119,41 +74,12 @@
                  * @param {*} code 頁面代碼
                  */
                 content: function (code) {
-                    $.backyard().process.api(
-                        '/index.php/api/content/user/' + settings.userType + '/code/' + code,
-                        'GET',
-                        function (response) {
-                            var widgets = response.widgets;
-                            var content = '';
-                            for (var key in widgets) {
-                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
-                            }
-                            $(settings.template.content).html(content);
-                        }
-                    );
+                    var templateName = 'content';
+                    var templateMetadataApiPath = '/index.php/api/content/user/' + settings.userType + '/code/' + code;
+                    $.backyard({ 'userType': settings.userType }).process.template(templateMetadataApiPath, templateName);
                 }
             },
 
-            metadata: {
-                /**
-                 * 取得組件後設資料
-                 * @param {*} code 代碼
-                 */
-                widget: function (code) {
-                    var content = '';
-                    $.backyard({ 'userType': settings.userType }).process.api(
-                        '/index.php/api/widget/user/' + settings.userType + '/code/' + code,
-                        'GET',
-                        function (response) {
-                            content = response.content;
-                        },
-                        null,
-                        false
-                    );
-
-                    return content
-                }
-            },
             /**
              * @var 內容物件
              */
@@ -216,6 +142,29 @@
                         'success': success_feedback,
                         'error': error_feedback
                     });
+                },
+
+                /**
+                 * 載入版面中的組件
+                 * 
+                 * @param {*} templateMetadataApiPath 版面後設資料的API呼叫路徑
+                 * @param {*} templateName 版面名稱
+                 */
+                template: function (templateMetadataApiPath, templateName) {
+                    $.backyard().process.api(
+                        templateMetadataApiPath,
+                        'GET',
+                        function (response) {
+                            var widgets = response.widgets;
+                            var content = '';
+                            for (var key in widgets) {
+                                content += '<div class="col-' + widgets[key].mobile + ' col-sm-' + widgets[key].mobile + ' col-md-' + widgets[key].pad + ' col-lg-' + widgets[key].desktop + ' col-xl-' + widgets[key].desktop + '">';
+                                content += $.backyard({ 'userType': settings.userType }).html.widget(widgets[key].code);
+                                content += '</div>';
+                            }
+                            $(settings.template[templateName]).html(content);
+                        }
+                    );
                 }
             }
 
