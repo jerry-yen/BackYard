@@ -31,6 +31,7 @@
                     $('h3.card-title', settings.instance).html(response.metadata.name);
                     metadata_code = response.metadata.metadata;
 
+
                     // 取得資料集欄位資訊
                     var response = $.backyard({ 'userType': settings.userType }).metadata.metadata(settings.code);
                     if (response.status != 'success') {
@@ -40,27 +41,21 @@
 
                     // 呈現欄位元件
                     for (var key in fields) {
-                        // 載入元件類別檔
-                        $.backyard({ 'userType': settings.userType }).process.component(
-                            '/index.php/api/component/user/' + settings.userType + '/code/' + fields[key].component,
-                            function () {
-                                var componentName = fields[key].component + '_component';
-                                var component = new $[componentName]({
-                                    'id': fields[key].frontendVariable,
-                                    'name': fields[key].frontendVariable,
-                                    'tip': fields[key].fieldTip,
-                                    'label': fields[key].name
-                                });
-                                component.initial();
+                        var componentName = fields[key].component + '_component';
+                        var component = new $[componentName]({
+                            'id': fields[key].frontendVariable,
+                            'name': fields[key].frontendVariable,
+                            'tip': fields[key].fieldTip,
+                            'label': fields[key].name
+                        });
+                        component.initial();
 
-                                var fieldContainer = $('<div class="form-group"></div>');
-                                fieldContainer.append(component.label());
-                                fieldContainer.append(component.tip());
-                                fieldContainer.append(component.element());
+                        var fieldContainer = $('<div class="form-group"></div>');
+                        fieldContainer.append(component.label());
+                        fieldContainer.append(component.tip());
+                        fieldContainer.append(component.element());
 
-                                $('div.card-body', settings.instance).append(fieldContainer);
-                            }
-                        );
+                        $('div.card-body', settings.instance).append(fieldContainer);
                     }
 
                 }

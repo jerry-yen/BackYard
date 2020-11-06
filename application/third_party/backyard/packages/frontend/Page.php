@@ -47,6 +47,84 @@ class Page extends \backyard\Package
     }
 
     /**
+     * 取得整個頁面所需要的Javascript
+     * 
+     * @param string $code 頁面代碼
+     * 
+     * @return string
+     */
+    public function getScript($code)
+    {
+
+        $widgetScripts = array();
+        $componentScripts = array();
+
+        // 取得 View 路徑
+        $this->backyard->config->loadConfigFile('frontend');
+        $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
+
+        // 取得頁面後設資料
+        $pageMetadata = $this->getMetadata($code);
+        foreach ($pageMetadata['metadata']['widgets'] as $widget) {
+
+            // 取得組件後設資料
+            $widgetMetadata = $this->backyard->widget->getMetadata($widget['code']);
+            $widgetName = $widgetMetadata['metadata']['widget'];
+            if (isset($widgetScripts[$widgetName])) {
+                continue;
+            }
+
+            // 取得組件Script內容
+            $scriptPath = $this->viewPath . '/widgets/' . $widgetName . '/script.js';
+            if (!file_exists($scriptPath)) {
+                continue;
+            }
+
+            $widgetScript = file_get_contents($scriptPath) . "\r\n";
+            $widgetScript .= $this->readLibraries($this->viewPath . '/widgets/' . $widgetName . '/libraries.json');
+            $widgetScripts[$widgetName] = $widgetScript;
+
+            // 取得元件後設資料
+            $metadataCode = $widgetMetadata['metadata']['metadata'];
+            $fieldMetadata = $this->backyard->metadata->getItem($metadataCode);
+            foreach ($fieldMetadata['metadata']['fields'] as $field) {
+                // 取得元件Script內容
+                $scriptPath = $this->viewPath . '/components/' . $field['component'] . '/component.js';
+                if (!file_exists($scriptPath)) {
+                    continue;
+                }
+
+                $componentScript = file_get_contents($scriptPath) . "\r\n";
+                $componentScript .= $this->readLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
+                $componentScripts[$field['component']] = $componentScript;
+            }
+        }
+
+        return implode("\r\n", $widgetScripts) . "\r\n" . implode("\r\n", $componentScripts);
+    }
+
+    /**
+     * 載入引用的函式/套件
+     * 
+     * @param string $libraryJSONFile 函式庫路徑
+     */
+    private function readLibraries($libraryJSONFile)
+    {
+        $script = '';
+        if (file_exists($libraryJSONFile)) {
+            $libraries = json_decode(file_get_contents($libraryJSONFile), true);
+
+            foreach ($libraries as $libraryName) {
+                $libraryPath = $this->viewPath . '/libraries/' . $libraryName . '/' . $libraryName . '.js';
+                if (file_exists($libraryPath)) {
+                    $script .= file_get_contents($libraryPath) . "\r\n";
+                }
+            }
+        }
+        return $script;
+    }
+
+    /**
      * 取得頁面HTML語法
      * 
      * @param string $code 模組代碼

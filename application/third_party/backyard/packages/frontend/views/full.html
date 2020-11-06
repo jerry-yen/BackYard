@@ -243,11 +243,13 @@
   <script src="{adminlte}/backyard/backyard.js"></script>
   <script>
     $('document').ready(function () {
-      $.backyard({ 'userType': 'master' }).template.logo();
-      $.backyard({ 'userType': 'master' }).template.content('login');
-      $.backyard({ 'userType': 'master' }).template.header();
-      $.backyard({ 'userType': 'master' }).template.footer();
-      $.backyard({ 'userType': 'master' }).template.leftSide();
+      var backyard = $.backyard({ 'userType': 'master' });
+      backyard.process.script('login');
+      backyard.template.logo();
+      backyard.template.content('login');
+      backyard.template.header();
+      backyard.template.footer();
+      backyard.template.leftSide();
     });
   </script>
 </body>

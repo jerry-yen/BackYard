@@ -160,7 +160,6 @@
                  * @param {*} async 是否以非同步方式呼叫API
                  */
                 api: function (url, method, success_feedback, error_feedback, async) {
-
                     method = (method == 'undefined' || method == null) ? 'GET' : method;
                     success_feedback = (success_feedback == 'undefined' || success_feedback == null) ? function () { } : success_feedback;
                     error_feedback = (error_feedback == 'undefined' || error_feedback == null) ? function (thrownError) { console.log(thrownError); } : error_feedback;
@@ -184,13 +183,35 @@
                  * @param {*} async 是否以非同步方式載入腳本
                  */
                 component: function (url, success_feedback, error_feedback, async) {
-
                     success_feedback = (success_feedback == 'undefined' || success_feedback == null) ? function () { } : success_feedback;
                     error_feedback = (error_feedback == 'undefined' || error_feedback == null) ? function (thrownError) { console.log(thrownError); } : error_feedback;
                     async = (async == 'undefined' || async == null) ? false : async;
 
                     $.ajax({
                         'url': url,
+                        'async': async,
+                        'dataType': 'script',
+                        'type': 'GET',
+                        'success': success_feedback,
+                        'error': error_feedback
+                    });
+                },
+
+                /**
+                 * 載入所有元件所需的腳本
+                 * 
+                 * @param {*} code 資料集代碼
+                 * @param {*} success_feedback 自訂呼叫成功後的處理方法
+                 * @param {*} error_feedback 自訂呼叫失敗後的處理方法
+                 * @param {*} async 是否以非同步方式載入腳本
+                 */
+                script: function (code, success_feedback, error_feedback, async) {
+                    success_feedback = (success_feedback == 'undefined' || success_feedback == null) ? function () { } : success_feedback;
+                    error_feedback = (error_feedback == 'undefined' || error_feedback == null) ? function (thrownError) { console.log(thrownError); } : error_feedback;
+                    async = (async == 'undefined' || async == null) ? false : async;
+
+                    $.ajax({
+                        'url': '/index.php/api/script/user/' + settings.userType + '/code/' + code,
                         'async': async,
                         'dataType': 'script',
                         'type': 'GET',

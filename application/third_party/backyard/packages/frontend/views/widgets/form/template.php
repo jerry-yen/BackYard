@@ -16,7 +16,6 @@
         </div>
     </form>
 </div>
-<script src="{adminlte}/widgets/form/script.js"></script>
 <link rel="stylesheet" href="{adminlte}/widgets/form/style.css">
 <script>
     $('document').ready(function() {

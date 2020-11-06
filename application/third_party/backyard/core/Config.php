@@ -28,7 +28,9 @@ class Config extends \backyard\Package
     public function loadConfigFile($configFileName)
     {
         require_once($this->configRootPath . '/' . $configFileName . '.php');
-        $this->config = $config;
+        if (isset($config)) {
+            $this->config = $config;
+        }
     }
 
     /**

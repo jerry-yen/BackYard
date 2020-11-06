@@ -123,6 +123,17 @@ class Api extends \chriskacerguis\RestServer\RestController
     }
 
     /**
+     * 取得整個頁面所需要的Javascript套件
+     * @param string $code 元件名稱
+     */
+    public function script_get(){
+        $this->backyard->loadPackage('frontend');
+        $script = $this->backyard->page->getScript($this->get('code'));
+        header('Content-Type: application/javascript');
+        echo $script;
+    }
+
+    /**
      * 取得元件
      * @param string $code 元件名稱
      */
