@@ -16,7 +16,6 @@
         </div>
     </form>
 </div>
-<link rel="stylesheet" href="{adminlte}/widgets/form/style.css">
 <script>
     $('document').ready(function() {
         $('div[widget="{code}"]').backyard_form({

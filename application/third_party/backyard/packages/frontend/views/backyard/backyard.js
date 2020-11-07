@@ -221,6 +221,38 @@
                 },
 
                 /**
+                 * 載入所有元件所需的樣式檔
+                 * 
+                 * @param {*} code 資料集代碼
+                 * @param {*} success_feedback 自訂呼叫成功後的處理方法
+                 * @param {*} error_feedback 自訂呼叫失敗後的處理方法
+                 * @param {*} async 是否以非同步方式載入腳本
+                 */
+                css: function (code, success_feedback, error_feedback, async) {
+                    success_feedback = (success_feedback == 'undefined' || success_feedback == null) ? function () { } : success_feedback;
+                    error_feedback = (error_feedback == 'undefined' || error_feedback == null) ? function (thrownError) { console.log(thrownError); } : error_feedback;
+                    async = (async == 'undefined' || async == null) ? false : async;
+
+                    var fileref = document.createElement("link");
+                    fileref.setAttribute("rel", "stylesheet");
+                    fileref.setAttribute("type", "text/css");
+                    fileref.setAttribute("href", '/index.php/api/css/user/' + settings.userType + '/code/' + code);
+                    if (typeof fileref != "undefined") {
+                        document.getElementsByTagName("head")[0].appendChild(fileref);
+                    }
+                    /*
+                                        $.ajax({
+                                            'url': '/index.php/api/css/user/' + settings.userType + '/code/' + code,
+                                            'async': async,
+                                            'dataType': 'script',
+                                            'type': 'GET',
+                                            'success': success_feedback,
+                                            'error': error_feedback
+                                        });
+                                        */
+                },
+
+                /**
                  * 載入版面中的組件
                  * 
                  * @param {*} templateMetadataApiPath 版面後設資料的API呼叫路徑

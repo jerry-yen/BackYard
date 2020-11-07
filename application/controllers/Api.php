@@ -126,7 +126,8 @@ class Api extends \chriskacerguis\RestServer\RestController
      * 取得整個頁面所需要的Javascript套件
      * @param string $code 元件名稱
      */
-    public function script_get(){
+    public function script_get()
+    {
         $this->backyard->loadPackage('frontend');
         $script = $this->backyard->page->getScript($this->get('code'));
         header('Content-Type: application/javascript');
@@ -134,10 +135,23 @@ class Api extends \chriskacerguis\RestServer\RestController
     }
 
     /**
+     * 取得整個頁面所需要的Javascript套件
+     * @param string $code 元件名稱
+     */
+    public function css_get()
+    {
+        $this->backyard->loadPackage('frontend');
+        $script = $this->backyard->page->getCSS($this->get('code'));
+        header("Content-type: text/css");
+        echo $script;
+    }
+
+    /**
      * 取得元件
      * @param string $code 元件名稱
      */
-    public function component_get(){
+    public function component_get()
+    {
         $this->backyard->loadPackage('frontend');
         $metadata = $this->backyard->component->getScript($this->get('code'));
 
