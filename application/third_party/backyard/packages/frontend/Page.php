@@ -153,12 +153,11 @@ class Page extends \backyard\Package
             }
 
             // 取得元件Style內容
+            $widgetStyle = '';
             $stylePath = $this->viewPath . '/widgets/' . $widgetName . '/style.css';
-            if (!file_exists($stylePath)) {
-                continue;
+            if (file_exists($stylePath)) {
+                $widgetStyle = file_get_contents($stylePath) . "\r\n";
             }
-
-            $widgetStyle = file_get_contents($stylePath) . "\r\n";
             $widgetStyle .= $this->readCSSLibraries($this->viewPath . '/widgets/' . $widgetName . '/libraries.json');
             $widgetStyles[$widgetName] = $widgetStyle;
 
@@ -167,12 +166,11 @@ class Page extends \backyard\Package
             $fieldMetadata = $this->backyard->metadata->getItem($metadataCode);
             foreach ($fieldMetadata['metadata']['fields'] as $field) {
                 // 取得元件Style內容
+                $componentStyle = '';
                 $stylePath = $this->viewPath . '/components/' . $field['component'] . '/component.css';
-                if (!file_exists($stylePath)) {
-                    continue;
+                if (file_exists($stylePath)) {
+                    $componentStyle = file_get_contents($stylePath) . "\r\n";
                 }
-
-                $componentStyle = file_get_contents($stylePath) . "\r\n";
                 $componentStyle .= $this->readCSSLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
                 $componentStyles[$field['component']] = $componentStyle;
             }

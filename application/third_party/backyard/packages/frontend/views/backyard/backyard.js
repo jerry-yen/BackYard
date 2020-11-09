@@ -240,16 +240,6 @@
                     if (typeof fileref != "undefined") {
                         document.getElementsByTagName("head")[0].appendChild(fileref);
                     }
-                    /*
-                                        $.ajax({
-                                            'url': '/index.php/api/css/user/' + settings.userType + '/code/' + code,
-                                            'async': async,
-                                            'dataType': 'script',
-                                            'type': 'GET',
-                                            'success': success_feedback,
-                                            'error': error_feedback
-                                        });
-                                        */
                 },
 
                 /**

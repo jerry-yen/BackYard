@@ -41,11 +41,13 @@
 
                     // 呈現欄位元件
                     for (var key in fields) {
+                        console.log(fields[key]);
                         var componentName = fields[key].component + '_component';
                         var component = new $[componentName]({
                             'id': fields[key].frontendVariable,
                             'name': fields[key].frontendVariable,
                             'tip': fields[key].fieldTip,
+                            'source': fields[key].source,
                             'label': fields[key].name
                         });
                         component.initial();
@@ -53,7 +55,9 @@
                         var fieldContainer = $('<div class="form-group"></div>');
                         fieldContainer.append(component.label());
                         fieldContainer.append(component.tip());
+                        fieldContainer.append('<br />');
                         fieldContainer.append(component.element());
+                        component.elementConvertToComponent();
 
                         $('div.card-body', settings.instance).append(fieldContainer);
                     }

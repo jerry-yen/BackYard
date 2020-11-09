@@ -13,7 +13,8 @@
             'value': '',
             'class': 'form-control',
             'label': '',
-            'component': $('<input type="checkbox">')
+            'source':'',
+            'component': $('<input type="checkbox" value="Y">')
         }, _settings);
 
         // 自定義函式
@@ -21,9 +22,13 @@
             initial: function () {
                 settings.component
                     .attr('id', settings.id)
-                    .attr('class', settings.class)
-                    .attr('name', settings.name)
-                    .val(settings.value);
+//                    .attr('class', settings.class)
+                    .attr('name', settings.name);
+//                    .val(settings.value);
+                var source = JSON.parse(settings.source);
+                settings.component.attr('data-on-text', source[0]);
+                settings.component.attr('data-off-text', source[1]);
+               
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -33,6 +38,9 @@
             },
             element: function () {
                 return settings.component;
+            },
+            elementConvertToComponent : function(){
+                settings.component.bootstrapSwitch();
             }
         };
 
