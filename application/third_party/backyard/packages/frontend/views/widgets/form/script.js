@@ -57,13 +57,14 @@
                         var fieldContainer = $('<div class="form-group"></div>');
                         fieldContainer.append(component.label());
                         fieldContainer.append(component.tip());
+                        fieldContainer.append(component.invalid());
                         fieldContainer.append('<br />');
                         fieldContainer.append(component.element());
                         component.elementConvertToComponent();
 
                         $('div.card-body', settings.instance).append(fieldContainer);
 
-                        components.push(component);
+                        components[fields[key].frontendVariable] = component;
                     }
                 },
                 /**
@@ -76,6 +77,7 @@
                         var data = {};
                         for (var key in components) {
                             data[components[key].getName()] = components[key].getValue();
+                            components[key].setInvalid('');
                         }
                         
                         $.backyard({ 'userType': settings.userType }).process.api(
@@ -83,10 +85,17 @@
                             data,
                             'POST',
                             function (response) {
+                                if(response.status == 'failed'){
+                                    // 欄位驗證失敗
+                                    if(response.code == 'validator'){
+                                        for(var fieldName in response.message){
+                                            components[fieldName].setInvalid(response.message[fieldName]);
+                                        }
+                                    }
+                                }
                                 console.log(response);
                             }
                         );
-                        console.log(data);
                     });
                 }
             },

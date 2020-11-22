@@ -39,6 +39,9 @@
             element: function () {
                 return settings.component;
             },
+            invalid: function () {
+                return $('<invalid for="' + settings.id + '" style="display:none;"></invalid>');
+            },
             elementConvertToComponent: function () {
                 settings.component.bootstrapSwitch();
 
@@ -48,6 +51,17 @@
             },
             getValue: function () {
                 return (settings.component.closest('div.bootstrap-switch-on').length > 0) ? 'Y' : 'N';
+            },
+            setInvalid : function(message){
+                var invalid = $('invalid[for="' + settings.id + '"]');
+                if(message.trim() != ''){
+                    invalid.html(message);
+                    invalid.show();
+                }
+                else{
+                    invalid.html('');
+                    invalid.hide();
+                }
             }
         };
 

@@ -276,11 +276,11 @@ class Data extends \backyard\Package
         }
 
         $response = $this->backyard->getUser()->convertToDatabase($inputs['id'], $inputs);
-        
+
         // 新增記錄
         $this->database->insert($response['table'], $response['value']);
 
-        return $inputs['id'];
+        return array('status' => 'success', 'id' => $inputs['id']);
     }
 
     /**

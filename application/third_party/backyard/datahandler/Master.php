@@ -20,9 +20,9 @@ class Master extends \backyard\Package
         $this->backyard->config->loadConfigFile('master');
         $master = $this->backyard->config->getConfig('master');
         if (!isset($master['metadata'][$code])) {
-            return array('status' => 'failed', 'message' => '找不到Master設定');
+            return array('status' => 'failed', 'code' => 'metadata', 'message' => '找不到Master設定');
         } else {
-            return array('status' => 'success', 'metadata' => $master['metadata'][$code]);
+            return array('status' => 'success','code' => 'metadata', 'metadata' => $master['metadata'][$code]);
         }
     }
 

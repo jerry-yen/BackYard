@@ -91,7 +91,7 @@ class Validator
             $flag = $flag & $this->validate($field['name'], $key, $inputs[$key], $field['validators']);
         }
 
-        return array('status' => $flag ? 'success' : 'failed', 'fields' => $validFields, 'message' => $this->invalid);
+        return array('status' => $flag ? 'success' : 'failed', 'code' => 'validator', 'fields' => $validFields, 'message' => $this->invalid);
     }
 
     /**

@@ -32,6 +32,9 @@
             label: function () {
                 return $('<label for="' + settings.id + '">' + settings.label + ' : </label>');
             },
+            invalid: function () {
+                return $('<invalid for="' + settings.id + '" style="display:none;"></invalid>');
+            },
             element: function () {
                 return settings.component;
             },
@@ -42,6 +45,17 @@
             },
             getValue: function () {
                 return settings.component.val()
+            },
+            setInvalid : function(message){
+                var invalid = $('invalid[for="' + settings.id + '"]');
+                if(message.trim() != ''){
+                    invalid.html(message);
+                    invalid.show();
+                }
+                else{
+                    invalid.html('');
+                    invalid.hide();
+                }
             }
         };
 
