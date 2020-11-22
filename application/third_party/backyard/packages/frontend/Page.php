@@ -164,7 +164,7 @@ class Page extends \backyard\Package
             // 取得資料集後設資料
             $datasetCode = $widgetMetadata['metadata']['dataset'];
             $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
-            foreach ($fieldDataset['metadata']['fields'] as $field) {
+            foreach ($fieldDataset['dataset']['fields'] as $field) {
                 // 取得元件Style內容
                 $componentStyle = '';
                 $stylePath = $this->viewPath . '/components/' . $field['component'] . '/component.css';
