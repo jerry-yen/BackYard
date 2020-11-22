@@ -13,7 +13,7 @@
             'value': '',
             'class': 'form-control',
             'label': '',
-            'source':'',
+            'source': '',
             'component': $('<input type="checkbox" value="Y">')
         }, _settings);
 
@@ -22,13 +22,13 @@
             initial: function () {
                 settings.component
                     .attr('id', settings.id)
-//                    .attr('class', settings.class)
+                    //                    .attr('class', settings.class)
                     .attr('name', settings.name);
-//                    .val(settings.value);
+                //                    .val(settings.value);
                 var source = JSON.parse(settings.source);
                 settings.component.attr('data-on-text', source[0]);
                 settings.component.attr('data-off-text', source[1]);
-               
+
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -39,8 +39,15 @@
             element: function () {
                 return settings.component;
             },
-            elementConvertToComponent : function(){
+            elementConvertToComponent: function () {
                 settings.component.bootstrapSwitch();
+
+            },
+            getName: function () {
+                return settings.name;
+            },
+            getValue: function () {
+                return (settings.component.closest('div.bootstrap-switch-on').length > 0) ? 'Y' : 'N';
             }
         };
 

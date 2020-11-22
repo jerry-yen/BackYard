@@ -26,6 +26,11 @@ class Backyard
     private $packages = array();
 
     /**
+     * @var 函式
+     */
+    private $libraries = array();
+
+    /**
      * 建構子
      */
     public function __construct()
@@ -37,7 +42,7 @@ class Backyard
         $this->filterIPs();
 
         // 取得所有輸入變數(POST + GET)
-        $this->getInputs();
+        $this->mergeInputs();
     }
 
     /**
@@ -72,6 +77,12 @@ class Backyard
                 if (strtolower($name) == strtolower($className)) {
                     return $classObject;
                 }
+            }
+        }
+
+        foreach ($this->libraries as $className => $classObject) {
+            if (strtolower($name) == strtolower($className)) {
+                return $classObject;
             }
         }
 
@@ -140,6 +151,20 @@ class Backyard
         $this->loadingPackage($packageName, $namespace, $packagePath);
     }
 
+    public function loadLibrary($libraryName)
+    {
+        $namespace = '\\backyard\\libraries';
+        $libraryPath = dirname(__FILE__) . '/libraries';
+
+        // 載入套件檔案
+        require_once($libraryPath . '/' . $libraryName . '.php');
+
+        if (!isset($this->libraries[$libraryName])) {
+            $classPath = $namespace . '\\' . $libraryName;
+            $this->libraries[$libraryName] = new $classPath();
+        }
+    }
+
     /**
      * 設定使用者
      * 
@@ -168,7 +193,7 @@ class Backyard
     /**
      * 取得GET、POST資料
      */
-    private function getInputs()
+    private function mergeInputs()
     {
         // 專用於 Restful API時，取得 GET 所使用
         if (method_exists(\CI_Controller::get_instance(), 'get')) {
@@ -198,6 +223,11 @@ class Backyard
         unset($security);
     }
 
+    public function getInputs()
+    {
+        return $this->inputs;
+    }
+
     /**
      * 取得單筆項目
      * 
@@ -219,11 +249,11 @@ class Backyard
             }
 
             // 驗證輸入參數
-            $validator = new Validator();
+            $validator = new \backyard\core\Validator();
             $res = $validator->checkInputs($metadata['metadata'], $this->inputs);
             unset($validator);
 
-            $data = new Data($this->userType);
+            $data = new \backyard\core\Data($this->userType);
             $res = $data->getItem($this->inputs['code'], array(), $res['fields']);
             unset($data);
 
@@ -241,7 +271,7 @@ class Backyard
         if (!isset($this->inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        $metadataObject = new Metadata($this->userType);
+        $metadataObject = new \backyard\core\Metadata($this->userType);
         $metadata = $metadataObject->getItem($this->inputs['code']);
         if ($metadata['status'] == 'failed') {
             return $metadata;
@@ -252,12 +282,12 @@ class Backyard
             }
 
             // 驗證輸入參數
-            $validator = new Validator();
+            $validator = new \backyard\core\Validator();
             $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
             unset($validator);
 
             // 取得資料
-            $data = new Data($this->userType);
+            $data = new \backyard\core\Data($this->userType);
             $response = $data->getItems($this->inputs['code'], array(), $res['fields']);
             unset($data);
 
@@ -267,7 +297,7 @@ class Backyard
             }
 
             // 轉換資料
-            $converter = new Converter();
+            $converter = new \backyard\core\Converter();
             foreach ($response['results'] as $key => $result) {
                 $response['results'][$key] = $converter->checkOutputs('form', $metadata['metadata'], $result);
             }
@@ -282,15 +312,16 @@ class Backyard
     /**
      * 新增項目
      * 
+     * @param string $code 模組代碼
      * @param array $exValues 額外處理過的值
      */
-    public function insertItem($exValues = array())
+    public function insertItem($code, $exValues = array())
     {
-        if (!isset($this->inputs['code'])) {
+        if (!isset($code)) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        $metadataObject = new Metadata($this->userType);
-        $metadata = $metadataObject->getItem($this->inputs['code']);
+        $metadataObject = new \backyard\core\Metadata($this->userType);
+        $metadata = $metadataObject->getItem($code);
         if ($metadata['status'] == 'failed') {
             return $metadata;
         } else {
@@ -301,7 +332,7 @@ class Backyard
             }
 
             // 驗證輸入參數
-            $validator = new Validator();
+            $validator = new \backyard\core\Validator();
             $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
             unset($validator);
 
@@ -310,8 +341,8 @@ class Backyard
             }
 
             // 輸入資料
-            $data = new Data($this->userType);
-            $data->insertItem($this->inputs['code'], $res['fields']);
+            $data = new \backyard\core\Data($this->userType);
+            $data->insertItem($code, $res['fields']);
             unset($data);
         }
     }
@@ -319,14 +350,15 @@ class Backyard
     /**
      * 更新項目
      * 
+     * @param string $code 模組代碼
      * @param array $exValues 額外處理過的值
      */
-    public function updateItem($exValues = array())
+    public function updateItem($code, $exValues = array())
     {
         if (!isset($this->inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        $metadataObject = new Metadata($this->userType);
+        $metadataObject = new \backyard\core\Metadata($this->userType);
         $metadata = $metadataObject->getItem($this->inputs['code']);
         if ($metadata['status'] == 'failed') {
             return $metadata;
@@ -338,7 +370,7 @@ class Backyard
             }
 
             // 驗證輸入參數
-            $validator = new Validator();
+            $validator = new \backyard\core\Validator();
             $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
             unset($validator);
 
@@ -347,7 +379,7 @@ class Backyard
             }
 
             // 更新資料
-            $data = new Data($this->userType);
+            $data = new \backyard\core\Data($this->userType);
             $data->updateItem($this->inputs['code'], $this->inputs['id'], $res['fields']);
             unset($data);
         }
@@ -364,7 +396,7 @@ class Backyard
         if (!isset($this->inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        $metadataObject = new Metadata($this->userType);
+        $metadataObject = new \backyard\core\Metadata($this->userType);
         $metadata = $metadataObject->getItem($this->inputs['code']);
         if ($metadata['status'] == 'failed') {
             return $metadata;
@@ -376,7 +408,7 @@ class Backyard
             }
 
             // 驗證輸入參數
-            $validator = new Validator();
+            $validator = new \backyard\core\Validator();
             $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
             unset($validator);
 
@@ -385,7 +417,7 @@ class Backyard
             }
 
             // 刪除資料
-            $data = new Data($this->userType);
+            $data = new \backyard\core\Data($this->userType);
             $data->deleteItem($this->inputs['code'], $this->inputs['id']);
             unset($data);
         }

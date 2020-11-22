@@ -12,7 +12,7 @@
         <!-- /.card-body -->
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">修改</button>
+            <button type="button" class="modify btn btn-primary">修改</button>
         </div>
     </form>
 </div>

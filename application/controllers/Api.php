@@ -163,6 +163,24 @@ class Api extends \chriskacerguis\RestServer\RestController
     {
     }
 
+    /**
+     * 新增項目
+     */
+    public function item_post()
+    {
+        $response = $this->backyard->data->insertItem();
+        $this->response($response, 200);
+    }
+
+    /**
+     * 更新項目
+     */
+    public function item_put()
+    {
+        $response = $this->backyard->updateItem($this->get('code'));
+        $this->response($response, 200);
+    }
+
     public function items_get()
     {
     }

@@ -13,7 +13,7 @@
             'value': '',
             'class': 'form-control',
             'label': '',
-            'source':'',
+            'source': '',
             'component': $('<input type="text">')
         }, _settings);
 
@@ -36,6 +36,12 @@
                 return settings.component;
             },
             elementConvertToComponent: function () {
+            },
+            getName: function () {
+                return settings.name;
+            },
+            getValue: function () {
+                return settings.component.val()
             }
         };
 

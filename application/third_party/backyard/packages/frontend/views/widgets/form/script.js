@@ -9,8 +9,11 @@
         var settings = $.extend({
             'userType': 'admin',
             'code': $(this).attr('widget'),
-            'instance': this
+            'instance': this,
+            'submit_button_selector': 'button.modify'
         }, _settings);
+
+        var components = [];
 
         // 自定義函式
         var coreMethod = {
@@ -41,7 +44,6 @@
 
                     // 呈現欄位元件
                     for (var key in fields) {
-                        console.log(fields[key]);
                         var componentName = fields[key].component + '_component';
                         var component = new $[componentName]({
                             'id': fields[key].frontendVariable,
@@ -60,13 +62,38 @@
                         component.elementConvertToComponent();
 
                         $('div.card-body', settings.instance).append(fieldContainer);
-                    }
 
+                        components.push(component);
+                    }
+                },
+                /**
+                 * 送出表單
+                 */
+                submit: function () {
+                    $(settings.submit_button_selector).click(function () {
+
+                        // 取得各欄位(元件)的值
+                        var data = {};
+                        for (var key in components) {
+                            data[components[key].getName()] = components[key].getValue();
+                        }
+                        
+                        $.backyard({ 'userType': settings.userType }).process.api(
+                            '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
+                            data,
+                            'POST',
+                            function (response) {
+                                console.log(response);
+                            }
+                        );
+                        console.log(data);
+                    });
                 }
             },
         }
 
         coreMethod.event.initial();
+        coreMethod.event.submit();
 
         return coreMethod;
     };

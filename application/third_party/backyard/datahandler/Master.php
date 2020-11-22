@@ -98,24 +98,24 @@ class Master extends \backyard\Package
      * 
      * @return array 資料庫資料
      */
-    public function convertToDatabase(&$table, $id, $value)
+    public function convertToDatabase($id, $value)
     {
         $module['id'] = $id;
         $module['created_at'] = $value['created_at'];
         $module['updated_at'] = $value['updated_at'];
-        $module['code'] = $table;
-        $table = $this->database->dbprefix . 'module';
+        $module['code'] = $value['code'];
+        $table = get_instance()->db->dbprefix . 'module';
 
         unset($value['id']);
         unset($value['created_at']);
         unset($value['updated_at']);
+        unset($value['code']);
         $module['metadata'] = json_encode($value, JSON_UNESCAPED_UNICODE);
-
         unset($value);
 
         // 整理好的值，重新付予給value變數
         $value = $module;
         unset($module);
-        return $value;
+        return array('table' => $table, 'value' => $value);
     }
 }

@@ -231,36 +231,56 @@ class Data extends \backyard\Package
     /**
      * 新增記錄
      * 
-     * @param string $code 模組代碼(或資料庫名稱)
-     * @param array $value 欄位及值
+     * @param string $code 模組代碼
+     * @param array $exValues 額外處理過的值
      * 
      * @param string GUID 新增記錄的ID
      */
-    public function insertItem($code, $value)
+    public function insertItem($exValues = array())
     {
+        $inputs = $this->backyard->getInputs();
+        if (!isset($inputs['code'])) {
+            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
+        }
+        $response = $this->backyard->metadata->getItem($inputs['code']);
+        if ($response['status'] == 'failed') {
+            return $response;
+        }
+
+        // 額外處理過的欄位值
+        if (count($exValues) > 0) {
+            $this->inputs = array_merge($this->inputs, $exValues);
+        }
+
+        // 驗證輸入參數
+        $response = $this->backyard->validator->checkInputs($response['metadata'], $inputs);
+        if ($response['status'] == 'failed') {
+            return $response;
+        }
+        $inputs = $response['fields'];
 
         // 預設ID
-        if (!isset($value['id'])) {
-            $codeObject = new \backyard\libraries\Code();
-            $value['id'] = $codeObject->getGUID();
+        if (!isset($inputs['id'])) {
+            $this->backyard->loadLibrary('Code');
+            $inputs['id'] = $this->backyard->code->getGUID();
         }
 
         // 預設建置時間
-        if (!isset($value['created_at'])) {
-            $value['created_at'] = date('Y-m-d H:i:s');
+        if (!isset($inputs['created_at'])) {
+            $inputs['created_at'] = date('Y-m-d H:i:s');
         }
 
         // 預設更新時間
-        if (!isset($value['updated_at'])) {
-            $value['updated_at'] = date('Y-m-d H:i:s');
+        if (!isset($inputs['updated_at'])) {
+            $inputs['updated_at'] = date('Y-m-d H:i:s');
         }
 
-        $value = $this->backyard->getUser()->convertToDatabase($code, $value['id'], $value);
-
+        $response = $this->backyard->getUser()->convertToDatabase($inputs['id'], $inputs);
+        
         // 新增記錄
-        $this->database->insert($code, $value);
+        $this->database->insert($response['table'], $response['value']);
 
-        return $value['id'];
+        return $inputs['id'];
     }
 
     /**

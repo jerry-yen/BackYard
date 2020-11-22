@@ -27,26 +27,27 @@ class Validator
      * 
      * @return array status(success:成功,failed:失敗), message[$key:欄位變數](錯誤訊息)
      */
-    public function checkInputs($fieldType = 'form', $metadata, $inputs)
+    public function checkInputs($metadata, $inputs)
     {
-        $fields = $metadata[$fieldType . 'Fields'];
+        $fields = $metadata['fields'];
 
         if (!isset($fields) || !is_array($fields)) {
             return array('status' => 'failed', 'fields' => array(), 'message' => array());
         }
 
         $buildinFields = array(
-            'id'        => array('input' => false, 'name' => '識別碼', 'validators' => array('uuid', 'length{32,40}')),          // 識別碼
-            'parent_id' => array('input' => false, 'name' => '上層識別碼', 'validators' => array('uuid', 'length{32,40}')),      // 上層識別碼
-            'domain_id' => array('input' => false, 'name' => '網域識別碼', 'validators' => array('uuid', 'length{32,40}')),      // 網域識別碼
-            'member_id' => array('input' => false, 'name' => '使用者識別碼', 'validators' => array('uuid', 'length{32,40}')),    // 使用者識別碼
-            'visibility' => array('input' => false, 'name' => '可見度', 'validators' => array('number', 'range{0,5}')),           // 可見度
-            'level'     => array('input' => false, 'name' => '層數', 'validators' => array('number')),                          // 層數
-            'created_at' => array('input' => false, 'name' => '建置時間', 'validators' => array('datetime')),                    // 建置時間
-            'updated_at' => array('input' => false, 'name' => '更新時間', 'validators' => array('datetime')),                    // 更新時間
-            'sorted_at' => array('input' => false, 'name' => '排序時間', 'validators' => array('datetime')),                    // 排序時間
-            'sequence'  => array('input' => false, 'name' => '排列順序', 'validators' => array('number')),                      // 排列順序
-            'top_at'    => array('input' => false, 'name' => '置頂時間', 'validators' => array('datetime'))                     // 置頂時間
+            'id'        => array('input' => false, 'name' => '識別碼', 'validators' => array('uuid', 'length{32,40}')),             // 識別碼
+            'parent_id' => array('input' => false, 'name' => '上層識別碼', 'validators' => array('uuid', 'length{32,40}')),         // 上層識別碼
+            'domain_id' => array('input' => false, 'name' => '網域識別碼', 'validators' => array('uuid', 'length{32,40}')),         // 網域識別碼
+            'member_id' => array('input' => false, 'name' => '使用者識別碼', 'validators' => array('uuid', 'length{32,40}')),       // 使用者識別碼
+            'visibility' => array('input' => false, 'name' => '可見度', 'validators' => array('number', 'range{0,5}')),             // 可見度
+            'level'     => array('input' => false, 'name' => '層數', 'validators' => array('number')),                              // 層數
+            'created_at' => array('input' => false, 'name' => '建置時間', 'validators' => array('datetime')),                       // 建置時間
+            'updated_at' => array('input' => false, 'name' => '更新時間', 'validators' => array('datetime')),                       // 更新時間
+            'sorted_at' => array('input' => false, 'name' => '排序時間', 'validators' => array('datetime')),                        // 排序時間
+            'sequence'  => array('input' => false, 'name' => '排列順序', 'validators' => array('number')),                          // 排列順序
+            'top_at'    => array('input' => false, 'name' => '置頂時間', 'validators' => array('datetime')),                         // 置頂時間
+            'code'    => array('input' => false, 'name' => '模組代碼', 'validators' => array('length{5,30}'))                       // 模組代碼
         );
 
         $flag = true;

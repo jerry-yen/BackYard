@@ -93,6 +93,7 @@
                     var content = '';
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/widgethtml/user/' + settings.userType + '/code/' + code,
+                        {},
                         'GET',
                         function (response) {
                             content = response.content;
@@ -113,6 +114,7 @@
                     var content = '';
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/metadata/user/' + settings.userType + '/code/' + code,
+                        {},
                         'GET',
                         function (response) {
                             content = response;
@@ -126,6 +128,7 @@
                     var content = '';
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/widget/user/' + settings.userType + '/code/' + code,
+                        {},
                         'GET',
                         function (response) {
                             content = response;
@@ -154,12 +157,13 @@
                  * 呼叫API
                  * 
                  * @param {*} url API路徑
+                 * @param {*} data 傳送的參數
                  * @param {*} method HTTP方法(GET,POST)
                  * @param {*} success_feedback 自訂呼叫成功後的處理方法
                  * @param {*} error_feedback 自訂呼叫失敗後的處理方法
                  * @param {*} async 是否以非同步方式呼叫API
                  */
-                api: function (url, method, success_feedback, error_feedback, async) {
+                api: function (url, data, method, success_feedback, error_feedback, async) {
                     method = (method == 'undefined' || method == null) ? 'GET' : method;
                     success_feedback = (success_feedback == 'undefined' || success_feedback == null) ? function () { } : success_feedback;
                     error_feedback = (error_feedback == 'undefined' || error_feedback == null) ? function (thrownError) { console.log(thrownError); } : error_feedback;
@@ -167,6 +171,7 @@
                     $.ajax({
                         'url': url,
                         'async': async,
+                        'data':data,
                         'dataType': 'json',
                         'type': method,
                         'success': success_feedback,
@@ -251,6 +256,7 @@
                 template: function (templateMetadataApiPath, templateName) {
                     $.backyard().process.api(
                         templateMetadataApiPath,
+                        {},
                         'GET',
                         function (response) {
                             var widgets = response.widgets;
