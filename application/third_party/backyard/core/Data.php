@@ -185,47 +185,63 @@ class Data extends \backyard\Package
      * 
      * @return array
      */
-    public function getItem($code, $fields = array(), $where = array())
+    public function getItem()
     {
+
+        $inputs = $this->backyard->getInputs();
+        if (!isset($inputs['code'])) {
+            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
+        }
+
+        $response = $this->backyard->getUser()->convertToWhere($inputs);
+        $where = $response['where'];
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
          */
 
         // 取得資料表中的所有欄位
-        $tableFields = $this->database->list_fields($this->database->dbprefix . $code);
+        $tableFields = $this->database->list_fields($response['table']);
         foreach ($tableFields as $key => $field) {
             $tableFields[$field] = true;
             unset($tableFields[$key]);
         }
         // 過濾要取得的欄位
-        foreach ($fields as $key => $value) {
-            if (!isset($tableFields[$value])) {
-                unset($fields[$key]);
+        if (isset($fields) && count($fields) > 0) {
+            foreach ($fields as $key => $value) {
+                if (!isset($tableFields[$value])) {
+                    unset($fields[$key]);
+                }
             }
+        } else {
+            $fields = array();
         }
         // 過濾要搜尋的條件
-        foreach ($where as $key => $value) {
-            if (!isset($tableFields[$key])) {
-                unset($where[$key]);
+        if (isset($where) && count($where) > 0) {
+            foreach ($where as $key => $value) {
+                if (!isset($tableFields[$key])) {
+                    unset($where[$key]);
+                }
             }
+        } else {
+            $where = array();
         }
 
         // 欄位
         $this->database = $this->database->select((count($fields) == 0) ? '*' : (implode(',', $fields)));
 
         // 表單
-        $this->database = $this->database->from($this->database->dbprefix . $code);
+        $this->database = $this->database->from($response['table']);
 
         // 條件
         $this->database = $this->database->where($where);
 
         // 取得結果
-        $result = $this->database->get()->row_array();
+        $item = $this->database->get()->row_array();
 
         // 根據不同使用者，進行資料格式的轉換
-        $result = $this->backyard->getUser()->convertToData($result);
+        $item = $this->backyard->getUser()->convertToData($item);
 
-        return array('status' => 'success', 'result' => $result);
+        return array('status' => 'success', 'item' => $item);
     }
 
     /**
@@ -275,7 +291,7 @@ class Data extends \backyard\Package
             $inputs['updated_at'] = date('Y-m-d H:i:s');
         }
 
-        $response = $this->backyard->getUser()->convertToDatabase($inputs['id'], $inputs);
+        $response = $this->backyard->getUser()->convertToDatabase($inputs);
 
         // 新增記錄
         $this->database->insert($response['table'], $response['value']);

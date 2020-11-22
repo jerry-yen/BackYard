@@ -44,18 +44,21 @@
                 return settings.name;
             },
             getValue: function () {
-                return settings.component.val()
+                return settings.component.val();
             },
-            setInvalid : function(message){
+            setInvalid: function (message) {
                 var invalid = $('invalid[for="' + settings.id + '"]');
-                if(message.trim() != ''){
+                if (message.trim() != '') {
                     invalid.html(message);
                     invalid.show();
                 }
-                else{
+                else {
                     invalid.html('');
                     invalid.hide();
                 }
+            },
+            setValue: function (value) {
+                settings.component.val(value);
             }
         };
 

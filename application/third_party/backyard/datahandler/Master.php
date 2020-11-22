@@ -82,15 +82,13 @@ class Master extends \backyard\Package
     /**
      * 將一般欄位的資料轉換成資料庫資料
      * 
-     * @param string $table 資料表名稱
-     * @param string $id 資料識別碼
-     * @param array $result 資料庫的值
+     * @param array $value 資料庫的值
      * 
      * @return array 資料庫資料
      */
-    public function convertToDatabase($id, $value)
+    public function convertToDatabase($value)
     {
-        $module['id'] = $id;
+        $module['id'] = $value['id'];
         $module['created_at'] = $value['created_at'];
         $module['updated_at'] = $value['updated_at'];
         $module['code'] = $value['code'];
@@ -107,5 +105,31 @@ class Master extends \backyard\Package
         $value = $module;
         unset($module);
         return array('table' => $table, 'value' => $value);
+    }
+
+    /**
+     * 將一般欄位的資料轉換成資料庫條件
+     * 
+     * @param array $value 條件值
+     * 
+     * @return array 資料庫資料
+     */
+    public function convertToWhere($value)
+    {
+        $module = array();
+        if(isset($value['id'])){
+            $module['id'] = $value['id'];
+        }
+        if(isset($value['created_at'])){
+            $module['created_at'] = $value['created_at'];
+        }
+        if(isset($value['updated_at'])){
+            $module['updated_at'] = $value['updated_at'];
+        }
+        if(isset($value['code'])){
+            $module['code'] = $value['code'];
+        }
+        $table = get_instance()->db->dbprefix . 'module';
+        return array('table' => $table, 'where' => $module);
     }
 }

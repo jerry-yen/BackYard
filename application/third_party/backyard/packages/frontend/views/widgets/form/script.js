@@ -65,28 +65,62 @@
                         components[fields[key].frontendVariable] = component;
                     }
                 },
+
+                /**
+                 * 載入資料
+                 */
+                loadData: function () {
+                    $.backyard({ 'userType': settings.userType }).process.api(
+                        '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
+                        {},
+                        'GET',
+                        function (response) {
+                            // 將資料代入到各個欄位
+                            if (response.status == 'success') {
+                                for (var fieldName in response.item) {
+                                    if (components[fieldName] != undefined) {
+                                        components[fieldName].setValue(response.item[fieldName]);
+                                    }
+                                }
+
+                                // 如果預設有id，代表為修改模式
+                                if (response.item['id'] != undefined) {
+                                    $('div.card-body', settings.instance).append('<input type="hidden" id="id" name="id" value="' + response.item['id'] + '"/>')
+                                }
+                            }
+                        }
+                    );
+                },
                 /**
                  * 送出表單
                  */
-                submit: function () {
+                submitEvent: function () {
                     $(settings.submit_button_selector).click(function () {
 
-                        // 取得各欄位(元件)的值
                         var data = {};
+
+                        // 取得所有隱藏欄位值，包含id
+                        $('input[type="hidden"]').each(function () {
+                            data[$(this).attr('name')] = $(this).val();
+                        });
+
+                        // 取得各欄位(元件)的值
                         for (var key in components) {
                             data[components[key].getName()] = components[key].getValue();
                             components[key].setInvalid('');
                         }
-                        
+
+                        httpType = (data['id'] != undefined) ? 'PUT' : 'POST';
+
                         $.backyard({ 'userType': settings.userType }).process.api(
                             '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
                             data,
-                            'POST',
+                            httpType,
                             function (response) {
-                                if(response.status == 'failed'){
+                                if (response.status == 'failed') {
                                     // 欄位驗證失敗
-                                    if(response.code == 'validator'){
-                                        for(var fieldName in response.message){
+                                    if (response.code == 'validator') {
+                                        for (var fieldName in response.message) {
                                             components[fieldName].setInvalid(response.message[fieldName]);
                                         }
                                     }
@@ -100,7 +134,8 @@
         }
 
         coreMethod.event.initial();
-        coreMethod.event.submit();
+        coreMethod.event.submitEvent();
+        coreMethod.event.loadData();
 
         return coreMethod;
     };

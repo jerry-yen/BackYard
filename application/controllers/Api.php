@@ -36,19 +36,6 @@ class Api extends \chriskacerguis\RestServer\RestController
     }
 
     /**
-     * 取得所有後設資料
-     * 
-     * @param string user 使用者類型(master, admin)
-     * 
-     * @return json 後設資料
-     */
-    public function metadatas_get()
-    {
-        $metadata = $this->backyard->metadata->getItems();
-        $this->response(json_encode($metadata, JSON_UNESCAPED_UNICODE), 200);
-    }
-
-    /**
      * 取得組件後設資料
      * 
      * @param string code 代碼
@@ -161,6 +148,8 @@ class Api extends \chriskacerguis\RestServer\RestController
 
     public function item_get()
     {
+        $response = $this->backyard->data->getItem();
+        $this->response($response, 200);
     }
 
     /**

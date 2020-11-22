@@ -14,7 +14,7 @@
             'class': 'form-control',
             'label': '',
             'source': '',
-            'component': $('<input type="checkbox" value="Y">')
+            'component': $('<input type="checkbox" value="Y" data-on-color="primary" data-off-color="danger">')
         }, _settings);
 
         // 自定義函式
@@ -44,24 +44,29 @@
             },
             elementConvertToComponent: function () {
                 settings.component.bootstrapSwitch();
-
             },
             getName: function () {
                 return settings.name;
             },
             getValue: function () {
-                return (settings.component.closest('div.bootstrap-switch-on').length > 0) ? 'Y' : 'N';
+                return settings.component.bootstrapSwitch('state') ? 'Y' : 'N';
             },
-            setInvalid : function(message){
+            setInvalid: function (message) {
                 var invalid = $('invalid[for="' + settings.id + '"]');
-                if(message.trim() != ''){
+                if (message.trim() != '') {
                     invalid.html(message);
                     invalid.show();
                 }
-                else{
+                else {
                     invalid.html('');
                     invalid.hide();
                 }
+            },
+            setValue: function (value) {
+                // 剛載入時需要延遲，才有辦法設定value，否則會被預設值蓋過
+                setTimeout(function () {
+                    settings.component.bootstrapSwitch('state', (value == 'Y'));
+                }, 500);
             }
         };
 
