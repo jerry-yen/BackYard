@@ -16,15 +16,14 @@ class Converter
     /**
      * 轉換
      * 
-     * @param string $fieldType 要轉換的欄位類型(form:表單輸出轉換,table:清單輸出轉換,search:搜尋輸出轉換)
-     * @param array $metadata 後設資料
+     * @param array $dataset 資料集後設資料
      * @param array $output 輸出資料
      * 
      * @return array status(success:成功,failed:失敗), message[$key:欄位變數](錯誤訊息)
      */
-    public function checkOutputs($fieldType = 'form', $metadata, $output)
+    public function checkOutputs($dataset, $output)
     {
-        $fields = $metadata[$fieldType . 'Fields'];
+        $fields = $dataset['fields'];
 
         if (!isset($fields) || !is_array($fields)) {
             return array();

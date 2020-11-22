@@ -239,9 +239,9 @@ class Backyard
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
 
-        $metadata = $this->user->getMetadata($this->inputs['code']);
-        if ($metadata['status'] == 'failed') {
-            return $metadata;
+        $dataset = $this->user->getDataset($this->inputs['code']);
+        if ($dataset['status'] == 'failed') {
+            return $dataset;
         } else {
             // 額外處理過的欄位值
             if (count($exValues) > 0) {
@@ -250,7 +250,7 @@ class Backyard
 
             // 驗證輸入參數
             $validator = new \backyard\core\Validator();
-            $res = $validator->checkInputs($metadata['metadata'], $this->inputs);
+            $res = $validator->checkInputs($dataset['dataset'], $this->inputs);
             unset($validator);
 
             $data = new \backyard\core\Data($this->userType);
@@ -306,44 +306,6 @@ class Backyard
 
 
             print_r($response);
-        }
-    }
-
-    /**
-     * 新增項目
-     * 
-     * @param string $code 模組代碼
-     * @param array $exValues 額外處理過的值
-     */
-    public function insertItem($code, $exValues = array())
-    {
-        if (!isset($code)) {
-            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
-        }
-        $metadataObject = new \backyard\core\Metadata($this->userType);
-        $metadata = $metadataObject->getItem($code);
-        if ($metadata['status'] == 'failed') {
-            return $metadata;
-        } else {
-
-            // 額外處理過的欄位值
-            if (count($exValues) > 0) {
-                $this->inputs = array_merge($this->inputs, $exValues);
-            }
-
-            // 驗證輸入參數
-            $validator = new \backyard\core\Validator();
-            $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
-            unset($validator);
-
-            if ($res['status'] == 'failed') {
-                return $res;
-            }
-
-            // 輸入資料
-            $data = new \backyard\core\Data($this->userType);
-            $data->insertItem($code, $res['fields']);
-            unset($data);
         }
     }
 

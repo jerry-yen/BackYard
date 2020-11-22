@@ -110,10 +110,10 @@
              * @var 後設資料
              */
             metadata: {
-                metadata: function (code) {
+                dataset: function (code) {
                     var content = '';
                     $.backyard({ 'userType': settings.userType }).process.api(
-                        '/index.php/api/metadata/user/' + settings.userType + '/code/' + code,
+                        '/index.php/api/dataset/user/' + settings.userType + '/code/' + code,
                         {},
                         'GET',
                         function (response) {

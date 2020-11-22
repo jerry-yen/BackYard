@@ -12,24 +12,16 @@ class Admin extends \backyard\Package
 {
 
     /**
-     * 取得後設資料
+     * 取得資料集後設資料
      * 
      * @param string $code 代碼
      */
-    public function getMetadata($code)
+    public function getDataset($code)
     {
-        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'metadata'));
-        $metadata = ($response['status'] == 'success') ? $response['result'] : array();
+        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'dataset'));
+        $dataset = ($response['status'] == 'success') ? $response['result'] : array();
 
-        return array('status' => 'success', 'metadata' => json_decode($metadata, true));
-    }
-
-    /**
-     * 取得所有後設資料
-     */
-    public function getMetadatas()
-    {
-        return array('status' => 'success', 'metadata' => array());
+        return array('status' => 'success', 'dataset' => json_decode($dataset, true));
     }
 
     /**

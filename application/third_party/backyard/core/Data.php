@@ -57,7 +57,7 @@ class Data extends \backyard\Package
      * @param string $code 模組代碼(資料表名稱)
      * @param array $fields 欄位資訊
      */
-    public function createTable($code, $metadata = array())
+    public function createTable($code, $fields = array())
     {
         // 表單名稱
         $tableName = $this->database->dbprefix . $code;
@@ -242,7 +242,7 @@ class Data extends \backyard\Package
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        $response = $this->backyard->metadata->getItem($inputs['code']);
+        $response = $this->backyard->dataset->getItem($inputs['code']);
         if ($response['status'] == 'failed') {
             return $response;
         }
@@ -253,7 +253,7 @@ class Data extends \backyard\Package
         }
 
         // 驗證輸入參數
-        $response = $this->backyard->validator->checkInputs($response['metadata'], $inputs);
+        $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
         if ($response['status'] == 'failed') {
             return $response;
         }

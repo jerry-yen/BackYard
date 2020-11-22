@@ -7,7 +7,7 @@
 /**
  * 登入設定
  */
-$config['master']['metadata']['login'] = array(
+$config['master']['dataset']['login'] = array(
     'name'              => '登入設定',
     'code'              => 'login',
     'fields'        => array(
@@ -21,7 +21,7 @@ $config['master']['metadata']['login'] = array(
 /**
  * 信箱設定
  */
-$config['master']['metadata']['email'] = array(
+$config['master']['dataset']['email'] = array(
     'name'              => '信箱設定',
     'code'              => 'email',
     'fields'        => array(
@@ -51,7 +51,7 @@ $config['master']['widget']['menu'] = array(
     'name'              => '選單',
     'code'              => 'menu',
     'widget'            => 'menu',
-    'metadata'          => '',
+    'dataset'          => '',
     'permission'        => array(
         'ADD', 'MODIFY'
     ),
@@ -70,7 +70,7 @@ $config['master']['widget']['login'] = array(
     'name'              => '登入設定',
     'code'              => 'login',
     'widget'            => 'form',
-    'metadata'          => 'login',
+    'dataset'          => 'login',
     'permission'        => array(
         'ADD', 'MODIFY'
     ),
@@ -88,7 +88,7 @@ $config['master']['widget']['email'] = array(
     'name'              => '登入設定',
     'code'              => 'login',
     'widget'            => 'data',
-    'metadata'          => 'email',
+    'dataset'          => 'email',
     'classLevelCount'   => 0,
     'permission'        => array(
         'ADD', 'MODIFY', 'DELETE'
@@ -110,7 +110,7 @@ $config['master']['widget']['logo'] = array(
     'name'              => '頁尾',
     'code'              => 'logo',
     'widget'            => 'logo',
-    'metadata'          => '',
+    'dataset'          => '',
     'classLevelCount'   => 0,
     'permission'        => array(),
     'events' => array()
@@ -123,7 +123,7 @@ $config['master']['widget']['footer'] = array(
     'name'              => '頁尾',
     'code'              => 'footer',
     'widget'            => 'footer',
-    'metadata'          => '',
+    'dataset'          => '',
     'classLevelCount'   => 0,
     'permission'        => array(),
     'events' => array()

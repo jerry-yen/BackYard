@@ -22,17 +22,17 @@ class Api extends \chriskacerguis\RestServer\RestController
     }
 
     /**
-     * 取得後設資料
+     * 取得資料集後設資料
      * 
      * @param string code 代碼
      * @param string user 使用者類型(master, admin)
      * 
      * @return json 後設資料
      */
-    public function metadata_get()
+    public function dataset_get()
     {
-        $metadata = $this->backyard->metadata->getItem($this->get('code'));
-        $this->response($metadata, 200);
+        $dataset = $this->backyard->dataset->getItem($this->get('code'));
+        $this->response($dataset, 200);
     }
 
     /**

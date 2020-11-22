@@ -11,29 +11,19 @@ namespace backyard\datahandler;
 class Master extends \backyard\Package
 {
     /**
-     * 取得後設資料
+     * 取得資料集後設資料
      * 
      * @param strin $code 代碼
      */
-    public function getMetadata($code)
+    public function getDataset($code)
     {
         $this->backyard->config->loadConfigFile('master');
         $master = $this->backyard->config->getConfig('master');
-        if (!isset($master['metadata'][$code])) {
-            return array('status' => 'failed', 'code' => 'metadata', 'message' => '找不到Master設定');
+        if (!isset($master['dataset'][$code])) {
+            return array('status' => 'failed', 'code' => 'dataset', 'message' => '找不到Master設定');
         } else {
-            return array('status' => 'success','code' => 'metadata', 'metadata' => $master['metadata'][$code]);
+            return array('status' => 'success','code' => 'dataset', 'dataset' => $master['dataset'][$code]);
         }
-    }
-
-    /**
-     * 取得所有後設資料
-     */
-    public function getMetadatas()
-    {
-        $this->backyard->config->loadConfigFile('master');
-        $master = $this->backyard->config->getConfig('master');
-        return array('status' => 'success', 'metadata' => $master['metadata']);
     }
 
     /**

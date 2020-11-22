@@ -22,14 +22,14 @@ class Validator
      * 驗證
      * 
      * @param string $fieldType 要驗證的欄位類型(form:表單輸入驗證,table:清單輸入驗證,search:搜尋輸入驗證)
-     * @param array $metadata 後設資料
+     * @param array $dataset 資料集後設資料
      * @param array $inputs 輸入資料
      * 
      * @return array status(success:成功,failed:失敗), message[$key:欄位變數](錯誤訊息)
      */
-    public function checkInputs($metadata, $inputs)
+    public function checkInputs($dataset, $inputs)
     {
-        $fields = $metadata['fields'];
+        $fields = $dataset['fields'];
 
         if (!isset($fields) || !is_array($fields)) {
             return array('status' => 'failed', 'fields' => array(), 'message' => array());

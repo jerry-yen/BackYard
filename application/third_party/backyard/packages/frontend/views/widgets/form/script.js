@@ -32,15 +32,13 @@
                     }
                     // 組件標題
                     $('h3.card-title', settings.instance).html(response.metadata.name);
-                    metadata_code = response.metadata.metadata;
-
 
                     // 取得資料集欄位資訊
-                    var response = $.backyard({ 'userType': settings.userType }).metadata.metadata(settings.code);
+                    var response = $.backyard({ 'userType': settings.userType }).metadata.dataset(settings.code);
                     if (response.status != 'success') {
                         return;
                     }
-                    var fields = response.metadata.fields;
+                    var fields = response.dataset.fields;
 
                     // 呈現欄位元件
                     for (var key in fields) {

@@ -84,10 +84,10 @@ class Page extends \backyard\Package
             $widgetScript .= $this->readLibraries($this->viewPath . '/widgets/' . $widgetName . '/libraries.json');
             $widgetScripts[$widgetName] = $widgetScript;
 
-            // 取得元件後設資料
-            $metadataCode = $widgetMetadata['metadata']['metadata'];
-            $fieldMetadata = $this->backyard->metadata->getItem($metadataCode);
-            foreach ($fieldMetadata['metadata']['fields'] as $field) {
+            // 取得資料集後設資料
+            $datasetCode = $widgetMetadata['metadata']['dataset'];
+            $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
+            foreach ($fieldDataset['dataset']['fields'] as $field) {
                 // 取得元件Script內容
                 $scriptPath = $this->viewPath . '/components/' . $field['component'] . '/component.js';
                 if (!file_exists($scriptPath)) {
@@ -161,10 +161,10 @@ class Page extends \backyard\Package
             $widgetStyle .= $this->readCSSLibraries($this->viewPath . '/widgets/' . $widgetName . '/libraries.json');
             $widgetStyles[$widgetName] = $widgetStyle;
 
-            // 取得元件後設資料
-            $metadataCode = $widgetMetadata['metadata']['metadata'];
-            $fieldMetadata = $this->backyard->metadata->getItem($metadataCode);
-            foreach ($fieldMetadata['metadata']['fields'] as $field) {
+            // 取得資料集後設資料
+            $datasetCode = $widgetMetadata['metadata']['dataset'];
+            $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
+            foreach ($fieldDataset['metadata']['fields'] as $field) {
                 // 取得元件Style內容
                 $componentStyle = '';
                 $stylePath = $this->viewPath . '/components/' . $field['component'] . '/component.css';
