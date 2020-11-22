@@ -233,39 +233,6 @@ class Backyard
     }
 
     /**
-     * 取得單筆項目
-     * 
-     * @param array $exValues 額外處理過的值
-     */
-    public function getItem($exValues = array())
-    {
-        if (!isset($this->inputs['code'])) {
-            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
-        }
-
-        $dataset = $this->user->getDataset($this->inputs['code']);
-        if ($dataset['status'] == 'failed') {
-            return $dataset;
-        } else {
-            // 額外處理過的欄位值
-            if (count($exValues) > 0) {
-                $this->inputs = array_merge($this->inputs, $exValues);
-            }
-
-            // 驗證輸入參數
-            $validator = new \backyard\core\Validator();
-            $res = $validator->checkInputs($dataset['dataset'], $this->inputs);
-            unset($validator);
-
-            $data = new \backyard\core\Data($this->userType);
-            $res = $data->getItem($this->inputs['code'], array(), $res['fields']);
-            unset($data);
-
-            print_r($res);
-        }
-    }
-
-    /**
      * 取得多筆項目
      * 
      * @param array $exValues 額外處理過的值
@@ -312,45 +279,6 @@ class Backyard
             print_r($response);
         }
     }
-
-    /**
-     * 更新項目
-     * 
-     * @param string $code 模組代碼
-     * @param array $exValues 額外處理過的值
-     */
-    public function updateItem($code, $exValues = array())
-    {
-        if (!isset($this->inputs['code'])) {
-            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
-        }
-        $metadataObject = new \backyard\core\Metadata($this->userType);
-        $metadata = $metadataObject->getItem($this->inputs['code']);
-        if ($metadata['status'] == 'failed') {
-            return $metadata;
-        } else {
-
-            // 額外處理過的欄位值
-            if (count($exValues) > 0) {
-                $this->inputs = array_merge($this->inputs, $exValues);
-            }
-
-            // 驗證輸入參數
-            $validator = new \backyard\core\Validator();
-            $res = $validator->checkInputs('form', $metadata['metadata'], $this->inputs);
-            unset($validator);
-
-            if ($res['status'] == 'failed') {
-                return $res;
-            }
-
-            // 更新資料
-            $data = new \backyard\core\Data($this->userType);
-            $data->updateItem($this->inputs['code'], $this->inputs['id'], $res['fields']);
-            unset($data);
-        }
-    }
-
 
     /**
      * 刪除項目
