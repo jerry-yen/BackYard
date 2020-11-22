@@ -141,7 +141,6 @@ class Api extends \chriskacerguis\RestServer\RestController
     {
         $this->backyard->loadPackage('frontend');
         $metadata = $this->backyard->component->getScript($this->get('code'));
-
         header('Content-Type: application/javascript');
         echo $metadata;
     }
