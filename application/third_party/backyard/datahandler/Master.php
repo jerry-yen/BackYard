@@ -89,9 +89,16 @@ class Master extends \backyard\Package
     public function convertToDatabase($value)
     {
         $module['id'] = $value['id'];
-        $module['created_at'] = $value['created_at'];
-        $module['updated_at'] = $value['updated_at'];
-        $module['code'] = $value['code'];
+
+       if(isset($value['created_at'])){
+            $module['created_at'] = $value['created_at'];
+        }
+        if(isset($value['updated_at'])){
+            $module['updated_at'] = $value['updated_at'];
+        }
+        if(isset($value['code'])){
+            $module['code'] = $value['code'];
+        }
         $table = get_instance()->db->dbprefix . 'module';
 
         unset($value['id']);

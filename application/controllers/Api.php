@@ -166,7 +166,7 @@ class Api extends \chriskacerguis\RestServer\RestController
      */
     public function item_put()
     {
-        $response = $this->backyard->updateItem($this->get('code'));
+        $response = $this->backyard->data->updateItem();
         $this->response($response, 200);
     }
 

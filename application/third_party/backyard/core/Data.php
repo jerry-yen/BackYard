@@ -247,7 +247,6 @@ class Data extends \backyard\Package
     /**
      * 新增記錄
      * 
-     * @param string $code 模組代碼
      * @param array $exValues 額外處理過的值
      * 
      * @param string GUID 新增記錄的ID
@@ -265,7 +264,7 @@ class Data extends \backyard\Package
 
         // 額外處理過的欄位值
         if (count($exValues) > 0) {
-            $this->inputs = array_merge($this->inputs, $exValues);
+            $inputs = array_merge($inputs, $exValues);
         }
 
         // 驗證輸入參數
@@ -302,31 +301,51 @@ class Data extends \backyard\Package
     /**
      * 更新記錄
      * 
-     * @param string $code 模組代碼(或資料庫名稱)
-     * @param string $id
-     * @param array $value 欄位及值
+     * @param array $exValues 額外處理過的值
      * 
      * @param string GUID 更新記錄的ID
      */
-    public function updateItem($code, $id, $value)
+    public function updateItem($exValues = array())
     {
-
-        if (!isset($id) || is_null($id)) {
-            throw new \Exception('更新資料表記錄:缺少識別碼');
+        $inputs = $this->backyard->getInputs();
+        if (!isset($inputs['code'])) {
+            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
+
+        if (!isset($inputs['id']) || is_null($inputs['id'])) {
+            return array('status' => 'failed', 'message' => '更新資料表記錄:缺少識別碼');
+        }
+
+        $response = $this->backyard->dataset->getItem($inputs['code']);
+        if ($response['status'] == 'failed') {
+            return $response;
+        }
+
+        // 額外處理過的欄位值
+        if (count($exValues) > 0) {
+            $inputs = array_merge($inputs, $exValues);
+        }
+
+        // 驗證輸入參數
+        $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
+        if ($response['status'] == 'failed') {
+            return $response;
+        }
+        $inputs = $response['fields'];
 
         // 預設更新時間
         if (!isset($value['updated_at'])) {
             $value['updated_at'] = date('Y-m-d H:i:s');
         }
 
-        $value = $this->backyard->getUser()->convertToDatabase($code, $id, $value);
+        $response = $this->backyard->getUser()->convertToDatabase($inputs);
+        $value = $response['value'];
 
         // 更新記錄
-        $this->database->where('id', $id);
-        $this->database->update($code, $value);
+        $this->database->where('id', $value['id']);
+        $this->database->update($response['table'], $value);
 
-        return $id;
+        return array('status' => 'success', 'id' => $value['id']);
     }
 
     /**
