@@ -39,10 +39,6 @@ class Page extends \backyard\Package
     public function getMetadata($code)
     {
         $page = $this->backyard->getUser()->getMetadataOfPage($code);
-        if ($page['status'] != 'success') {
-            return '頁面載入錯誤';
-        }
-
         return $page;
     }
 
@@ -213,7 +209,9 @@ class Page extends \backyard\Package
 
         // 取得頁面後設資料
         $page = $this->getMetadata($code);
-
+        if($page['status'] != 'success'){
+            return $page['message'];
+        }
         $content = file_get_contents($this->viewPath . '/full.html');
         $content = $this->refinePathInHtmlContent($content);
         $content = str_replace('{pageTitle}', $page['metadata']['name'], $content);

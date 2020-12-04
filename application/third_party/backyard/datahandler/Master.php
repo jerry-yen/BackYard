@@ -47,6 +47,9 @@ class Master extends \backyard\Package
     {
         $this->backyard->config->loadConfigFile('master');
         $master = $this->backyard->config->getConfig('master');
+        if(!isset($master['page'][$code])){
+            return array('status' => 'failed', 'message' => '找不到此頁面');
+        }
         return array('status' => 'success', 'metadata' => $master['page'][$code]);
     }
 
