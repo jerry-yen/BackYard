@@ -85,11 +85,15 @@ $config['master']['widget']['login'] = array(
  * 信箱設定組件
  */
 $config['master']['widget']['email'] = array(
-    'name'              => '登入設定',
-    'code'              => 'login',
+    'name'              => '信箱管理',
+    'code'              => 'email',
     'widget'            => 'data',
-    'dataset'          => 'email',
+    'dataset'           => 'email',
     'classLevelCount'   => 0,
+    'listfields'            => array(
+        array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('require', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '發送信箱', 'dbVariable' => 'email', 'frontendVariable' => 'email', 'component' => 'text', 'validator' => array('require', 'email'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    ),
     'permission'        => array(
         'ADD', 'MODIFY', 'DELETE'
     ),
@@ -99,7 +103,6 @@ $config['master']['widget']['email'] = array(
         'delete'        => '',
         'batchDelete'   => '',
         'dataSource'    => '',
-
     )
 );
 
@@ -181,7 +184,17 @@ $config['master']['page']['login'] = array(
     'code'      => 'login',
     'widgets'   => array(
         array('code' => 'login', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
-        // array('code' => 'email', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+/**
+ * 信箱管理
+ */
+$config['master']['page']['email'] = array(
+    'name'      => '信箱管理',
+    'code'      => 'email',
+    'widgets'   => array(
+        array('code' => 'email', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
     )
 );
 

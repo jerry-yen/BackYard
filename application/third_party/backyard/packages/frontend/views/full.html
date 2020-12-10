@@ -244,10 +244,10 @@
   <script>
     $('document').ready(function () {
       var backyard = $.backyard({ 'userType': 'master' });
-      backyard.process.script('login');
-      backyard.process.css('login');
+      backyard.process.script('{code}');
+      backyard.process.css('{code}');
       backyard.template.logo();
-      backyard.template.content('login');
+      backyard.template.content('{code}');
       backyard.template.header();
       backyard.template.footer();
       backyard.template.leftSide();

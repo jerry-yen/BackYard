@@ -215,6 +215,7 @@ class Page extends \backyard\Package
         $content = file_get_contents($this->viewPath . '/full.html');
         $content = $this->refinePathInHtmlContent($content);
         $content = str_replace('{pageTitle}', $page['metadata']['name'], $content);
+        $content = str_replace('{code}', $page['metadata']['code'], $content);
 
         return $content;
     }
