@@ -24,7 +24,7 @@
         <table class="table table-hover text-nowrap">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>操作</th>
                     <th>User</th>
                     <th>Date</th>
                     <th>Status</th>
@@ -33,6 +33,11 @@
             </thead>
             <tbody>
                 <tr>
+                    <td>
+                        <button type="button" class="btn btn-xs bg-blue"><i class="far fa-edit"></i> 修改</button>
+                        <button type="button" class="btn btn-xs bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
+                        <button type="button" class="btn btn-xs bg-gradient-info"><i class="fas fa-bars"></i> 瀏覽</button>
+                    </td>
                     <td>183</td>
                     <td>John Doe</td>
                     <td>11-7-2014</td>
@@ -64,6 +69,15 @@
         </table>
     </div>
     <!-- /.card-body -->
+    <div class="card-footer clearfix">
+        <ul class="pagination pagination-sm m-0 float-right">
+            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+        </ul>
+    </div>
 </div>
 <script>
     $('document').ready(function() {

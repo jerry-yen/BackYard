@@ -39,7 +39,7 @@
                     var fields = response.metadata.listfields;
                     console.log(fields);
                     // 呈現欄位元件
-                    $('table thead tr th', settings.instance).remove();
+                    $('table thead tr th', settings.instance).not(':first').remove();
                     for (var key in fields) {
                         $('table thead tr', settings.instance).append('<th>' + fields[key].name + '</th>');
                     }
