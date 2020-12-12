@@ -25,6 +25,10 @@
                     .attr('class', settings.class)
                     .attr('name', settings.name)
                     .val(settings.value);
+                var source = JSON.parse(settings.source);
+                for (var key in source) {
+                    settings.component.append('<option value="' + key + '">' + source[key] + '</option>');
+                }
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
