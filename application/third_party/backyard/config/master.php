@@ -25,18 +25,18 @@ $config['master']['dataset']['email'] = array(
     'name'              => '信箱設定',
     'code'              => 'email',
     'fields'        => array(
-        array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('require', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '信箱設定', 'dbVariable' => 'emailSetting', 'frontendVariable' => 'emailSetting', 'component' => 'grouplabel', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '發送信箱', 'dbVariable' => 'email', 'frontendVariable' => 'email', 'component' => 'text', 'validator' => array('require', 'email'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '發送信箱', 'dbVariable' => 'email', 'frontendVariable' => 'email', 'component' => 'text', 'validator' => array('required', 'email'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '發送名稱', 'dbVariable' => 'emailName', 'frontendVariable' => 'emailName', 'component' => 'text', 'validator' => array('length{5,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '回覆信箱', 'dbVariable' => 'replyEmail', 'frontendVariable' => 'replyEmail', 'component' => 'text', 'validator' => array('require', 'email'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => 'SMTP開關', 'dbVariable' => 'smtpGate', 'frontendVariable' => 'smtpGate', 'component' => 'switch', 'validator' => array('require', 'enum{Y,N}'), 'converter' => array(), 'source' => '["是","否"]', 'fieldTip' => ''),
+        array('name' => '回覆信箱', 'dbVariable' => 'replyEmail', 'frontendVariable' => 'replyEmail', 'component' => 'text', 'validator' => array('required', 'email'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => 'SMTP開關', 'dbVariable' => 'smtpGate', 'frontendVariable' => 'smtpGate', 'component' => 'switch', 'validator' => array('required', 'enum{Y,N}'), 'converter' => array(), 'source' => '["是","否"]', 'fieldTip' => ''),
         array('name' => 'SMTP設定', 'dbVariable' => 'smtpSetting', 'frontendVariable' => 'smtpSetting', 'component' => 'grouplabel', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '主機', 'dbVariable' => 'smtpHost', 'frontendVariable' => 'smtpHost', 'component' => 'text', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => 'Port', 'dbVariable' => 'smtpPort', 'frontendVariable' => 'smtpPort', 'component' => 'number', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '帳號', 'dbVariable' => 'smtpAccount', 'frontendVariable' => 'smtpAccount', 'component' => 'text', 'validator' => array('length{5,50}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '是否需要驗證', 'dbVariable' => 'isVerification', 'frontendVariable' => 'isVerification', 'component' => 'switch', 'validator' => array('enum{Y,N}'), 'converter' => array(), 'source' => '["是","否"]', 'fieldTip' => ''),
-        array('name' => '安全協定', 'dbVariable' => 'smtpSecure', 'frontendVariable' => 'smtpSecure', 'component' => 'select', 'validator' => array('require', 'enum{,SSL,TLS}'), 'converter' => array(), 'source' => '{"":"無","SSL":"SSL","TLS":"TLS"}', 'fieldTip' => ''),
+        array('name' => '安全協定', 'dbVariable' => 'smtpSecure', 'frontendVariable' => 'smtpSecure', 'component' => 'select', 'validator' => array('required', 'enum{,SSL,TLS}'), 'converter' => array(), 'source' => '{"":"無","SSL":"SSL","TLS":"TLS"}', 'fieldTip' => ''),
     )
 );
 

@@ -12,6 +12,7 @@
             'instance': this,
             'add_button_selector': 'button.add',
             'modify_button_selector': 'button.modify',
+            'submit_button_selector': 'button.submit'
         }, _settings);
 
         var components = [];
@@ -48,7 +49,7 @@
                         return;
                     }
 
-                    this.add();
+                    this.addEvent();
                 },
 
                 /**
@@ -93,7 +94,6 @@
                         return;
                     }
                     var fields = response.dataset.fields;
-                    console.log(fields);
 
                     // 呈現欄位元件
                     for (var key in fields) {
@@ -119,11 +119,16 @@
 
                         components[fields[key].frontendVariable] = component;
                     }
+
+                    this.submitEvent();
                 },
                 formLoadData: function () {
 
                 },
-                add: function () {
+                /**
+                 * 新增資料
+                 */
+                addEvent: function () {
                     $(settings.add_button_selector).click(function () {
                         $('div.' + settings.code + '_table').addClass('d-none');
                         $('div.' + settings.code + '_form').removeClass('d-none');
@@ -147,7 +152,6 @@
                             data[components[key].getName()] = components[key].getValue();
                             components[key].setInvalid('');
                         }
-
                         httpType = (data['id'] != undefined) ? 'PUT' : 'POST';
 
                         $.backyard({ 'userType': settings.userType }).process.api(

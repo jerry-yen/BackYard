@@ -42,7 +42,7 @@ class System
     public function length($field, $value, $params = array())
     {
         // 不填寫則不驗證
-        if($value == '' || is_null($value)){
+        if ($value == '' || is_null($value)) {
             return array('status' => 'success');
         }
 
@@ -72,7 +72,7 @@ class System
     public function range($field, $value, $params = array())
     {
         // 不填寫則不驗證
-        if($value == '' || is_null($value)){
+        if ($value == '' || is_null($value)) {
             return array('status' => 'success');
         }
         $min = $params[0];
@@ -98,7 +98,7 @@ class System
     public function enum($field, $value, $params)
     {
         // 不填寫則不驗證
-        if($value == '' || is_null($value)){
+        if ($value == '' || is_null($value)) {
             return array('status' => 'success');
         }
         foreach ($params as $param) {
@@ -121,7 +121,7 @@ class System
     public function uuid($field, $value, $params)
     {
         // 不填寫則不驗證
-        if($value == '' || is_null($value)){
+        if ($value == '' || is_null($value)) {
             return array('status' => 'success');
         }
         $res = preg_match("/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/", $value);
@@ -143,11 +143,10 @@ class System
     public function email($field, $value, $params = array())
     {
         // 不填寫則不驗證
-        if($value == '' || is_null($value)){
+        if ($value == '' || is_null($value)) {
             return array('status' => 'success');
         }
-        $res = preg_match("/^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*
-        @[a-zA-Z](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/", $value);
+        $res = preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i", $value);
 
         if (!$res) {
             return array('status' => 'failed', 'message' => $field . '的信箱格式錯誤');

@@ -94,7 +94,7 @@
         <!-- /.card-body -->
 
         <div class="card-footer">
-            <button type="button" class="modify btn btn-primary">修改</button>
+            <button type="button" class="submit btn btn-primary">儲存</button>
         </div>
     </form>
 </div>
