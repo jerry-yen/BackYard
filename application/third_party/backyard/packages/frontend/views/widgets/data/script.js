@@ -159,13 +159,17 @@
                             data,
                             httpType,
                             function (response) {
-                                if (response.status == 'failed') {
+                                if (response.status != 'success') {
                                     // 欄位驗證失敗
                                     if (response.code == 'validator') {
                                         for (var fieldName in response.message) {
                                             components[fieldName].setInvalid(response.message[fieldName]);
                                         }
                                     }
+                                }
+                                else{
+                                    $('div.' + settings.code + '_table').removeClass('d-none');
+                                    $('div.' + settings.code + '_form').addClass('d-none');
                                 }
                             }
                         );
