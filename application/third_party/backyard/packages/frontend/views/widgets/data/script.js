@@ -10,7 +10,8 @@
             'userType': 'admin',
             'code': $(this).attr('widget'),
             'instance': this,
-            'submit_button_selector': 'button.modify'
+            'add_button_selector': 'button.add',
+            'modify_button_selector': 'button.modify',
         }, _settings);
 
         var components = [];
@@ -24,10 +25,9 @@
                 /**
                  * 初始化：載入Metadata並將介面擺放定位
                  */
-                initial: function () {
+                tableInitial: function () {
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
-                    console.log(response);
                     if (response.status != 'success') {
                         return;
                     }
@@ -35,9 +35,8 @@
                     $('h3.card-title', settings.instance).html(response.metadata.name);
 
                     // 取得資料集欄位資訊
-                   
                     var fields = response.metadata.listfields;
-                    console.log(fields);
+
                     // 呈現欄位元件
                     $('table thead tr th', settings.instance).not(':first').remove();
                     for (var key in fields) {
@@ -48,12 +47,15 @@
                     if (response.status != 'success') {
                         return;
                     }
+
+                    this.add();
                 },
 
                 /**
                  * 載入資料
                  */
-                loadData: function () {
+                tableLoadData: function () {
+                    /*
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
                         {},
@@ -74,6 +76,58 @@
                             }
                         }
                     );
+                    */
+                },
+                formInitial: function () {
+                    // 取得組件後設資料
+                    var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
+                    if (response.status != 'success') {
+                        return;
+                    }
+                    // 組件標題
+                    $('h3.card-title', settings.instance).html(response.metadata.name);
+
+                    // 取得資料集欄位資訊
+                    var response = $.backyard({ 'userType': settings.userType }).metadata.dataset(settings.code);
+                    if (response.status != 'success') {
+                        return;
+                    }
+                    var fields = response.dataset.fields;
+                    console.log(fields);
+
+                    // 呈現欄位元件
+                    for (var key in fields) {
+                        var componentName = fields[key].component + '_component';
+                        var component = new $[componentName]({
+                            'id': fields[key].frontendVariable,
+                            'name': fields[key].frontendVariable,
+                            'tip': fields[key].fieldTip,
+                            'source': fields[key].source,
+                            'label': fields[key].name
+                        });
+                        component.initial();
+
+                        var fieldContainer = $('<div class="form-group"></div>');
+                        fieldContainer.append(component.label());
+                        fieldContainer.append(component.tip());
+                        fieldContainer.append(component.invalid());
+                        fieldContainer.append('<br />');
+                        fieldContainer.append(component.element());
+                        component.elementConvertToComponent();
+
+                        $('div.' + settings.code + '_form div.card-body', settings.instance).append(fieldContainer);
+
+                        components[fields[key].frontendVariable] = component;
+                    }
+                },
+                formLoadData: function () {
+
+                },
+                add: function () {
+                    $(settings.add_button_selector).click(function () {
+                        $('div.' + settings.code + '_table').addClass('d-none');
+                        $('div.' + settings.code + '_form').removeClass('d-none');
+                    });
                 },
                 /**
                  * 送出表單
@@ -109,7 +163,6 @@
                                         }
                                     }
                                 }
-                                console.log(response);
                             }
                         );
                     });
@@ -117,9 +170,9 @@
             },
         }
 
-        coreMethod.event.initial();
-        coreMethod.event.submitEvent();
-        coreMethod.event.loadData();
+        coreMethod.event.tableInitial();
+        coreMethod.event.tableLoadData();
+        coreMethod.event.formInitial();
 
         return coreMethod;
     };

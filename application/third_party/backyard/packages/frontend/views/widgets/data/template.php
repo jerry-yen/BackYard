@@ -1,4 +1,4 @@
-<div class="card card-primary">
+<div class="card card-primary {code}_table">
     <div class="card-header ">
         <h3 class="card-title">{title}</h3>
     </div>
@@ -6,7 +6,7 @@
     <!-- /.card-header -->
     <div class="card-body table-responsive p-0">
         <div class="card-tools" style="padding:5px;">
-            <button type="button" class="btn bg-green"><i class="fas fa-plus"></i> 新增</button>
+            <button type="button" class="add btn bg-green"><i class="fas fa-plus"></i> 新增</button>
             <button type="button" class="btn bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
             <button type="button" class="btn bg-gradient-info"><i class="fas fa-sort-amount-down-alt"></i> 排序</button>
             <div class="btn-group">
@@ -34,7 +34,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-xs bg-blue"><i class="far fa-edit"></i> 修改</button>
+                        <button type="button" class="modify btn btn-xs bg-blue"><i class="far fa-edit"></i> 修改</button>
                         <button type="button" class="btn btn-xs bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
                         <button type="button" class="btn btn-xs bg-gradient-info"><i class="fas fa-bars"></i> 瀏覽</button>
                     </td>
@@ -79,6 +79,26 @@
         </ul>
     </div>
 </div>
+
+<!-- general form elements -->
+<div class="card card-primary {code}_form d-none">
+    <div class="card-header">
+        <h3 class="card-title"></h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form role="form">
+        <div class="card-body">
+            
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button type="button" class="modify btn btn-primary">修改</button>
+        </div>
+    </form>
+</div>
+<!-- /.card -->
 <script>
     $('document').ready(function() {
         $('div[widget="{code}"]').backyard_data({

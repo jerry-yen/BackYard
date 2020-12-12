@@ -1,5 +1,5 @@
 tip {
-    color:green;
+    color: green;
     padding-left: 10px;
 }
 
@@ -13,4 +13,13 @@ invalid {
 
 .invalid {
     border-color: red;
+}
+
+.grouplabel {
+    background-color:#ebecec;
+    width:100%;
+    color:black;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
 }
