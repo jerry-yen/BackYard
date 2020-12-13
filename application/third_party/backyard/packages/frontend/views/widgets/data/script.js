@@ -26,7 +26,7 @@
             event: {
                 /**
                  * 初始化：載入Metadata並將介面擺放定位
-                 */
+                 */  
                 tableInitial: function () {
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
@@ -51,6 +51,7 @@
                     }
 
                     this.addEvent();
+                    this.modifyEvent();
                 },
 
                 /**
@@ -73,6 +74,7 @@
                                         tr.removeClass('d-none');
                                         tr.append('<td>' + response.results[index][listFields[key].frontendVariable] + '</td>');
                                     }
+                                    tr.attr('id', response.results[index]['id']);
                                     $('table tbody', settings.instance).append(tr);
                                 }
                             }
@@ -123,8 +125,27 @@
 
                     this.submitEvent();
                 },
-                formLoadData: function () {
+                formLoadData: function (id) {
+                    $.backyard({ 'userType': settings.userType }).process.api(
+                        '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code + '?id=' + id,
+                        {},
+                        'GET',
+                        function (response) {
+                            // 將資料代入到各個欄位
+                            if (response.status == 'success') {
+                                for (var fieldName in response.item) {
+                                    if (components[fieldName] != undefined) {
+                                        components[fieldName].setValue(response.item[fieldName]);
+                                    }
+                                }
 
+                                // 如果預設有id，代表為修改模式
+                                if (response.item['id'] != undefined) {
+                                    $('div.card-body', settings.instance).append('<input type="hidden" id="id" name="id" value="' + response.item['id'] + '"/>')
+                                }
+                            }
+                        }
+                    );
                 },
                 /**
                  * 新增資料
@@ -140,9 +161,22 @@
                     });
                 },
                 /**
+                 * 修改資料
+                 */
+                modifyEvent: function () {
+                    var backyard = this;
+                    $('body').on('click', settings.modify_button_selector, function(){
+                        $('div.' + settings.code + '_table').addClass('d-none');
+                        $('div.' + settings.code + '_form').removeClass('d-none');
+                        var id = $(this).closest('tr').attr('id');
+                        backyard.formLoadData(id);
+                    });
+                },
+                /**
                  * 送出表單
                  */
                 submitEvent: function () {
+                    var backyard = this;
                     $(settings.submit_button_selector).click(function () {
 
                         var data = {};
@@ -175,6 +209,7 @@
                                 else {
                                     $('div.' + settings.code + '_table').removeClass('d-none');
                                     $('div.' + settings.code + '_form').addClass('d-none');
+                                    backyard.tableLoadData();
                                 }
                             }
                         );
