@@ -145,6 +145,9 @@ class Api extends \chriskacerguis\RestServer\RestController
         echo $metadata;
     }
 
+    /**
+     * 取得項目
+     */
     public function item_get()
     {
         $response = $this->backyard->data->getItem();
@@ -169,7 +172,12 @@ class Api extends \chriskacerguis\RestServer\RestController
         $this->response($response, 200);
     }
 
+    /**
+     * 取得項目清單
+     */
     public function items_get()
     {
+        $response = $this->backyard->data->getItems();
+        $this->response($response, 200);
     }
 }

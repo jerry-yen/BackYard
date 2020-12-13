@@ -94,57 +94,67 @@ class Data extends \backyard\Package
 
     /**
      * 取得多筆資料記錄
-     * @param string $code 模組代碼
-     * @param array $fields 指定欄位
-     * @param array $where 搜尋條件
-     * @param array $sort 排序條件
      * @param int $count 顯示筆數
      * @param boolean $pagination 是否分頁
      * 
      * @return array
      */
-    public function getItems($code, $fields = array(), $where = array(), $sort = array(), $count = 10, $pagination = false)
+    public function getItems($count = 10, $pagination = true)
     {
-        if ($this->userType == 'master') {
-            $where['code'] = $code;
-            $code = 'module';
+        $inputs = $this->backyard->getInputs();
+        if (!isset($inputs['code'])) {
+            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
+
+        $response = $this->backyard->getUser()->convertToWhere($inputs);
+        $where = $response['where'];
 
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
          */
 
         // 取得資料表中的所有欄位
-        $tableFields = $this->database->list_fields($this->database->dbprefix . $code);
+        $tableFields = $this->database->list_fields($response['table']);
         foreach ($tableFields as $key => $field) {
             $tableFields[$field] = true;
             unset($tableFields[$key]);
         }
+
         // 過濾要取得的欄位
-        foreach ($fields as $key => $value) {
-            if (!isset($tableFields[$value])) {
-                unset($fields[$key]);
+        if (isset($fields) && count($fields) > 0) {
+            foreach ($fields as $key => $value) {
+                if (!isset($tableFields[$value])) {
+                    unset($fields[$key]);
+                }
             }
-        }
-        // 過濾要搜尋的條件
-        foreach ($where as $key => $value) {
-            if (!isset($tableFields[$key])) {
-                unset($where[$key]);
-            }
+        } else {
+            $fields = array();
         }
 
+        // 過濾要搜尋的條件
+        if (isset($where) && count($where) > 0) {
+            foreach ($where as $key => $value) {
+                if (!isset($tableFields[$key])) {
+                    unset($where[$key]);
+                }
+            }
+        } else {
+            $where = array();
+        }
         // 欄位
         $this->database = $this->database->select((count($fields) == 0) ? '*' : (implode(',', $fields)));
 
         // 表單
-        $this->database = $this->database->from($this->database->dbprefix . $code);
+        $this->database = $this->database->from($response['table']);
 
         // 條件
         $this->database = $this->database->where($where);
 
         // 排序
-        foreach ($sort as $key => $method) {
-            $this->database = $this->database->order_by($key, $method);
+        if (isset($sort) && count($sort) > 0) {
+            foreach ($sort as $key => $method) {
+                $this->database = $this->database->order_by($key, $method);
+            }
         }
 
         // 取得總筆數
@@ -158,23 +168,23 @@ class Data extends \backyard\Package
                 get_instance()->input->post('page');
             $page = isset($page) ? $page : 1;
             $offset = ($page - 1) * $count;
-            $this->database = $this->database->limit($offset, $count);
+            $this->database = $this->database->limit($count, $offset);
         }
 
         // 取得結果
         $results = $this->database->get()->result_array();
 
-        if ($this->userType == 'master') {
-            foreach ($results as $key => $result) {
-                $data = json_decode($result['metadata'], true);
-                $result = array_merge($result, $data);
-                unset($result['metadata']);
-                $results[$key] = $result;
-            }
+        // 根據不同使用者，進行資料格式的轉換
+        foreach ($results as $key => $result) {
+            $results[$key] = $this->backyard->getUser()->convertToData($result);
         }
 
-
-        return array('status' => 'success', 'total' => $total, 'results' => $results);
+        return array(
+            'status' => 'success', 
+            'total' => $total, 
+            'total_page' => ceil($total / $count), 
+            'results' => $results
+        );
     }
 
     /**
