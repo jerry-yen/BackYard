@@ -12,6 +12,7 @@
             'instance': this,
             'add_button_selector': 'button.add',
             'modify_button_selector': 'button.modify',
+            'delete_button_selector': 'button.delete',
             'submit_button_selector': 'button.submit'
         }, _settings);
 
@@ -26,7 +27,7 @@
             event: {
                 /**
                  * 初始化：載入Metadata並將介面擺放定位
-                 */  
+                 */
                 tableInitial: function () {
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
@@ -52,6 +53,7 @@
 
                     this.addEvent();
                     this.modifyEvent();
+                    this.deleteEvent();
                 },
 
                 /**
@@ -165,11 +167,58 @@
                  */
                 modifyEvent: function () {
                     var backyard = this;
-                    $('body').on('click', settings.modify_button_selector, function(){
+                    $('body').on('click', settings.modify_button_selector, function () {
                         $('div.' + settings.code + '_table').addClass('d-none');
                         $('div.' + settings.code + '_form').removeClass('d-none');
                         var id = $(this).closest('tr').attr('id');
                         backyard.formLoadData(id);
+                    });
+                },
+                /**
+                 * 刪除資料
+                 */
+                deleteEvent: function () {
+                    var backyard = this;
+                    $('body').on('click', settings.delete_button_selector, function () {
+                        var id = $(this).closest('tr').attr('id');
+                        Swal.fire({
+                            title: '刪除資料',
+                            icon: 'warning',
+                            html:
+                                '請注意！確定刪除後資料將<u>無法還原</u>',
+                            showCloseButton: true,
+                            showCancelButton: true,
+                            focusConfirm: false,
+                            confirmButtonText:
+                                '刪除',
+                            cancelButtonText:
+                                '取消'
+                        }).then((result) => {
+                            if (result.value) {
+                                $.backyard({ 'userType': settings.userType }).process.api(
+                                    '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
+                                    {'id':id},
+                                    'DELETE',
+                                    function (response) {
+                                        if (response.status != 'success') {
+                                            Swal.fire(
+                                                '發生錯誤！',
+                                                response.message,
+                                                'error'
+                                            );
+                                        }
+                                        else {
+                                            Swal.fire(
+                                                '刪除成功',
+                                                '',
+                                                'success'
+                                            );
+                                            backyard.tableLoadData();
+                                        }
+                                    }
+                                );
+                            }
+                        });
                     });
                 },
                 /**

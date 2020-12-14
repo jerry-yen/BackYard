@@ -35,7 +35,7 @@
                 <tr class="d-none">
                     <td> 
                         <button type="button" class="modify btn btn-xs bg-blue"><i class="far fa-edit"></i> 修改</button>
-                        <button type="button" class="btn btn-xs bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
+                        <button type="button" class="delete btn btn-xs bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
                         <button type="button" class="btn btn-xs bg-gradient-info"><i class="fas fa-bars"></i> 瀏覽</button>
                     </td>
                 </tr>

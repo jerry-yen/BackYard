@@ -180,9 +180,9 @@ class Data extends \backyard\Package
         }
 
         return array(
-            'status' => 'success', 
-            'total' => $total, 
-            'total_page' => ceil($total / $count), 
+            'status' => 'success',
+            'total' => $total,
+            'total_page' => ceil($total / $count),
             'results' => $results
         );
     }
@@ -360,24 +360,27 @@ class Data extends \backyard\Package
 
     /**
      * 刪除記錄
-     * 
-     * @param string $code 模組代碼(或資料庫名稱)
-     * @param string $id
      */
-    public function deleteItem($code, $id)
+    public function deleteItem()
     {
 
-        if (!isset($id) || is_null($id)) {
-            throw new \Exception('刪除資料表記錄:缺少識別碼');
+        $inputs = $this->backyard->getInputs();
+        if (!isset($inputs['code'])) {
+            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
 
-        if ($this->userType == 'master') {
-            $code = $this->database->dbprefix . 'module';
+        if (!isset($inputs['id']) || is_null($inputs['id'])) {
+            return array('status' => 'failed', 'message' => '刪除資料表記錄:缺少識別碼');
         }
+
+        $response = $this->backyard->getUser()->convertToDatabase($inputs);
+        $value = $response['value'];
 
         // 刪除記錄
-        $this->database->where('id', $id);
-        $this->database->delete($code);
+        $this->database->where('id', $value['id']);
+        $this->database->delete($response['table']);
+
+        return array('status' => 'success');
     }
 
     /**

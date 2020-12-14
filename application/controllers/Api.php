@@ -173,6 +173,15 @@ class Api extends \chriskacerguis\RestServer\RestController
     }
 
     /**
+     * 刪除項目
+     */
+    public function item_delete()
+    {
+        $response = $this->backyard->data->deleteItem();
+        $this->response($response, 200);
+    }
+
+    /**
      * 取得項目清單
      */
     public function items_get()

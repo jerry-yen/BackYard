@@ -205,6 +205,10 @@ class Backyard
                 $this->inputs,
                 \CI_Controller::get_instance()->put()
             );
+            $this->inputs = array_merge(
+                $this->inputs,
+                \CI_Controller::get_instance()->delete()
+            );
         } else {
             $this->inputs = array_merge(
                 get_instance()->input->get(),
