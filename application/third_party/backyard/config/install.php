@@ -6,7 +6,7 @@
 $config['install']['module'] = '
     CREATE TABLE IF NOT EXISTS byard_module (
         id VARCHAR(40) NOT NULL PRIMARY KEY COMMENT "識別碼" COLLATE utf8_unicode_ci,
-        type VARCHAR(30) NOT NULL COMMENT "設定類型(dataset,widget,page,menu)" COLLATE utf8_unicode_ci,
+        type VARCHAR(30) NOT NULL COMMENT "設定類型(login,dataset,email,widget,page,menu,...)" COLLATE utf8_unicode_ci,
         code VARCHAR(30) NOT NULL COMMENT "代碼" COLLATE utf8_unicode_ci,
         metadata TEXT NULL COMMENT "後設資料(JSON)" COLLATE utf8_unicode_ci,
         created_at DATETIME COMMENT "建置時間" COLLATE utf8_unicode_ci,

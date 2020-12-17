@@ -79,6 +79,11 @@ class Master extends \backyard\Package
             unset($result['metadata']);
         }
 
+        if (isset($result['code'])) {
+            $result['_code'] = $result['code'];
+            unset($result['code']);
+        }
+
         return $result;
     }
 
@@ -99,8 +104,11 @@ class Master extends \backyard\Package
         if(isset($value['updated_at'])){
             $module['updated_at'] = $value['updated_at'];
         }
+        if(isset($value['_code'])){
+            $module['code'] = $value['_code'];
+        }
         if(isset($value['code'])){
-            $module['code'] = $value['code'];
+            $module['type'] = $value['code'];
         }
         $table = get_instance()->db->dbprefix . 'module';
 
@@ -108,6 +116,7 @@ class Master extends \backyard\Package
         unset($value['created_at']);
         unset($value['updated_at']);
         unset($value['code']);
+        unset($value['_code']);
         $module['metadata'] = json_encode($value, JSON_UNESCAPED_UNICODE);
         unset($value);
 
@@ -137,7 +146,7 @@ class Master extends \backyard\Package
             $module['updated_at'] = $value['updated_at'];
         }
         if(isset($value['code'])){
-            $module['code'] = $value['code'];
+            $module['type'] = $value['code'];
         }
         $table = get_instance()->db->dbprefix . 'module';
         return array('table' => $table, 'where' => $module);
