@@ -8,7 +8,7 @@
         <div class="card-tools" style="padding:5px;">
             <button type="button" class="add btn bg-green"><i class="fas fa-plus"></i> 新增</button>
             <button type="button" class="btn bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
-            <button type="button" class="btn bg-gradient-info"><i class="fas fa-sort-amount-down-alt"></i> 排序</button>
+            <button type="button" class="sort btn bg-gradient-info"><i class="fas fa-sort-amount-down-alt"></i> 排序</button>
             <div class="btn-group">
                 <button type="button" class="btn bg-yellow"><i class="fas fa-bars"></i> 其它</button>
                 <button type="button" class="btn bg-yellow dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -73,6 +73,44 @@
     </form>
 </div>
 <!-- /.card -->
+
+
+<div class="card card-primary {code}_sort d-none">
+    <div class="card-header ">
+        <h3 class="card-title">{title}</h3>
+    </div>
+
+    <!-- /.card-header -->
+    <div class="card-body table-responsive p-0">
+        <div class="card-tools" style="padding:5px;">
+            <button type="button" class="check-sort btn bg-blue"><i class="fas fa-check"></i> 修改順序</button>
+            <button type="button" class="return btn bg-yellow"><i class="fas fa-times"></i> 取消</button>
+        </div>
+        <table class="table table-hover text-nowrap">
+            <thead>
+                <tr>
+                    <th width="20">&nbsp;</th>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="d-none">
+                    <td> 
+                        <div class="sort-drop"><i class="fas fa-grip-vertical"></i></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer clearfix">
+        
+    </div>
+</div>
+
 <script>
     $('document').ready(function() {
         $('div[widget="{code}"]').backyard_data({
@@ -80,4 +118,3 @@
         });
     });
 </script>
-<!-- /.card -->

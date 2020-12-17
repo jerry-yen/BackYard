@@ -10,20 +10,14 @@
             'userType': 'admin',
             'code': $(this).attr('widget'),
             'instance': this,
-            'submit_button_selector': 'button.modify'
+            'submit_button_selector': 'button.submit'
         }, _settings);
 
         var components = [];
 
         // 自定義函式
-        var coreMethod = {
-            /**
-             * @var 事件物件
-             */
-            event: {
-                /**
-                 * 初始化：載入Metadata並將介面擺放定位
-                 */
+        var widget = {
+            form: {
                 initial: function () {
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
@@ -64,11 +58,9 @@
 
                         components[fields[key].frontendVariable] = component;
                     }
-                },
 
-                /**
-                 * 載入資料
-                 */
+                    widget.form.listener.submit();
+                },
                 loadData: function () {
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
@@ -91,52 +83,52 @@
                         }
                     );
                 },
-                /**
-                 * 送出表單
-                 */
-                submitEvent: function () {
-                    $(settings.submit_button_selector).click(function () {
+                listener: {
+                    /**
+                     * 送出表單
+                     */
+                    submit: function () {
+                        $(settings.submit_button_selector).click(function () {
 
-                        var data = {};
+                            var data = {};
 
-                        // 取得所有隱藏欄位值，包含id
-                        $('input[type="hidden"]').each(function () {
-                            data[$(this).attr('name')] = $(this).val();
-                        });
+                            // 取得所有隱藏欄位值，包含id
+                            $('input[type="hidden"]').each(function () {
+                                data[$(this).attr('name')] = $(this).val();
+                            });
 
-                        // 取得各欄位(元件)的值
-                        for (var key in components) {
-                            data[components[key].getName()] = components[key].getValue();
-                            components[key].setInvalid('');
-                        }
+                            // 取得各欄位(元件)的值
+                            for (var key in components) {
+                                data[components[key].getName()] = components[key].getValue();
+                                components[key].setInvalid('');
+                            }
 
-                        httpType = (data['id'] != undefined) ? 'PUT' : 'POST';
+                            httpType = (data['id'] != undefined) ? 'PUT' : 'POST';
 
-                        $.backyard({ 'userType': settings.userType }).process.api(
-                            '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
-                            data,
-                            httpType,
-                            function (response) {
-                                if (response.status == 'failed') {
-                                    // 欄位驗證失敗
-                                    if (response.code == 'validator') {
-                                        for (var fieldName in response.message) {
-                                            components[fieldName].setInvalid(response.message[fieldName]);
+                            $.backyard({ 'userType': settings.userType }).process.api(
+                                '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
+                                data,
+                                httpType,
+                                function (response) {
+                                    if (response.status == 'failed') {
+                                        // 欄位驗證失敗
+                                        if (response.code == 'validator') {
+                                            for (var fieldName in response.message) {
+                                                components[fieldName].setInvalid(response.message[fieldName]);
+                                            }
                                         }
                                     }
                                 }
-                                console.log(response);
-                            }
-                        );
-                    });
-                }
-            },
+                            );
+                        });
+                    }
+                },
+            }
         }
 
-        coreMethod.event.initial();
-        coreMethod.event.submitEvent();
-        coreMethod.event.loadData();
+        widget.form.initial();
+        widget.form.loadData();
 
-        return coreMethod;
+        return widget;
     };
 }(jQuery));
