@@ -59,12 +59,42 @@ class Page extends \backyard\Package
         $this->backyard->config->loadConfigFile('frontend');
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
+
+        /* 版面各區塊所使用的組件 */
+
+        // Logo 區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('logo');
+        $this->readScripts($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+        // 左側區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('leftside');
+        $this->readScripts($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+        // 頁頭區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('header');
+        $this->readScripts($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+        // 頁底區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('footer');
+        $this->readScripts($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
         // 取得頁面後設資料
-        $pageMetadata = $this->getMetadata($code);
-        foreach ($pageMetadata['metadata']['widgets'] as $widget) {
+        $template = $this->getMetadata($code);
+        $this->readScripts($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+
+        return implode("\r\n", $widgetScripts) . "\r\n" . implode("\r\n", $componentScripts);
+    }
+
+    private function readScripts($widgets, &$widgetScripts, &$componentScripts)
+    {
+        foreach ($widgets as $widget) {
 
             // 取得組件後設資料
             $widgetMetadata = $this->backyard->widget->getMetadata($widget['code']);
+            if ($widgetMetadata['status'] != 'success') {
+                continue;
+            }
             $widgetName = $widgetMetadata['metadata']['widget'];
             if (isset($widgetScripts[$widgetName])) {
                 continue;
@@ -83,20 +113,20 @@ class Page extends \backyard\Package
             // 取得資料集後設資料
             $datasetCode = $widgetMetadata['metadata']['dataset'];
             $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
-            foreach ($fieldDataset['dataset']['fields'] as $field) {
-                // 取得元件Script內容
-                $scriptPath = $this->viewPath . '/components/' . $field['component'] . '/component.js';
-                if (!file_exists($scriptPath)) {
-                    continue;
-                }
+            if (isset($fieldDataset['dataset'])) {
+                foreach ($fieldDataset['dataset']['fields'] as $field) {
+                    // 取得元件Script內容
+                    $scriptPath = $this->viewPath . '/components/' . $field['component'] . '/component.js';
+                    if (!file_exists($scriptPath)) {
+                        continue;
+                    }
 
-                $componentScript = file_get_contents($scriptPath) . "\r\n";
-                $componentScript .= $this->readLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
-                $componentScripts[$field['component']] = $componentScript;
+                    $componentScript = file_get_contents($scriptPath) . "\r\n";
+                    $componentScript .= $this->readLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
+                    $componentScripts[$field['component']] = $componentScript;
+                }
             }
         }
-
-        return implode("\r\n", $widgetScripts) . "\r\n" . implode("\r\n", $componentScripts);
     }
 
     /**
@@ -137,8 +167,29 @@ class Page extends \backyard\Package
         $this->backyard->config->loadConfigFile('frontend');
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
+        /* 版面各區塊所使用的組件 */
+
+        // Logo 區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('logo');
+        $this->readCsses($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+        // 左側區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('leftside');
+        $this->readCsses($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+        // 頁頭區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('header');
+        $this->readCsses($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
+        // 頁底區塊
+        $template = $this->backyard->getUser()->getMetadataOfTemplate('footer');
+        $this->readCsses($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+
         // 取得頁面後設資料
-        $pageMetadata = $this->getMetadata($code);
+        $template = $this->getMetadata($code);
+        $this->readCsses($template['metadata']['widgets'], $widgetStyles, $componentStyles);
+
+        /*
         foreach ($pageMetadata['metadata']['widgets'] as $widget) {
 
             // 取得組件後設資料
@@ -171,8 +222,49 @@ class Page extends \backyard\Package
                 $componentStyles[$field['component']] = $componentStyle;
             }
         }
+        */
 
         return implode("\r\n", $widgetStyles) . "\r\n" . implode("\r\n", $componentStyles);
+    }
+
+    private function readCsses($widgets, &$widgetStyles, &$componentStyles)
+    {
+        foreach ($widgets as $widget) {
+            // 取得組件後設資料
+            $widgetMetadata = $this->backyard->widget->getMetadata($widget['code']);
+            if ($widgetMetadata['status'] != 'success') {
+                continue;
+            }
+            $widgetName = $widgetMetadata['metadata']['widget'];
+            if (isset($widgetStyles[$widgetName])) {
+                continue;
+            }
+
+            // 取得元件Style內容
+            $widgetStyle = '';
+            $stylePath = $this->viewPath . '/widgets/' . $widgetName . '/style.css';
+            if (file_exists($stylePath)) {
+                $widgetStyle = file_get_contents($stylePath) . "\r\n";
+            }
+            $widgetStyle .= $this->readCSSLibraries($this->viewPath . '/widgets/' . $widgetName . '/libraries.json');
+            $widgetStyles[$widgetName] = $widgetStyle;
+
+            // 取得資料集後設資料
+            $datasetCode = $widgetMetadata['metadata']['dataset'];
+            $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
+            if (isset($fieldDataset['dataset']['fields'])) {
+                foreach ($fieldDataset['dataset']['fields'] as $field) {
+                    // 取得元件Style內容
+                    $componentStyle = '';
+                    $stylePath = $this->viewPath . '/components/' . $field['component'] . '/component.css';
+                    if (file_exists($stylePath)) {
+                        $componentStyle = file_get_contents($stylePath) . "\r\n";
+                    }
+                    $componentStyle .= $this->readCSSLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
+                    $componentStyles[$field['component']] = $componentStyle;
+                }
+            }
+        }
     }
 
     /**
@@ -209,7 +301,7 @@ class Page extends \backyard\Package
 
         // 取得頁面後設資料
         $page = $this->getMetadata($code);
-        if($page['status'] != 'success'){
+        if ($page['status'] != 'success') {
             return $page['message'];
         }
         $content = file_get_contents($this->viewPath . '/full.html');

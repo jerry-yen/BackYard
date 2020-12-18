@@ -45,7 +45,7 @@ $config['master']['dataset']['email'] = array(
  *               組件
  *************************************/
 
- /**
+/**
  * 選單組件
  */
 $config['master']['widget']['menu'] = array(
@@ -60,6 +60,28 @@ $config['master']['widget']['menu'] = array(
         'submit'        => '',
         'cancel'        => '',
         'dataSource'    => '/api/menu'
+    ),
+    'menu'   => array(
+        // 一層
+        array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+
+        // 二層
+        array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
+            array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+            array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+        )),
+
+        // 三層
+        array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理',  'subItems' => array(
+            array('type' => 'pageClass', 'icon' => '', 'title' => '網站管理',  'subItems' => array(
+                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+            )),
+            array('type' => 'pageClass', 'icon' => '', 'title' => '不要管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+            )),
+        )),
     )
 );
 
@@ -133,11 +155,12 @@ $config['master']['widget']['footer'] = array(
     'events' => array()
 );
 
+
 /*************************************
  *               版面
  *************************************/
 
- // 左側版面
+// 左側版面
 $config['master']['template']['logo'] = array(
     'name'      => 'LOGO',
     'code'      => 'logo',
@@ -196,36 +219,5 @@ $config['master']['page']['email'] = array(
     'code'      => 'email',
     'widgets'   => array(
         array('code' => 'email', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
-    )
-);
-
-/*************************************
- *               選單
- *************************************/
-
-$config['master']['menu'] = array(
-    'name'      => '選單設定',
-    'code'      => 'login',
-    'menu'   => array(
-        // 一層
-        array('type' => 'page', 'icon' => '', 'code' => 'login'),
-
-        // 二層
-        array('type' => 'pageClass', 'icon' => '', 'subItems' => array(
-            array('type' => 'page', 'icon' => '', 'code' => 'login'),
-            array('type' => 'page', 'icon' => '', 'code' => 'email'),
-        )),
-
-        // 三層
-        array('type' => 'pageClass', 'icon' => '', 'subItems' => array(
-            array('type' => 'pageClass', 'icon' => '', 'pages' => array(
-                array('type' => 'page', 'icon' => '', 'code' => 'login'),
-                array('type' => 'page', 'icon' => '', 'code' => 'email'),
-            )),
-            array('type' => 'pageClass', 'icon' => '', 'pages' => array(
-                array('type' => 'page', 'icon' => '', 'code' => 'login'),
-                array('type' => 'page', 'icon' => '', 'code' => 'email'),
-            )),
-        )),
     )
 );

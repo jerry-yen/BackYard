@@ -22,7 +22,7 @@ class Master extends \backyard\Package
         if (!isset($master['dataset'][$code])) {
             return array('status' => 'failed', 'code' => 'dataset', 'message' => '找不到Master設定');
         } else {
-            return array('status' => 'success','code' => 'dataset', 'dataset' => $master['dataset'][$code]);
+            return array('status' => 'success', 'code' => 'dataset', 'dataset' => $master['dataset'][$code]);
         }
     }
 
@@ -35,6 +35,9 @@ class Master extends \backyard\Package
     {
         $this->backyard->config->loadConfigFile('master');
         $master = $this->backyard->config->getConfig('master');
+        if (!isset($master['widget'][$code])) {
+            return array('status' => 'failed', 'message' => '找不到此組件');
+        }
         return array('status' => 'success', 'metadata' => $master['widget'][$code]);
     }
 
@@ -47,7 +50,7 @@ class Master extends \backyard\Package
     {
         $this->backyard->config->loadConfigFile('master');
         $master = $this->backyard->config->getConfig('master');
-        if(!isset($master['page'][$code])){
+        if (!isset($master['page'][$code])) {
             return array('status' => 'failed', 'message' => '找不到此頁面');
         }
         return array('status' => 'success', 'metadata' => $master['page'][$code]);
@@ -98,16 +101,16 @@ class Master extends \backyard\Package
     {
         $module['id'] = $value['id'];
 
-       if(isset($value['created_at'])){
+        if (isset($value['created_at'])) {
             $module['created_at'] = $value['created_at'];
         }
-        if(isset($value['updated_at'])){
+        if (isset($value['updated_at'])) {
             $module['updated_at'] = $value['updated_at'];
         }
-        if(isset($value['_code'])){
+        if (isset($value['_code'])) {
             $module['code'] = $value['_code'];
         }
-        if(isset($value['code'])){
+        if (isset($value['code'])) {
             $module['type'] = $value['code'];
         }
         $table = get_instance()->db->dbprefix . 'module';
@@ -136,16 +139,16 @@ class Master extends \backyard\Package
     public function convertToWhere($value)
     {
         $module = array();
-        if(isset($value['id'])){
+        if (isset($value['id'])) {
             $module['id'] = $value['id'];
         }
-        if(isset($value['created_at'])){
+        if (isset($value['created_at'])) {
             $module['created_at'] = $value['created_at'];
         }
-        if(isset($value['updated_at'])){
+        if (isset($value['updated_at'])) {
             $module['updated_at'] = $value['updated_at'];
         }
-        if(isset($value['code'])){
+        if (isset($value['code'])) {
             $module['type'] = $value['code'];
         }
         $table = get_instance()->db->dbprefix . 'module';

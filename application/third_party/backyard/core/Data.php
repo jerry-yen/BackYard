@@ -382,28 +382,4 @@ class Data extends \backyard\Package
 
         return array('status' => 'success');
     }
-
-    /**
-     * 儲存記錄 ( 不在存就新增，如存在就更新)
-     * @param string $code 模組代碼(或資料庫名稱)
-     * @param string $id
-     * @param array $value 欄位及值
-     * 
-     * @param string GUID 更新記錄的ID
-     */
-    public function saveItem($code, $id, $value = array())
-    {
-
-        // 資料存在則更新
-        if (!is_null($id) && trim($id) != '') {
-            $response = $this->getItem($code, array('id'), array('id' => $id));
-            if ($response['status'] == 'success') {
-                return $this->updateItem($code, $id, $value);
-            }
-        }
-
-        // 找不到資料則新增
-        $value['id'] = $id;
-        return $this->insertItem($code, $value);
-    }
 }

@@ -39,10 +39,6 @@ class Widget extends \backyard\Package
     public function getMetadata($code)
     {
         $widget = $this->backyard->getUser()->getMetadataOfWidget($code);
-        if ($widget['status'] != 'success') {
-            return '頁面載入錯誤';
-        }
-
         return $widget;
     }
 
