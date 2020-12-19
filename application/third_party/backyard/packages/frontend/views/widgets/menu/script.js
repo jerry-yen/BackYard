@@ -28,8 +28,6 @@
                         return;
                     }
 
-                    console.log(response.metadata.menu);
-
                     for (var i in response.metadata.menu) {
                         var item = $('li.nav-item.template', settings.instance).clone();
                         item.removeClass('template').removeClass('d-none');

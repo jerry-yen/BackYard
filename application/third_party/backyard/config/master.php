@@ -63,8 +63,26 @@ $config['master']['widget']['menu'] = array(
     ),
     'menu'   => array(
         // 一層
-        array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+        array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
+            array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+            array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+            array('type' => 'page', 'icon' => '', 'title' => '帳戶管理', 'code' => 'account'),
+        )),
 
+        array('type' => 'pageClass', 'icon' => '', 'title' => '資訊管理', 'subItems' => array(
+            array('type' => 'page', 'icon' => '', 'title' => '資料管理', 'code' => 'dataset'),
+            array('type' => 'page', 'icon' => '', 'title' => '組件管理', 'code' => 'widget'),
+        )),
+        
+        array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
+            array('type' => 'page', 'icon' => '', 'title' => 'LOGO管理', 'code' => 'logo'),
+            array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
+            array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'page'),
+            array('type' => 'page', 'icon' => '', 'title' => '側欄管理', 'code' => 'leftside'),
+            array('type' => 'page', 'icon' => '', 'title' => '頁尾管理', 'code' => 'footer'),
+        )),
+
+/*
         // 二層
         array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
             array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
@@ -82,6 +100,7 @@ $config['master']['widget']['menu'] = array(
                 array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
             )),
         )),
+*/
     )
 );
 
