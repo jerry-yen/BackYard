@@ -310,7 +310,9 @@
                     widget.sort.listener.check();
                     widget.sort.listener.cancel();
 
-                    $('div.' + settings.code + '_sort table tbody').sortable();
+                    $('div.' + settings.code + '_sort table tbody').sortable({
+                        handle: "td i.fa-grip-vertical"
+                    });
                 },
 
                 loadData: function () {

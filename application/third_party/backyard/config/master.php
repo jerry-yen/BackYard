@@ -22,7 +22,7 @@ $config['master']['dataset']['login'] = array(
  * 信箱設定
  */
 $config['master']['dataset']['email'] = array(
-    'name'              => '信箱設定',
+    'name'              => '信箱管理',
     'code'              => 'email',
     'fields'        => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
@@ -38,6 +38,45 @@ $config['master']['dataset']['email'] = array(
         array('name' => '帳號', 'dbVariable' => 'smtpAccount', 'frontendVariable' => 'smtpAccount', 'component' => 'text', 'validator' => array('length{5,50}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '是否需要驗證', 'dbVariable' => 'isVerification', 'frontendVariable' => 'isVerification', 'component' => 'switch', 'validator' => array('enum{Y,N}'), 'converter' => array(), 'source' => '["是","否"]', 'fieldTip' => ''),
         array('name' => '安全協定', 'dbVariable' => 'smtpSecure', 'frontendVariable' => 'smtpSecure', 'component' => 'select', 'validator' => array('required', 'enum{,SSL,TLS}'), 'converter' => array(), 'source' => '{"":"無","SSL":"SSL","TLS":"TLS"}', 'fieldTip' => ''),
+    )
+);
+
+/**
+ * 帳號管理
+ */
+$config['master']['dataset']['account'] = array(
+    'name'              => '帳號管理',
+    'code'              => 'account',
+    'fields'        => array(
+        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '密碼', 'dbVariable' => 'password', 'frontendVariable' => 'password', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    )
+);
+
+/**
+ * 資料管理
+ */
+$config['master']['dataset']['dataset'] = array(
+    'name'              => '資料管理',
+    'code'              => 'dataset',
+    'fields'        => array(
+        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '欄位', 'dbVariable' => 'fields', 'frontendVariable' => 'fields', 'component' => 'datasetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    )
+);
+
+/**
+ * 組件管理
+ */
+$config['master']['dataset']['widget'] = array(
+    'name'              => '組件管理',
+    'code'              => 'widget',
+    'fields'        => array(
+        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '欄位', 'dbVariable' => 'fields', 'frontendVariable' => 'fields', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     )
 );
 
@@ -73,7 +112,7 @@ $config['master']['widget']['menu'] = array(
             array('type' => 'page', 'icon' => '', 'title' => '資料管理', 'code' => 'dataset'),
             array('type' => 'page', 'icon' => '', 'title' => '組件管理', 'code' => 'widget'),
         )),
-        
+
         array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
             array('type' => 'page', 'icon' => '', 'title' => 'LOGO管理', 'code' => 'logo'),
             array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
@@ -82,7 +121,7 @@ $config['master']['widget']['menu'] = array(
             array('type' => 'page', 'icon' => '', 'title' => '頁尾管理', 'code' => 'footer'),
         )),
 
-/*
+        /*
         // 二層
         array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
             array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
@@ -124,7 +163,7 @@ $config['master']['widget']['login'] = array(
 );
 
 /**
- * 信箱設定組件
+ * 信箱管理組件
  */
 $config['master']['widget']['email'] = array(
     'name'              => '信箱管理',
@@ -135,6 +174,81 @@ $config['master']['widget']['email'] = array(
     'listfields'            => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('require', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('require', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => '')
+    ),
+    'permission'        => array(
+        'ADD', 'MODIFY', 'DELETE'
+    ),
+    'events' => array(
+        'add'           => '',
+        'modify'        => '',
+        'delete'        => '',
+        'batchDelete'   => '',
+        'dataSource'    => '',
+    )
+);
+
+/**
+ * 帳號管理組件
+ */
+$config['master']['widget']['account'] = array(
+    'name'              => '帳號管理',
+    'code'              => 'account',
+    'widget'            => 'data',
+    'dataset'           => 'account',
+    'classLevelCount'   => 0,
+    'listfields'            => array(
+        array('name' => '姓名', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '帳號', 'dbVariable' => 'account', 'frontendVariable' => 'account', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    ),
+    'permission'        => array(
+        'ADD', 'MODIFY', 'DELETE'
+    ),
+    'events' => array(
+        'add'           => '',
+        'modify'        => '',
+        'delete'        => '',
+        'batchDelete'   => '',
+        'dataSource'    => '',
+    )
+);
+
+/**
+ * 資料管理組件
+ */
+$config['master']['widget']['dataset'] = array(
+    'name'              => '資料管理',
+    'code'              => 'dataset',
+    'widget'            => 'data',
+    'dataset'           => 'dataset',
+    'classLevelCount'   => 0,
+    'listfields'            => array(
+        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    ),
+    'permission'        => array(
+        'ADD', 'MODIFY', 'DELETE'
+    ),
+    'events' => array(
+        'add'           => '',
+        'modify'        => '',
+        'delete'        => '',
+        'batchDelete'   => '',
+        'dataSource'    => '',
+    )
+);
+
+/**
+ * 組件管理組件
+ */
+$config['master']['widget']['widget'] = array(
+    'name'              => '組件管理',
+    'code'              => 'widget',
+    'widget'            => 'data',
+    'dataset'           => 'widget',
+    'classLevelCount'   => 0,
+    'listfields'            => array(
+        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     ),
     'permission'        => array(
         'ADD', 'MODIFY', 'DELETE'
@@ -238,5 +352,86 @@ $config['master']['page']['email'] = array(
     'code'      => 'email',
     'widgets'   => array(
         array('code' => 'email', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+/**
+ * 帳號管理
+ */
+$config['master']['page']['account'] = array(
+    'name'      => '帳號管理',
+    'code'      => 'account',
+    'widgets'   => array(
+        array('code' => 'account', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+/**
+ * 資料管理
+ */
+$config['master']['page']['dataset'] = array(
+    'name'      => '資料管理',
+    'code'      => 'dataset',
+    'widgets'   => array(
+        array('code' => 'dataset', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+/**
+ * 組件管理
+ */
+$config['master']['page']['widget'] = array(
+    'name'      => '組件管理',
+    'code'      => 'widget',
+    'widgets'   => array(
+        array('code' => 'widget', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+
+/**
+ * 頁頭管理
+ */
+$config['master']['page']['header'] = array(
+    'name'      => '頁頭管理',
+    'code'      => 'header',
+    'widgets'   => array(
+        array('code' => 'header', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+
+/**
+ * 頁面管理
+ */
+$config['master']['page']['page'] = array(
+    'name'      => '頁面管理',
+    'code'      => 'page',
+    'widgets'   => array(
+        array('code' => 'page', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+
+/**
+ * 側欄管理
+ */
+$config['master']['page']['leftside'] = array(
+    'name'      => '側欄管理',
+    'code'      => 'leftside',
+    'widgets'   => array(
+        array('code' => 'leftside', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+    )
+);
+
+
+/**
+ * 頁尾管理
+ */
+$config['master']['page']['footer'] = array(
+    'name'      => '頁尾管理',
+    'code'      => 'footer',
+    'widgets'   => array(
+        array('code' => 'footer', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
     )
 );
