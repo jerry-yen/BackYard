@@ -146,7 +146,7 @@
                     $(this).closest('tr').remove();
                 });
 
-
+                
 
             },
             getName: function () {
@@ -227,6 +227,10 @@
 
                     $('table tbody', settings.component).append(item);
                 }
+
+                $('table#' + settings.id + ' tbody').sortable({
+                    handle: "td i.fa-grip-vertical"
+                });
             }
         };
 
