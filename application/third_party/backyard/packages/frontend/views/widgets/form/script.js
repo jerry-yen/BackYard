@@ -80,7 +80,9 @@
                                     $('div.card-body', settings.instance).append('<input type="hidden" id="id" name="id" value="' + response.item['id'] + '"/>')
                                 }
                             }
-                        }
+                        },
+                        null,
+                        true
                     );
                 },
                 listener: {

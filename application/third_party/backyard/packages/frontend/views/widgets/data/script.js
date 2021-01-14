@@ -88,6 +88,8 @@
                             // 切換到排序介面
                             widget.sort.loadData();
                             widget.interface.turn('sort');
+                            widget.sort.initial();
+                            widget.sort.loadData();
                         });
                     },
 
@@ -103,6 +105,7 @@
 
                             // 切換到表單介面
                             widget.interface.turn('form');
+                            widget.form.initial();
                         });
                     },
 
@@ -116,6 +119,7 @@
                             widget.interface.turn('form');
 
                             var id = $(this).closest('tr').attr('id');
+                            widget.form.initial();
                             widget.form.loadData(id);
                         });
                     },
@@ -270,7 +274,7 @@
                                     else {
                                         // 切換到清單介面
                                         widget.interface.turn('table');
-
+                                        widget.table.initial();
                                         widget.table.loadData();
                                     }
                                 }
@@ -335,7 +339,9 @@
                                     $('div.' + settings.code + '_sort table tbody', settings.instance).append(tr);
                                 }
                             }
-                        }
+                        },
+                        null,
+                        true
                     );
                 },
 
@@ -358,7 +364,7 @@
                                     else {
                                         // 切換到清單介面
                                         widget.interface.turn('table');
-
+                                        widget.table.initial();
                                         widget.table.loadData();
                                     }
                                 }
@@ -372,6 +378,8 @@
                         $('body').on('click', settings.sort_cancel_button_selector, function () {
                             // 切換到表單介面
                             widget.interface.turn('table');
+                            widget.table.initial();
+                            widget.table.loadData();
                         });
                     }
                 }
@@ -398,8 +406,6 @@
         }
 
         widget.table.initial();
-        widget.form.initial();
-        widget.sort.initial();
         widget.table.loadData();
 
         return widget;

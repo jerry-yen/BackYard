@@ -1,6 +1,6 @@
 <div class="card card-primary {code}_table">
     <div class="card-header ">
-        <h3 class="card-title">{title}</h3>
+        <h3 class="card-title"></h3>
     </div>
 
     <!-- /.card-header -->
@@ -25,10 +25,6 @@
             <thead>
                 <tr>
                     <th>操作</th>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Reason</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,7 +73,7 @@
 
 <div class="card card-primary {code}_sort d-none">
     <div class="card-header ">
-        <h3 class="card-title">{title}</h3>
+        <h3 class="card-title"></h3>
     </div>
 
     <!-- /.card-header -->
@@ -90,10 +86,6 @@
             <thead>
                 <tr>
                     <th width="20">&nbsp;</th>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Reason</th>
                 </tr>
             </thead>
             <tbody>
