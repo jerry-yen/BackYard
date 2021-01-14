@@ -18,9 +18,8 @@
         var widget = {
             menu: {
                 initial: function () {
-
                     var urlParts = location.href.split('/');
-                    settings.url_code = urlParts[urlParts.length - 1];
+                    settings.url_code = urlParts[urlParts.length - 1].replace('#','');
 
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
@@ -41,6 +40,7 @@
                         $(this).css({'display':'block'});
                         $(this).closest('li').addClass('menu-open');
                     });
+                    $('[data-widget="treeview"]', settings.instance).Treeview('init');
                 },
 
                 loadData: function () {
