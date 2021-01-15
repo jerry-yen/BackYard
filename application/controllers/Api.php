@@ -51,6 +51,27 @@ class Api extends \chriskacerguis\RestServer\RestController
     }
 
     /**
+     * 取得組件自訂義的後設資料
+     * 
+     * @param string code 代碼
+     * @param string user 使用者類型(master, admin)
+     * 
+     * @return json 組件資料
+     */
+    public function definewidget_get()
+    {
+        $this->backyard->loadPackage('frontend');
+        $metadata = $this->backyard->widget->getDefineMetadata($this->get('code'));
+        $this->response($metadata, 200);
+    }
+
+    public function widgetlist_get(){
+        $this->backyard->loadPackage('frontend');
+        $metadata = $this->backyard->widget->getWidgetList($this->get('code'));
+        $this->response($metadata, 200);
+    }
+
+    /**
      * 取得組件HTML資料
      * 
      * @param string code 代碼

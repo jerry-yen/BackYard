@@ -43,6 +43,48 @@ class Widget extends \backyard\Package
     }
 
     /**
+     * 取得組清單
+     */
+    public function getWidgetList()
+    {
+        // 取得View基本路徑
+        $this->backyard->config->loadConfigFile('frontend');
+        $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
+        $widgets = array();
+        if (file_exists($this->viewPath . 'widgets/')) {
+            $dirs = scandir($this->viewPath . 'widgets/');
+            foreach($dirs as $dirOrFile){
+                if(in_array($dirOrFile, array('.','..'))){
+                    continue;
+                }
+                $widgets[] = $dirOrFile;
+            }
+        }
+
+        return $widgets;
+    }
+
+    /**
+     * 取得組件後設資料
+     * 
+     * @param string $code 代碼
+     */
+    public function getDefineMetadata($code)
+    {
+        // 取得View基本路徑
+        $this->backyard->config->loadConfigFile('frontend');
+        $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
+        // 取得組件內容
+        if (file_exists($this->viewPath . 'widgets/' . $code . '/metadata.php')) {
+            include_once($this->viewPath . 'widgets/' . $code . '/metadata.php');
+            return array('status' => 'success', 'metadata' => $metadata);
+        }
+
+
+        return array('status' => 'failed');
+    }
+
+    /**
      * 取得組件HTML語法
      * 
      * @param string $code 模組代碼

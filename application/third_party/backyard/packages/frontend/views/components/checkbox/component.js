@@ -1,20 +1,20 @@
 (function ($) {
 
     /**
-     * 下拉選單元件
+     * 核取方塊元件
      * 
      * @param {*} _settings 設定值
      */
-    $.select_component = function (_settings) {
+    $.checkbox_component = function (_settings) {
         var settings = $.extend({
             'id': '',
             'tip': '',
             'name': '',
             'value': '',
-            'class': 'form-control',
+            'class': '',
             'label': '',
             'source': '',
-            'component': $('<select></select>')
+            'component': $('<div></div>')
         }, _settings);
 
         // 自定義函式
@@ -22,24 +22,41 @@
             initial: function () {
                 settings.component
                     .attr('id', settings.id)
-                    .attr('class', settings.class)
-                    .attr('name', settings.name)
                     .val(settings.value);
-                if(settings.source.indexOf('api://') === 0){
+
+                if (settings.source.indexOf('api://') === 0) {
                     var apiUrl = settings.source.substring(6);
-                    $.backyard().process.api('/index.php/api/' + apiUrl, {}, 'GET', function(response){
-                        for(var key in response){
-                            settings.component.append('<option value="' + key + '">' + response[key] + '</option>');
+                    $.backyard().process.api('/index.php/api/' + apiUrl, {}, 'GET', function (response) {
+                        for (var key in response) {
+                            settings.component.append('\
+                            <div class="icheck-primary float-left pr-3">\
+                                <input id="' + settings.name + '-' + key + '" type="checkbox" name="' + settings.name + '[]" value="' + key + '" />\
+                                <label for="' + settings.name + '-' + key + '">' + response[key] + '</label>\
+                            </div>\
+                            '
+                            );
                         }
                     });
                 }
-                else{
+                else {
                     var source = JSON.parse(settings.source);
                     for (var key in source) {
-                        settings.component.append('<option value="' + key + '">' + source[key] + '</option>');
+                        settings.component.append('\
+                        <div class="icheck-primary float-left pr-3">\
+                            <input id="' + settings.name + '-' + key + '" type="checkbox" name="' + settings.name + '[]" value="' + key + '" />\
+                            <label for="' + settings.name + '-' + key + '">' + source[key] + '</label>\
+                        </div>\
+                        ')
                     }
                 }
-                
+                settings.component.append('<div class="clearfix"></div>');
+
+                /*
+                $('body').on('click', '#' + settings.id + ' input[type="checkbox"]', function(){
+                    // console.log($(this).prop('checked'));
+                });
+                */
+
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -59,7 +76,13 @@
                 return settings.name;
             },
             getValue: function () {
-                return settings.component.val();
+                var values = [];
+                $('#' + settings.id + ' input[type="checkbox"]').each(function () {
+                    if ($(this).prop('checked')) {
+                        values.push($(this).val());
+                    }
+                });
+                return values;
             },
             setInvalid: function (message) {
                 var invalid = $('invalid[for="' + settings.id + '"]');

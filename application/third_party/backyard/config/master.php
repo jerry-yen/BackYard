@@ -77,6 +77,8 @@ $config['master']['dataset']['widget'] = array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '欄位', 'dbVariable' => 'fields', 'frontendVariable' => 'fields', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '組件', 'dbVariable' => 'widget', 'frontendVariable' => 'widget', 'component' => 'widget', 'validator' => array(), 'converter' => array(), 'source' => 'api://widgetlist/user/master', 'fieldTip' => ''),
+        
     )
 );
 
@@ -248,18 +250,9 @@ $config['master']['widget']['widget'] = array(
     'classLevelCount'   => 0,
     'listfields'            => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => '')
     ),
-    'permission'        => array(
-        'ADD', 'MODIFY', 'DELETE'
-    ),
-    'events' => array(
-        'add'           => '',
-        'modify'        => '',
-        'delete'        => '',
-        'batchDelete'   => '',
-        'dataSource'    => '',
-    )
+    
 );
 
 /**

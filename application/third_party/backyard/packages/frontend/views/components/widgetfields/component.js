@@ -16,6 +16,7 @@
             'source': '',
             'component': $('\
                 <div class="datasetfields">\
+                    <select name="source"></select>\
                     <button type="button" class="add_field btn bg-green float-right">\
                         <i class="fas fa-plus"></i> 新增\
                     </button>\
