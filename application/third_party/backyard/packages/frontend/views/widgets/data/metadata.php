@@ -12,10 +12,10 @@ $metadata = array(
             'fieldTip' => ''
         ),
         array(
-            'name' => '清單欄位', 
+            'name' => '清單欄位顯示', 
             'dbVariable' => 'listfields', 
             'frontendVariable' => 'listfields', 
-            'component' => 'text', 
+            'component' => 'listfields', 
             'validator' => array(), 
             'converter' => array(), 
             'source' => '', 

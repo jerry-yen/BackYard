@@ -1,11 +1,11 @@
 (function ($) {
 
     /**
-     * 資料集欄位元件
+     * 清單欄位設定元件
      * 
      * @param {*} _settings 設定值
      */
-    $.widgetfields_component = function (_settings) {
+    $.listfields_component = function (_settings) {
         var settings = $.extend({
             'id': '',
             'tip': '',
@@ -16,14 +16,12 @@
             'source': '',
             'component': $('\
                 <div>\
-                    <select name="source" class="form-control"></select>\
-                    <br /><br />\
                     <table>\
                         <thead>\
                             <tr>\
-                                <th>名稱</th>\
-                                <th>前端變數</th>\
-                                <th>後端變數</th>\
+                                <th>&nbsp;</th>\
+                                <th>欄位名稱</th>\
+                                <th>顯示在清單</th>\
                             </tr>\
                         </thead>\
                         <tbody>\
@@ -32,9 +30,14 @@
                 </div>'),
             'emptyItem': '\
                             <tr>\
+                                <td><div class="sort-drop"><i class="fas fa-grip-vertical"></i></div></td>\
                                 <td class="name"></td>\
-                                <td class="fontendVariable"></td>\
-                                <td class="dbVariable"></td>\
+                                <td>\
+                                    <div class="icheck-primary float-left pr-3">\
+                                        <input id="" type="checkbox" name="[]" value="Y" />\
+                                        <label for=""></label>\
+                                    </div>\
+                                </td>\
                             </tr>'
         }, _settings);
 
@@ -46,18 +49,20 @@
                     .attr('class', settings.class)
                     .attr('name', settings.name);
 
-                $.backyard({ 'userType': 'master' }).process.api(
-                    '/index.php/api/items/user/master/code/dataset',
-                    {},
-                    'GET',
-                    function (response) {
-                        var select = $('select[name="source"]', settings.component);
-                        select.append('<option value="">請選擇</option>');
-                        for (var key in response.results) {
-                            select.append('<option value="' + response.results[key]._code + '" fields=\'' + response.results[key].fields + '\'>' + response.results[key].name + '</option>');
-                        }
-                    }
-                );
+                $('table tbody tr', settings.component).remove();
+                var source = $('#fields select[name="source"]');
+                var fieldsValue = $('option:selected', source).attr('fields');
+                if (fieldsValue == undefined) {
+                    return;
+                }
+                var fields = JSON.parse($('option:selected', source).attr('fields'));
+                for (var key in fields) {
+                    var emptyItem = $(settings.emptyItem);
+                    $('td.name', emptyItem).html(fields[key].name);
+                    $('td input[type="checkbox"]', emptyItem).attr('id', fields[key].fontendVariable);
+                    $('td label', emptyItem).attr('for', fields[key].fontendVariable);
+                    $('table tbody', settings.component).append(emptyItem);
+                }
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -73,7 +78,7 @@
             },
             elementConvertToComponent: function () {
 
-                $('body').on('change', '#' + settings.id + ' select[name="source"]', function () {
+                $('body').on('change', '#fields select[name="source"]', function () {
 
                     $('table tbody tr', settings.component).remove();
 
@@ -85,12 +90,13 @@
                     for (var key in fields) {
                         var emptyItem = $(settings.emptyItem);
                         $('td.name', emptyItem).html(fields[key].name);
-                        $('td.fontendVariable', emptyItem).html(fields[key].fontendVariable);
-                        $('td.dbVariable', emptyItem).html(fields[key].dbVariable);
                         $('table tbody', settings.component).append(emptyItem);
                     }
                 });
 
+                $('table tbody', settings.component).sortable({
+                    handle: "td i.fa-grip-vertical"
+                });
             },
             getName: function () {
                 return settings.name;
