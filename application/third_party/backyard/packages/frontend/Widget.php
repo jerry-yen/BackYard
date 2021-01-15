@@ -43,9 +43,9 @@ class Widget extends \backyard\Package
     }
 
     /**
-     * 取得組清單
+     * 取得組件清單
      */
-    public function getWidgetList()
+    public function getList()
     {
         // 取得View基本路徑
         $this->backyard->config->loadConfigFile('frontend');

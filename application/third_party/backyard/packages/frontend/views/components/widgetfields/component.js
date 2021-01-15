@@ -15,19 +15,15 @@
             'label': '',
             'source': '',
             'component': $('\
-                <div class="datasetfields">\
-                    <select name="source"></select>\
-                    <button type="button" class="add_field btn bg-green float-right">\
-                        <i class="fas fa-plus"></i> 新增\
-                    </button>\
+                <div>\
+                    <select name="source" class="form-control"></select>\
                     <br /><br />\
                     <table>\
                         <thead>\
                             <tr>\
-                                <th>&nbsp;</th>\
                                 <th>名稱</th>\
-                                <th>提示</th>\
-                                <th>操作</th>\
+                                <th>前端變數</th>\
+                                <th>後端變數</th>\
                             </tr>\
                         </thead>\
                         <tbody>\
@@ -36,56 +32,32 @@
                 </div>'),
             'emptyItem': '\
                             <tr>\
-                                <td><i class="fas fa-grip-vertical"></i></td>\
-                                <td><input type="text" name="name" class="form-control field_component"></td>\
-                                <td><input type="text" name="fontendVariable" class="form-control"></td>\
-                                <td><input type="text" name="dbVariable" class="form-control"></td>\
-                                <td>\
-                                    <select name="component" class="form-control">\
-                                        <optgroup label="HTML元件">\
-                                            <option value="text">文字方塊</option>\
-                                            <option value="textarea">多行文字</option>\
-                                            <option value="number">數字</option>\
-                                            <option value="select">單選下拉</option>\
-                                        </optgroup>\
-                                        <optgroup label="區塊元件">\
-                                            <option value="grouplabel">群組標籤</option>\
-                                        </optgroup>\
-                                        <optgroup label="jQuery套件">\
-                                            <option value="switch">開關閘</option>\
-                                        </optgroup>\
-                                    </select>\
-                                </td>\
-                                <td>\
-                                    <div class="datalist">\
-                                        <select name="validatorlist" class="form-control">\
-                                            <option value="">選擇即刪除</option>\
-                                        </select>\
-                                        <input name="validator" class="form-control" placeholder="0項">\
-                                    </div>\
-                                </td>\
-                                <td>\
-                                    <div class="datalist">\
-                                        <select name="converterlist" class="form-control">\
-                                            <option value="">選擇即刪除</option>\
-                                        </select>\
-                                        <input name="converter" class="form-control" placeholder="0項">\
-                                    </div>\
-                                </td>\
-                                <td><input type="text" name="source" class="form-control"></td>\
-                                <td><input type="text" name="fieldTip" class="form-control"></td>\
-                                <td><button type="button" name="delete" class="btn bg-red"><i class="fas fa-trash-alt"></i></td>\
+                                <td class="name"></td>\
+                                <td class="fontendVariable"></td>\
+                                <td class="dbVariable"></td>\
                             </tr>'
         }, _settings);
 
         // 自定義函式
         var coreMethod = {
             initial: function () {
+                settings.component.attr('id', settings.id);
                 $('table', settings.component)
-                    .attr('id', settings.id)
                     .attr('class', settings.class)
                     .attr('name', settings.name);
 
+                $.backyard({ 'userType': 'master' }).process.api(
+                    '/index.php/api/items/user/master/code/dataset',
+                    {},
+                    'GET',
+                    function (response) {
+                        var select = $('select[name="source"]', settings.component);
+                        select.append('<option value="">請選擇</option>');
+                        for (var key in response.results) {
+                            select.append('<option value="' + response.results[key]._code + '" fields=\'' + response.results[key].fields + '\'>' + response.results[key].name + '</option>');
+                        }
+                    }
+                );
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -100,6 +72,25 @@
                 return $('<invalid for="' + settings.id + '" style="display:none;"></invalid>');
             },
             elementConvertToComponent: function () {
+
+                $('body').on('change', '#' + settings.id + ' select[name="source"]', function () {
+
+                    $('table tbody tr', settings.component).remove();
+
+                    var fieldsValue = $('option:selected', $(this)).attr('fields');
+                    if (fieldsValue == undefined) {
+                        return;
+                    }
+                    var fields = JSON.parse($('option:selected', $(this)).attr('fields'));
+                    for (var key in fields) {
+                        var emptyItem = $(settings.emptyItem);
+                        $('td.name', emptyItem).html(fields[key].name);
+                        $('td.fontendVariable', emptyItem).html(fields[key].fontendVariable);
+                        $('td.dbVariable', emptyItem).html(fields[key].dbVariable);
+                        $('table tbody', settings.component).append(emptyItem);
+                    }
+                });
+
                 // datalist 選中之後，會自動被置制到 input，這時再偵測，如果input內容有在 datalist裡的話，就將datalist的內容刪除
                 $('button.add_field', settings.component).click(function () {
                     $('table tbody', settings.component).append(settings.emptyItem);
@@ -114,34 +105,6 @@
                     });
 
                 });
-
-                // 新增 datalist 資料
-                $('body').on('keypress', 'table#' + settings.id + ' input[name="validator"], input[name="converter"]', function (event) {
-                    if (event.keyCode != 13) {
-                        return;
-                    }
-
-                    $('select', $(this).closest('td')).append($('<option>').attr('value', $(this).val()).text($(this).val()));
-                    $(this).val('');
-                    $(this).focus();
-
-                    var count = $('select option', $(this).closest('td')).length;
-                    $(this).attr('placeholder', (count - 1) + '項');
-                });
-
-                // 刪除 datalist 資料
-                $('body').on('change', 'table#' + settings.id + ' div.datalist select', function () {
-                    $('option[value="' + $(this).val() + '"]', $(this)).remove();
-                    var count = $('select option', $(this).closest('td')).length;
-                    $('input', $(this).closest('td')).attr('placeholder', (count - 1) + '項');
-                });
-
-                // 刪除項目
-                $('body').on('click', 'table#' + settings.id + ' button[name="delete"]', function () {
-                    $(this).closest('tr').remove();
-                });
-
-                
 
             },
             getName: function () {

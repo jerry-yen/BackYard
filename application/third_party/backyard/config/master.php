@@ -76,7 +76,7 @@ $config['master']['dataset']['widget'] = array(
     'fields'        => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '欄位', 'dbVariable' => 'fields', 'frontendVariable' => 'fields', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '引用資料集', 'dbVariable' => 'fields', 'frontendVariable' => 'fields', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '組件', 'dbVariable' => 'widget', 'frontendVariable' => 'widget', 'component' => 'widget', 'validator' => array(), 'converter' => array(), 'source' => 'api://widgetlist/user/master', 'fieldTip' => ''),
         
     )
