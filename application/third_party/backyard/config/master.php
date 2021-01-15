@@ -116,7 +116,6 @@ $config['master']['widget']['menu'] = array(
         )),
 
         array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
-            array('type' => 'page', 'icon' => '', 'title' => 'LOGO管理', 'code' => 'logo'),
             array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
             array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'page'),
             array('type' => 'page', 'icon' => '', 'title' => '側欄管理', 'code' => 'leftside'),
