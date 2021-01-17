@@ -184,6 +184,8 @@
             form: {
                 initial: function () {
 
+                    $('div.card-body input[id="id"]', settings.instance).remove();
+                    
                     if(formLoaded){
                         return;
                     }
@@ -205,6 +207,7 @@
                     var fields = response.dataset.fields;
 
                     $('div.' + settings.code + '_form div.card-body *', settings.instance).remove();
+                    
 
                     // 呈現欄位元件
                     for (var key in fields) {

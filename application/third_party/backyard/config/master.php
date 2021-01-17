@@ -81,6 +81,62 @@ $config['master']['dataset']['widget'] = array(
     )
 );
 
+/**
+ * 頁頭組件
+ */
+$config['master']['dataset']['header'] = array(
+    'name'              => '頁頭組件',
+    'code'              => 'header',
+    'fields'        => array(
+        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+    )
+);
+
+/**
+ * 頁面組件
+ */
+$config['master']['dataset']['content'] = array(
+    'name'              => '頁面組件',
+    'code'              => 'content',
+    'fields'        => array(
+        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+    )
+);
+
+/**
+ * 側欄組件
+ */
+$config['master']['dataset']['leftside'] = array(
+    'name'              => '頁面組件',
+    'code'              => 'leftside',
+    'fields'        => array(
+        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+    )
+);
+
+/**
+ * 頁尾組件
+ */
+$config['master']['dataset']['footer'] = array(
+    'name'              => '頁尾組件',
+    'code'              => 'footer',
+    'fields'        => array(
+        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+    )
+);
+
 /*************************************
  *               組件
  *************************************/
@@ -111,7 +167,7 @@ $config['master']['widget']['menu'] = array(
 
         array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
             array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
-            array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'page'),
+            array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'content'),
             array('type' => 'page', 'icon' => '', 'title' => '側欄管理', 'code' => 'leftside'),
             array('type' => 'page', 'icon' => '', 'title' => '頁尾管理', 'code' => 'footer'),
         )),
@@ -247,14 +303,77 @@ $config['master']['widget']['widget'] = array(
 );
 
 /**
- * 頁尾組件
+ * 頁頭組件
  */
-$config['master']['widget']['logo'] = array(
-    'name'              => '頁尾',
-    'code'              => 'logo',
-    'dataset'          => '',
+$config['master']['widget']['header'] = array(
+    'name'              => '頁頭組件',
+    'code'              => 'header',
+    'dataset'          => 'header',
     'widget'            => array(
-        'code'  => 'logo',
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '組件代碼',
+            'desktop' => '桌面',
+            'pad' => '平板',
+            'mobile' => '手機'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
+    ),
+);
+
+/**
+ * 頁面組件
+ */
+$config['master']['widget']['content'] = array(
+    'name'              => '頁面組件',
+    'code'              => 'content',
+    'dataset'          => 'content',
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '組件代碼',
+            'desktop' => '桌面',
+            'pad' => '平板',
+            'mobile' => '手機'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
+    ),
+);
+
+/**
+ * 側欄組件
+ */
+$config['master']['widget']['leftside'] = array(
+    'name'              => '側欄組件',
+    'code'              => 'leftside',
+    'dataset'          => 'leftside',
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '組件代碼',
+            'desktop' => '桌面',
+            'pad' => '平板',
+            'mobile' => '手機'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
     ),
 );
 
@@ -262,11 +381,49 @@ $config['master']['widget']['logo'] = array(
  * 頁尾組件
  */
 $config['master']['widget']['footer'] = array(
-    'name'              => '頁尾',
+    'name'              => '頁尾組件',
     'code'              => 'footer',
+    'dataset'          => 'footer',
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '組件代碼',
+            'desktop' => '桌面',
+            'pad' => '平板',
+            'mobile' => '手機'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
+    ),
+);
+
+/**
+ * 頁尾組件
+ */
+$config['master']['widget']['pagefooter'] = array(
+    'name'              => '頁尾組件',
+    'code'              => 'pagefooter',
     'dataset'          => '',
     'widget'            => array(
         'code'  => 'footer',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '組件代碼',
+            'desktop' => '桌面',
+            'pad' => '平板',
+            'mobile' => '手機'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
     ),
 );
 
@@ -307,7 +464,7 @@ $config['master']['template']['footer'] = array(
     'name'      => '頁尾',
     'code'      => 'footer',
     'widgets'   => array(
-        array('code' => 'footer', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+        array('code' => 'pagefooter', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
     )
 );
 
@@ -386,11 +543,11 @@ $config['master']['page']['header'] = array(
 /**
  * 頁面管理
  */
-$config['master']['page']['page'] = array(
+$config['master']['page']['content'] = array(
     'name'      => '頁面管理',
-    'code'      => 'page',
+    'code'      => 'content',
     'widgets'   => array(
-        array('code' => 'page', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
+        array('code' => 'content', 'desktop' => 12, 'pad' => 12, 'mobile' => 12),
     )
 );
 

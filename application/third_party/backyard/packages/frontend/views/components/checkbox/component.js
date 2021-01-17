@@ -50,13 +50,6 @@
                     }
                 }
                 settings.component.append('<div class="clearfix"></div>');
-
-                /*
-                $('body').on('click', '#' + settings.id + ' input[type="checkbox"]', function(){
-                    // console.log($(this).prop('checked'));
-                });
-                */
-
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
