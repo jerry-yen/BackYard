@@ -21,11 +21,20 @@
 
         var components = [];
         var listFields = [];
+        var tableLoaded = false;
+        var formLoaded = false;
+        var sortLoaded = false;
 
         // 自定義函式
         var widget = {
             table: {
                 initial: function () {
+                
+                    if(tableLoaded){
+                        return;
+                    }
+                    tableLoaded = true;
+
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
                     if (response.status != 'success') {
@@ -35,12 +44,12 @@
                     $('h3.card-title', settings.instance).html(response.metadata.name);
 
                     // 取得資料集欄位資訊
-                    listFields = response.metadata.listfields;
+                    listFields = response.metadata.widget.listfields;
 
                     // 呈現欄位元件
                     $('div.' + settings.code + '_table table thead tr th', settings.instance).not(':first').remove();
                     for (var key in listFields) {
-                        $('div.' + settings.code + '_table table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
+                        $('div.' + settings.code + '_table table thead tr', settings.instance).append('<th>' + listFields[key] + '</th>');
                     }
 
                     var response = $.backyard({ 'userType': settings.userType }).metadata.dataset(settings.code);
@@ -72,7 +81,7 @@
                                     var tr = $('div.' + settings.code + '_table table tbody tr.d-none', settings.instance).clone();
                                     for (var key in listFields) {
                                         tr.removeClass('d-none');
-                                        tr.append('<td>' + response.results[index][listFields[key].frontendVariable] + '</td>');
+                                        tr.append('<td>' + response.results[index][key] + '</td>');
                                     }
                                     tr.attr('id', response.results[index]['id']);
                                     $('div.' + settings.code + '_table table tbody', settings.instance).append(tr);
@@ -174,6 +183,12 @@
             },
             form: {
                 initial: function () {
+
+                    if(formLoaded){
+                        return;
+                    }
+                    formLoaded = true;
+
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
                     if (response.status != 'success') {
@@ -188,6 +203,8 @@
                         return;
                     }
                     var fields = response.dataset.fields;
+
+                    $('div.' + settings.code + '_form div.card-body *', settings.instance).remove();
 
                     // 呈現欄位元件
                     for (var key in fields) {
@@ -232,7 +249,7 @@
                                 }
 
                                 // 如果預設有id，代表為修改模式
-                                if (response.item.id != undefined) {
+                                if (response.item.id != undefined && $('div.card-body input[id="id"]', settings.instance).length == 0) {
                                     $('div.card-body', settings.instance).append('<input type="hidden" id="id" name="id" value="' + response.item['id'] + '"/>')
                                 }
                             }
@@ -257,7 +274,6 @@
                                 components[key].setInvalid('');
                             }
                             httpType = (data['id'] != undefined) ? 'PUT' : 'POST';
-
                             $.backyard({ 'userType': settings.userType }).process.api(
                                 '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
                                 data,
@@ -288,6 +304,12 @@
 
             sort: {
                 initial: function () {
+
+                    if(sortLoaded){
+                        return;
+                    }
+                    sortLoaded = true;
+
                     // 取得組件後設資料
                     var response = $.backyard({ 'userType': settings.userType }).metadata.widget(settings.code);
                     if (response.status != 'success') {

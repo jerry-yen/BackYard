@@ -96,7 +96,9 @@
                 }
             },
             setValue: function (value) {
-                settings.component.val(value);
+                for(var key in value){
+                    $('input[type="checkbox"][value="' + value[key] + '"', settings.component).prop('checked', true);
+                }
             }
         };
 

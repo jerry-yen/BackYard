@@ -96,33 +96,7 @@
                 return settings.name;
             },
             getValue: function () {
-                var items = [];
-                $('tbody tr', settings.component).each(function () {
-                    var item = {};
-                    item.name = $('input[name="name"]', $(this)).val();
-                    item.fontendVariable = $('input[name="fontendVariable"]', $(this)).val();
-                    item.dbVariable = $('input[name="dbVariable"]', $(this)).val();
-                    item.component = $('select[name="component"]', $(this)).val();
-                    item.source = $('input[name="source"]', $(this)).val();
-                    item.fieldTip = $('input[name="fieldTip"]', $(this)).val();
-                    item.validator = [];
-                    item.converter = [];
-                    $('select[name="validatorlist"] option', $(this)).each(function (index) {
-                        if (index > 0) {
-                            item.validator.push($(this).attr('value'));
-                        }
-                    });
-
-                    $('select[name="converterlist"] option', $(this)).each(function (index) {
-                        if (index > 0) {
-                            item.converter.push($(this).attr('value'));
-                        }
-                    });
-
-                    items.push(item);
-                });
-
-                return JSON.stringify(items);
+               return $('select[name="source"]', settings.component).val();
             },
             setInvalid: function (message) {
                 var invalid = $('invalid[for="' + settings.id + '"]');
@@ -140,40 +114,8 @@
                     return;
                 }
 
-                $('table tbody tr', settings.component).remove();
-
-                var items = JSON.parse(value);
-                for (var i in items) {
-                    var item = $(settings.emptyItem).clone();
-
-                    $('input[name="name"]', item).val(items[i].name);
-                    $('input[name="fontendVariable"]', item).val(items[i].fontendVariable);
-                    $('input[name="dbVariable"]', item).val(items[i].dbVariable);
-                    $('select[name="component"]', item).val(items[i].component);
-
-                    if (items[i].validator.length > 0) {
-                        for (var v in items[i].validator) {
-                            $('select[name="validatorlist"]', item).append('<option value="' + items[i].validator[v] + '">' + items[i].validator[v] + '</option>');
-                        }
-                        $('input[name="validator"]', item).attr('placeholder', (items[i].validator.length) + '項');
-                    }
-                    if (items[i].converter.length > 0) {
-                        for (var c in items[i].converter) {
-                            $('select[name="converterlist"]', item).append('<option value="' + items[i].converter[c] + '">' + items[i].converter[c] + '</option>');
-                        }
-                        $('input[name="converter"]', item).attr('placeholder', (items[i].converter.length) + '項');
-                    }
-
-                    $('input[name="source"]', item).val(items[i].source);
-                    $('input[name="fieldTip"]', item).val(items[i].fieldTip);
-
-
-                    $('table tbody', settings.component).append(item);
-                }
-
-                $('table#' + settings.id + ' tbody').sortable({
-                    handle: "td i.fa-grip-vertical"
-                });
+                $('select[name="source"]', settings.component).val(value);
+                $('select[name="source"]', settings.component).change();
             }
         };
 

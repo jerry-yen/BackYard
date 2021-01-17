@@ -99,7 +99,7 @@ class Widget extends \backyard\Package
         $metadata = $this->getMetadata($code);
 
         // 組件名稱
-        $widget = $metadata['metadata']['widget'];
+        $widget = $metadata['metadata']['widget']['code'];
 
         // 取得組件內容
         if (file_exists($this->viewPath . 'widgets/' . $widget . '/template.php')) {

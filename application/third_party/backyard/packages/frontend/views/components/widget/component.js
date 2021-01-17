@@ -40,6 +40,7 @@
 
                 $('body').on('change', 'div#' + settings.id + ' select[name="widgetlist"]', function () {
                     $('div#' + settings.id + ' > *').not(':first').remove();
+                    components = [];
                     $.backyard().process.api('/index.php/api/definewidget/user/master/code/' + $(this).val(), {}, 'GET', function (response) {
                         if (response.status != 'success') {
                             return;
@@ -102,12 +103,7 @@
                                 components[response.metadata.events[key].frontendVariable] = component;
                             });
 
-
-
-
                         }
-
-                        console.log(components);
                     });
 
                 });
@@ -130,7 +126,12 @@
                 return settings.name;
             },
             getValue: function () {
-                return settings.component.val();
+                var values = {};
+                values['code'] = $('select[name="widgetlist"]', settings.component).val();
+                for(var key in components){
+                    values[key] = components[key].getValue();
+                }
+                return values;
             },
             setInvalid: function (message) {
                 var invalid = $('invalid[for="' + settings.id + '"]');
@@ -144,7 +145,14 @@
                 }
             },
             setValue: function (value) {
-                settings.component.val(value);
+                console.log(value);
+                $('select[name="widgetlist"]', settings.component).val(value.code);
+                $('select[name="widgetlist"]', settings.component).change();
+                console.log(components);
+                for(var key in components){
+                    console.log(value[key]);
+                    components[key].setValue(value[key]);
+                }
             }
         };
 

@@ -49,20 +49,7 @@
                     .attr('class', settings.class)
                     .attr('name', settings.name);
 
-                $('table tbody tr', settings.component).remove();
-                var source = $('#fields select[name="source"]');
-                var fieldsValue = $('option:selected', source).attr('fields');
-                if (fieldsValue == undefined) {
-                    return;
-                }
-                var fields = JSON.parse($('option:selected', source).attr('fields'));
-                for (var key in fields) {
-                    var emptyItem = $(settings.emptyItem);
-                    $('td.name', emptyItem).html(fields[key].name);
-                    $('td input[type="checkbox"]', emptyItem).attr('id', fields[key].fontendVariable);
-                    $('td label', emptyItem).attr('for', fields[key].fontendVariable);
-                    $('table tbody', settings.component).append(emptyItem);
-                }
+               
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -78,7 +65,7 @@
             },
             elementConvertToComponent: function () {
 
-                $('body').on('change', '#fields select[name="source"]', function () {
+                $('body').on('change', '#source select[name="source"]', function () {
 
                     $('table tbody tr', settings.component).remove();
 
@@ -90,6 +77,11 @@
                     for (var key in fields) {
                         var emptyItem = $(settings.emptyItem);
                         $('td.name', emptyItem).html(fields[key].name);
+                        $('td input[type="checkbox"]', emptyItem)
+                            .attr('id', '_' + fields[key].fontendVariable)
+                            .attr('title', fields[key].name)
+                            .attr('name', fields[key].fontendVariable);
+                        $('td label', emptyItem).attr('for', '_' + fields[key].fontendVariable);
                         $('table tbody', settings.component).append(emptyItem);
                     }
                 });
@@ -102,33 +94,12 @@
                 return settings.name;
             },
             getValue: function () {
-                var items = [];
-                $('tbody tr', settings.component).each(function () {
-                    var item = {};
-                    item.name = $('input[name="name"]', $(this)).val();
-                    item.fontendVariable = $('input[name="fontendVariable"]', $(this)).val();
-                    item.dbVariable = $('input[name="dbVariable"]', $(this)).val();
-                    item.component = $('select[name="component"]', $(this)).val();
-                    item.source = $('input[name="source"]', $(this)).val();
-                    item.fieldTip = $('input[name="fieldTip"]', $(this)).val();
-                    item.validator = [];
-                    item.converter = [];
-                    $('select[name="validatorlist"] option', $(this)).each(function (index) {
-                        if (index > 0) {
-                            item.validator.push($(this).attr('value'));
-                        }
-                    });
-
-                    $('select[name="converterlist"] option', $(this)).each(function (index) {
-                        if (index > 0) {
-                            item.converter.push($(this).attr('value'));
-                        }
-                    });
-
-                    items.push(item);
+                var fields = {};
+                $('input[type="checkbox"]', settings.component).each(function(){
+                    fields[$(this).attr('name')]={'status':$(this).prop('checked')?'Y':'N','name':$(this).attr('title')};
                 });
 
-                return JSON.stringify(items);
+                return fields;
             },
             setInvalid: function (message) {
                 var invalid = $('invalid[for="' + settings.id + '"]');
@@ -146,40 +117,22 @@
                     return;
                 }
 
-                $('table tbody tr', settings.component).remove();
+                console.log(value);
 
-                var items = JSON.parse(value);
-                for (var i in items) {
-                    var item = $(settings.emptyItem).clone();
-
-                    $('input[name="name"]', item).val(items[i].name);
-                    $('input[name="fontendVariable"]', item).val(items[i].fontendVariable);
-                    $('input[name="dbVariable"]', item).val(items[i].dbVariable);
-                    $('select[name="component"]', item).val(items[i].component);
-
-                    if (items[i].validator.length > 0) {
-                        for (var v in items[i].validator) {
-                            $('select[name="validatorlist"]', item).append('<option value="' + items[i].validator[v] + '">' + items[i].validator[v] + '</option>');
-                        }
-                        $('input[name="validator"]', item).attr('placeholder', (items[i].validator.length) + '項');
-                    }
-                    if (items[i].converter.length > 0) {
-                        for (var c in items[i].converter) {
-                            $('select[name="converterlist"]', item).append('<option value="' + items[i].converter[c] + '">' + items[i].converter[c] + '</option>');
-                        }
-                        $('input[name="converter"]', item).attr('placeholder', (items[i].converter.length) + '項');
-                    }
-
-                    $('input[name="source"]', item).val(items[i].source);
-                    $('input[name="fieldTip"]', item).val(items[i].fieldTip);
-
-
-                    $('table tbody', settings.component).append(item);
+                $('#source select[name="source"]').change();
+                var sortIndex = 0;
+                for(var key in value){
+                    $('input[name="' + key+ '"]').prop('checked',(value[key].status == 'Y'));
+                    $('input[name="' + key+ '"]').attr('sequence', sortIndex++);
                 }
 
-                $('table#' + settings.id + ' tbody').sortable({
-                    handle: "td i.fa-grip-vertical"
-                });
+                $('table tbody tr', settings.component).sort(function(a, b){
+                    var seq1 = $('input[type="checkbox"]', a).attr('sequence');
+                    var seq2 = $('input[type="checkbox"]', b).attr('sequence');
+                    console.log(seq1 + '--' + seq2);
+                    return (seq1 > seq2) ? 1 : -1;
+                }).appendTo($('table tbody', settings.component));
+               
             }
         };
 

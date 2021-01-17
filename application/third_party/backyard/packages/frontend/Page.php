@@ -95,7 +95,8 @@ class Page extends \backyard\Package
             if ($widgetMetadata['status'] != 'success') {
                 continue;
             }
-            $widgetName = $widgetMetadata['metadata']['widget'];
+            //print_r($widgetMetadata);
+            $widgetName = $widgetMetadata['metadata']['widget']['code'];
             if (isset($widgetScripts[$widgetName])) {
                 continue;
             }

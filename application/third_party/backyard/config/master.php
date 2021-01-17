@@ -76,9 +76,8 @@ $config['master']['dataset']['widget'] = array(
     'fields'        => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '引用資料集', 'dbVariable' => 'fields', 'frontendVariable' => 'fields', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '引用資料集', 'dbVariable' => 'source', 'frontendVariable' => 'source', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '組件', 'dbVariable' => 'widget', 'frontendVariable' => 'widget', 'component' => 'widget', 'validator' => array(), 'converter' => array(), 'source' => 'api://widgetlist/user/master', 'fieldTip' => ''),
-        
     )
 );
 
@@ -92,15 +91,10 @@ $config['master']['dataset']['widget'] = array(
 $config['master']['widget']['menu'] = array(
     'name'              => '選單',
     'code'              => 'menu',
-    'widget'            => 'menu',
     'dataset'          => '',
-    'permission'        => array(
-        'ADD', 'MODIFY'
-    ),
-    'events' => array(
-        'submit'        => '',
-        'cancel'        => '',
-        'dataSource'    => '/api/menu'
+    'widget'            => array(
+        'code'  => 'menu',
+        'event_dataSource' => '/api/menu'
     ),
     'menu'   => array(
         // 一層
@@ -151,16 +145,13 @@ $config['master']['widget']['menu'] = array(
 $config['master']['widget']['login'] = array(
     'name'              => '登入設定',
     'code'              => 'login',
-    'widget'            => 'form',
     'dataset'          => 'login',
-    'permission'        => array(
-        'ADD', 'MODIFY'
+    'widget'            => array(
+        'code'  => 'form',
+        'event_submit' => '',
+        'event_cancel' => '',
+        'event_dataSource' => ''
     ),
-    'events' => array(
-        'submit'        => '',
-        'cancel'        => '',
-        'dataSource'    => ''
-    )
 );
 
 /**
@@ -169,23 +160,21 @@ $config['master']['widget']['login'] = array(
 $config['master']['widget']['email'] = array(
     'name'              => '信箱管理',
     'code'              => 'email',
-    'widget'            => 'data',
     'dataset'           => 'email',
-    'classLevelCount'   => 0,
-    'listfields'            => array(
-        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('require', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('require', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => '')
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '代碼',
+            'title' => '用述'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
     ),
-    'permission'        => array(
-        'ADD', 'MODIFY', 'DELETE'
-    ),
-    'events' => array(
-        'add'           => '',
-        'modify'        => '',
-        'delete'        => '',
-        'batchDelete'   => '',
-        'dataSource'    => '',
-    )
 );
 
 /**
@@ -194,23 +183,21 @@ $config['master']['widget']['email'] = array(
 $config['master']['widget']['account'] = array(
     'name'              => '帳號管理',
     'code'              => 'account',
-    'widget'            => 'data',
     'dataset'           => 'account',
-    'classLevelCount'   => 0,
-    'listfields'            => array(
-        array('name' => '姓名', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '帳號', 'dbVariable' => 'account', 'frontendVariable' => 'account', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            'title' => '姓名',
+            'account' => '帳號'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
     ),
-    'permission'        => array(
-        'ADD', 'MODIFY', 'DELETE'
-    ),
-    'events' => array(
-        'add'           => '',
-        'modify'        => '',
-        'delete'        => '',
-        'batchDelete'   => '',
-        'dataSource'    => '',
-    )
 );
 
 /**
@@ -219,23 +206,21 @@ $config['master']['widget']['account'] = array(
 $config['master']['widget']['dataset'] = array(
     'name'              => '資料管理',
     'code'              => 'dataset',
-    'widget'            => 'data',
     'dataset'           => 'dataset',
-    'classLevelCount'   => 0,
-    'listfields'            => array(
-        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '代碼',
+            'name' => '名稱'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
     ),
-    'permission'        => array(
-        'ADD', 'MODIFY', 'DELETE'
-    ),
-    'events' => array(
-        'add'           => '',
-        'modify'        => '',
-        'delete'        => '',
-        'batchDelete'   => '',
-        'dataSource'    => '',
-    )
 );
 
 /**
@@ -244,14 +229,21 @@ $config['master']['widget']['dataset'] = array(
 $config['master']['widget']['widget'] = array(
     'name'              => '組件管理',
     'code'              => 'widget',
-    'widget'            => 'data',
     'dataset'           => 'widget',
-    'classLevelCount'   => 0,
-    'listfields'            => array(
-        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => '')
+    'widget'            => array(
+        'code'  => 'data',
+        'permission' => array('ADD','MODIFY','DELETE'),
+        'listfields' => array(
+            '_code' => '代碼',
+            'name' => '名稱'
+        ),
+        'classLevelCount' => 0,
+        'event_add' => '',
+        'event_modify' => '',
+        'event_delete' => '',
+        'event_batchDelete' => '',
+        'event_dataSource' => ''
     ),
-    
 );
 
 /**
@@ -260,11 +252,10 @@ $config['master']['widget']['widget'] = array(
 $config['master']['widget']['logo'] = array(
     'name'              => '頁尾',
     'code'              => 'logo',
-    'widget'            => 'logo',
     'dataset'          => '',
-    'classLevelCount'   => 0,
-    'permission'        => array(),
-    'events' => array()
+    'widget'            => array(
+        'code'  => 'logo',
+    ),
 );
 
 /**
@@ -273,11 +264,10 @@ $config['master']['widget']['logo'] = array(
 $config['master']['widget']['footer'] = array(
     'name'              => '頁尾',
     'code'              => 'footer',
-    'widget'            => 'footer',
     'dataset'          => '',
-    'classLevelCount'   => 0,
-    'permission'        => array(),
-    'events' => array()
+    'widget'            => array(
+        'code'  => 'footer',
+    ),
 );
 
 
