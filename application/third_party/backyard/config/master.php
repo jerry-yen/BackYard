@@ -102,10 +102,9 @@ $config['master']['dataset']['content'] = array(
     'name'              => '頁面組件',
     'code'              => 'content',
     'fields'        => array(
-        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '頁面代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '頁面名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '組件', 'dbVariable' => 'widgets', 'frontendVariable' => 'widgets', 'component' => 'pagewidgets', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     )
 );
 
@@ -338,12 +337,9 @@ $config['master']['widget']['content'] = array(
         'code'  => 'data',
         'permission' => array('ADD','MODIFY','DELETE'),
         'listfields' => array(
-            '_code' => '組件代碼',
-            'desktop' => '桌面',
-            'pad' => '平板',
-            'mobile' => '手機'
+            '_code' => '頁面代碼',
+            'name' => '頁面名稱'
         ),
-        'classLevelCount' => 0,
         'event_add' => '',
         'event_modify' => '',
         'event_delete' => '',
@@ -410,20 +406,7 @@ $config['master']['widget']['pagefooter'] = array(
     'code'              => 'pagefooter',
     'dataset'          => '',
     'widget'            => array(
-        'code'  => 'footer',
-        'permission' => array('ADD','MODIFY','DELETE'),
-        'listfields' => array(
-            '_code' => '組件代碼',
-            'desktop' => '桌面',
-            'pad' => '平板',
-            'mobile' => '手機'
-        ),
-        'classLevelCount' => 0,
-        'event_add' => '',
-        'event_modify' => '',
-        'event_delete' => '',
-        'event_batchDelete' => '',
-        'event_dataSource' => ''
+        'code'  => 'footer'
     ),
 );
 

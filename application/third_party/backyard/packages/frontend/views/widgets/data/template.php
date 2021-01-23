@@ -1,4 +1,4 @@
-<div class="card card-primary {code}_table">
+<div class="card card-primary table">
     <div class="card-header ">
         <h3 class="card-title"></h3>
     </div>
@@ -32,7 +32,7 @@
                     <td> 
                         <button type="button" class="modify btn btn-xs bg-blue"><i class="far fa-edit"></i> 修改</button>
                         <button type="button" class="delete btn btn-xs bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
-                        <button type="button" class="btn btn-xs bg-gradient-info"><i class="fas fa-bars"></i> 瀏覽</button>
+                        <button type="button" class="list btn btn-xs bg-gradient-info d-none"><i class="fas fa-bars"></i> <span class="btitle">瀏覽</span></button>
                     </td>
                 </tr>
             </tbody>
@@ -51,7 +51,7 @@
 </div>
 
 <!-- general form elements -->
-<div class="card card-primary {code}_form d-none">
+<div class="card card-primary form d-none">
     <div class="card-header">
         <h3 class="card-title"></h3>
     </div>
@@ -71,7 +71,7 @@
 <!-- /.card -->
 
 
-<div class="card card-primary {code}_sort d-none">
+<div class="card card-primary sort d-none">
     <div class="card-header ">
         <h3 class="card-title"></h3>
     </div>

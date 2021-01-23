@@ -10,13 +10,15 @@
             'userType': 'admin',
             'code': $(this).attr('widget'),
             'instance': this,
+            'params': {},
             'add_button_selector': 'button.add',
             'modify_button_selector': 'button.modify',
             'delete_button_selector': 'button.delete',
             'sort_button_selector': 'button.sort',
             'sort_cancel_button_selector': 'button.return',
             'sort_check_button_selector': 'button.check-sort',
-            'submit_button_selector': 'button.submit'
+            'submit_button_selector': 'button.submit',
+            'list_button_selector': 'button.list'
         }, _settings);
 
         var components = [];
@@ -24,13 +26,23 @@
         var tableLoaded = false;
         var formLoaded = false;
         var sortLoaded = false;
+        var levelParams = [];
+        /**
+         * 其實可以在這個組件，直接做 history url 功能
+         */
+        var historyUrls = [];
 
         // 自定義函式
         var widget = {
+            history: {
+                addParams: function (widget, params) {
+                    historyUrls.push({ 'widget': widget, 'params': params });
+                }
+            },
             table: {
                 initial: function () {
-                
-                    if(tableLoaded){
+
+                    if (tableLoaded) {
                         return;
                     }
                     tableLoaded = true;
@@ -40,6 +52,7 @@
                     if (response.status != 'success') {
                         return;
                     }
+
                     // 組件標題
                     $('h3.card-title', settings.instance).html(response.metadata.name);
 
@@ -47,10 +60,30 @@
                     listFields = response.metadata.widget.listfields;
 
                     // 呈現欄位元件
-                    $('div.' + settings.code + '_table table thead tr th', settings.instance).not(':first').remove();
+                    $('div.table table thead tr th', settings.instance).not(':first').remove();
                     for (var key in listFields) {
-                        $('div.' + settings.code + '_table table thead tr', settings.instance).append('<th>' + listFields[key] + '</th>');
+                        $('div.table table thead tr', settings.instance).append('<th>' + listFields[key] + '</th>');
                     }
+
+                    // 增加原始欄位的清單按鈕
+                    if (response.metadata.widget.sub_buttons != undefined) {
+                        for (var key in response.metadata.widget.sub_buttons) {
+                            var listbutton = $('tr.d-none td button.list.d-none', settings.instance).clone();
+                            listbutton
+                                .removeClass('d-none')
+                                .attr('widget', response.metadata.widget.sub_buttons[key].widget)
+                                .attr('linkfield', response.metadata.widget.sub_buttons[key].linkfield);
+                            if (response.metadata.widget.sub_buttons[key].icon == '') {
+                                response.metadata.widget.sub_buttons[key].icon = 'fas fa-bars';
+                            }
+                            $('i', listbutton).attr('class', response.metadata.widget.sub_buttons[key].icon);
+                            $('span.btitle', listbutton).html(response.metadata.widget.sub_buttons[key].name);
+
+
+                            $('tr.d-none td', settings.instance).append(listbutton);
+                        }
+                    }
+
 
                     var response = $.backyard({ 'userType': settings.userType }).metadata.dataset(settings.code);
                     if (response.status != 'success') {
@@ -65,26 +98,29 @@
                     widget.table.listener.delete();
                     // 排序事件
                     widget.table.listener.sort();
+                    // 清單瀏覽事件
+                    widget.table.listener.list();
                 },
 
                 loadData: function () {
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/items/user/' + settings.userType + '/code/' + settings.code,
-                        {},
+                        settings.params,
                         'GET',
                         function (response) {
                             // 將資料代入到各個欄位
                             if (response.status == 'success') {
-                                $('div.' + settings.code + '_table table tbody tr', settings.instance).not('.d-none').remove();
+                                $('div.table table tbody tr', settings.instance).not('.d-none').remove();
                                 for (var index in response.results) {
                                     // 呈現欄位資料
-                                    var tr = $('div.' + settings.code + '_table table tbody tr.d-none', settings.instance).clone();
+                                    var tr = $('div.table table tbody tr.d-none', settings.instance).clone();
                                     for (var key in listFields) {
                                         tr.removeClass('d-none');
                                         tr.append('<td>' + response.results[index][key] + '</td>');
                                     }
                                     tr.attr('id', response.results[index]['id']);
-                                    $('div.' + settings.code + '_table table tbody', settings.instance).append(tr);
+
+                                    $('div.table table tbody', settings.instance).append(tr);
                                 }
                             }
                         }
@@ -94,6 +130,9 @@
                 listener: {
                     sort: function () {
                         $('body').on('click', settings.sort_button_selector, function () {
+
+
+
                             // 切換到排序介面
                             widget.sort.loadData();
                             widget.interface.turn('sort');
@@ -175,7 +214,29 @@
                                 }
                             });
                         });
-                    }
+                    },
+                    /**
+                     * 清單瀏覽資料
+                     */
+                    list: function () {
+                        $('body').on('click', settings.list_button_selector, function () {
+
+
+                            // 切換到下一個組件
+                            tableLoaded = false;
+                            var widgetCode = $(this).attr('widget');
+                            var linkfield = $(this).attr('linkfield');
+                            var id = $(this).closest('tr').attr('id');
+
+                            levelParams.push({ 'widget': settings.code, 'params': settings.params });
+                            settings.code = widgetCode;
+                            settings.params[linkfield] = id;
+                            widget.table.initial();
+                            widget.table.loadData();
+
+
+                        });
+                    },
                 }
 
 
@@ -185,8 +246,8 @@
                 initial: function () {
 
                     $('div.card-body input[id="id"]', settings.instance).remove();
-                    
-                    if(formLoaded){
+
+                    if (formLoaded) {
                         return;
                     }
                     formLoaded = true;
@@ -206,8 +267,7 @@
                     }
                     var fields = response.dataset.fields;
 
-                    $('div.' + settings.code + '_form div.card-body *', settings.instance).remove();
-                    
+                    $('div.form div.card-body *', settings.instance).remove();
 
                     // 呈現欄位元件
                     for (var key in fields) {
@@ -229,7 +289,7 @@
                         fieldContainer.append(component.element());
                         component.elementConvertToComponent();
 
-                        $('div.' + settings.code + '_form div.card-body', settings.instance).append(fieldContainer);
+                        $('div.form div.card-body', settings.instance).append(fieldContainer);
 
                         components[fields[key].frontendVariable] = component;
                     }
@@ -308,7 +368,7 @@
             sort: {
                 initial: function () {
 
-                    if(sortLoaded){
+                    if (sortLoaded) {
                         return;
                     }
                     sortLoaded = true;
@@ -325,9 +385,9 @@
                     listFields = response.metadata.listfields;
 
                     // 呈現欄位元件
-                    $('div.' + settings.code + '_sort table thead tr th', settings.instance).not(':first').remove();
+                    $('div.sort table thead tr th', settings.instance).not(':first').remove();
                     for (var key in listFields) {
-                        $('div.' + settings.code + '_sort table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
+                        $('div.sort table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
                     }
 
                     var response = $.backyard({ 'userType': settings.userType }).metadata.dataset(settings.code);
@@ -339,7 +399,7 @@
                     widget.sort.listener.check();
                     widget.sort.listener.cancel();
 
-                    $('div.' + settings.code + '_sort table tbody').sortable({
+                    $('div.sort table tbody').sortable({
                         handle: "td i.fa-grip-vertical"
                     });
                 },
@@ -352,16 +412,16 @@
                         function (response) {
                             // 將資料代入到各個欄位
                             if (response.status == 'success') {
-                                $('div.' + settings.code + '_sort table tbody tr', settings.instance).not('.d-none').remove();
+                                $('div.sort table tbody tr', settings.instance).not('.d-none').remove();
                                 for (var index in response.results) {
                                     // 呈現欄位資料
-                                    var tr = $('div.' + settings.code + '_sort table tbody tr.d-none', settings.instance).clone();
+                                    var tr = $('div.sort table tbody tr.d-none', settings.instance).clone();
                                     for (var key in listFields) {
                                         tr.removeClass('d-none');
                                         tr.append('<td>' + response.results[index][listFields[key].frontendVariable] + '</td>');
                                     }
                                     tr.attr('id', response.results[index]['id']);
-                                    $('div.' + settings.code + '_sort table tbody', settings.instance).append(tr);
+                                    $('div.sort table tbody', settings.instance).append(tr);
                                 }
                             }
                         },
@@ -420,12 +480,12 @@
                  */
                 turn: function (interfaceName) {
                     // 隱藏組件中的所有介面
-                    $('div.' + settings.code + '_table').addClass('d-none');
-                    $('div.' + settings.code + '_form').addClass('d-none');
-                    $('div.' + settings.code + '_sort').addClass('d-none');
+                    $('div.table', settings.instance).addClass('d-none');
+                    $('div.form', settings.instance).addClass('d-none');
+                    $('div.sort', settings.instance).addClass('d-none');
 
                     // 顯示指定的介面
-                    $('div.' + settings.code + '_' + interfaceName).removeClass('d-none');
+                    $('div.' + interfaceName, settings.instance).removeClass('d-none');
                 }
             },
         }
