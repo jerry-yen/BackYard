@@ -154,4 +154,23 @@ class Master extends \backyard\Package
         $table = get_instance()->db->dbprefix . 'module';
         return array('table' => $table, 'where' => $module);
     }
+
+    /**
+     * 開發者登入
+     * @param array $data
+     */
+    public function login($data)
+    {
+        $this->backyard->config->loadConfigFile('master');
+        $master = $this->backyard->config->getConfig('master');
+
+        if (
+            $data['account'] == $master['login']['account']
+            && $data['password'] == $master['login']['password']
+        ) {
+            return array('status' => 'success', 'message' => '登入成功');
+        } else {
+            return array('status' => 'failed', 'message' => '帳號或密碼錯誤');
+        }
+    }
 }

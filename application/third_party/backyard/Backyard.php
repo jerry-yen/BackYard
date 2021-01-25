@@ -236,11 +236,13 @@ class Backyard
         return $this->inputs;
     }
 
+
     /**
      * 取得多筆項目
      * 
      * @param array $exValues 額外處理過的值
      */
+    /*
     public function getItems($exValues = array())
     {
         if (!isset($this->inputs['code'])) {
@@ -283,12 +285,13 @@ class Backyard
             print_r($response);
         }
     }
-
+*/
     /**
      * 刪除項目
      * 
      * @param array $exValues 額外處理過的值
      */
+    /*
     public function deleteItem($exValues = array())
     {
         if (!isset($this->inputs['code'])) {
@@ -320,4 +323,5 @@ class Backyard
             unset($data);
         }
     }
+    */
 }

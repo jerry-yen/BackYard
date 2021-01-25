@@ -21,6 +21,13 @@ class Api extends \chriskacerguis\RestServer\RestController
         $this->backyard->setUser($this->get('user'));
     }
 
+    public function login_post()
+    {
+        $this->backyard->loadPackage('account');
+        $response = $this->backyard->user->login($this->get('code'));
+        $this->response($response, 200);
+    }
+
     /**
      * 取得資料集後設資料
      * 
@@ -70,7 +77,8 @@ class Api extends \chriskacerguis\RestServer\RestController
      * @param string code 代碼
      * @param string user 使用者類型(master, admin)
      */
-    public function widgetlist_get(){
+    public function widgetlist_get()
+    {
         $this->backyard->loadPackage('frontend');
         $metadata = $this->backyard->widget->getList($this->get('code'));
         $this->response($metadata, 200);

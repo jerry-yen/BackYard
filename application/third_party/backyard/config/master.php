@@ -1,6 +1,15 @@
 <?php
 
 /*************************************
+ *             開發者帳密
+ *************************************/
+
+$config['master']['login'] = array(
+    'account'   => 'develop',
+    'password'  => '520726428',
+);
+
+/*************************************
  *             資料集
  *************************************/
 
@@ -218,7 +227,7 @@ $config['master']['widget']['email'] = array(
     'dataset'           => 'email',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '代碼',
             'title' => '用述'
@@ -241,7 +250,7 @@ $config['master']['widget']['account'] = array(
     'dataset'           => 'account',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             'title' => '姓名',
             'account' => '帳號'
@@ -264,7 +273,7 @@ $config['master']['widget']['dataset'] = array(
     'dataset'           => 'dataset',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '代碼',
             'name' => '名稱'
@@ -287,7 +296,7 @@ $config['master']['widget']['widget'] = array(
     'dataset'           => 'widget',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '代碼',
             'name' => '名稱'
@@ -310,7 +319,7 @@ $config['master']['widget']['header'] = array(
     'dataset'          => 'header',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '組件代碼',
             'desktop' => '桌面',
@@ -335,7 +344,7 @@ $config['master']['widget']['content'] = array(
     'dataset'          => 'content',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '頁面代碼',
             'name' => '頁面名稱'
@@ -357,7 +366,7 @@ $config['master']['widget']['leftside'] = array(
     'dataset'          => 'leftside',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '組件代碼',
             'desktop' => '桌面',
@@ -382,7 +391,7 @@ $config['master']['widget']['footer'] = array(
     'dataset'          => 'footer',
     'widget'            => array(
         'code'  => 'data',
-        'permission' => array('ADD','MODIFY','DELETE'),
+        'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
             '_code' => '組件代碼',
             'desktop' => '桌面',

@@ -18,8 +18,19 @@ class Master extends CI_Controller
 		$this->backyard->setUser('master');
 	}
 
+	/**
+	 * 登入頁面
+	 */
 	public function index()
 	{
+		$this->login();
+	}
+
+	public function login()
+	{
+		$this->backyard->loadPackage('frontend');
+		$htmlContent = $this->backyard->page->renderLoginPage();
+		echo $htmlContent;
 	}
 
 	/**

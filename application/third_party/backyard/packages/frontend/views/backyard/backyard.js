@@ -136,7 +136,7 @@
                     );
                     return content;
                 },
-                defineWidget:function(code){
+                defineWidget: function (code) {
                     var content = '';
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/definewidget/user/' + settings.userType + '/code/' + code,
@@ -150,7 +150,7 @@
                     );
                     return content;
                 }
-                
+
 
             },
 
@@ -190,6 +190,41 @@
                         'type': method,
                         'success': success_feedback,
                         'error': error_feedback
+                    });
+                },
+                /**
+                 * 登入
+                 */
+                login: function (account, password, verifycode) {
+
+                    var data = {};
+                    // 帳號
+                    data.account = account;
+                    // 密碼
+                    data.password = password;
+                    // 驗證碼(不一定有，非必填)
+                    data.verifycode = verifycode;
+                    var count = Math.floor(Math.random() * 5) + 5;
+                    var code = JSON.stringify(data);
+                    for (var i = 0; i < count; i++) {
+                        code = btoa(code);
+                    }
+                    code += count;
+                    this.api('/index.php/api/login/user/' + settings.userType, {
+                        'code': code
+                    }, 'POST', function (response) {
+                        console.log(response);
+                        if (response.status == 'success') {
+                            location.href = '/index.php/' + settings.userType + '/page';
+                        }
+                        else {
+                            Swal.fire({
+                                title: response.message,
+                                icon: 'warning',
+                                confirmButtonText:
+                                    '確定',
+                            });
+                        }
                     });
                 },
 

@@ -312,4 +312,16 @@ class Page extends \backyard\Package
 
         return $content;
     }
+
+    public function renderLoginPage()
+    {
+        // 取得View基本路徑
+        $this->backyard->config->loadConfigFile('frontend');
+        $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
+
+        $content = file_get_contents($this->viewPath . '/login.html');
+        $content = $this->refinePathInHtmlContent($content);
+
+        return $content;
+    }
 }
