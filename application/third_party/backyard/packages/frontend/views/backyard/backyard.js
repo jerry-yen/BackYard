@@ -218,12 +218,12 @@
                             location.href = '/index.php/' + settings.userType + '/page';
                         }
                         else {
-                            Swal.fire({
-                                title: response.message,
-                                icon: 'warning',
-                                confirmButtonText:
-                                    '確定',
-                            });
+                            $.backyard().dialog.alert(
+                                response.message,
+                                '',
+                                'warning',
+                                '確定'
+                            );
                         }
                     });
                 },
@@ -321,6 +321,41 @@
                         null,
                         true
                     );
+                }
+            },
+            dialog: {
+                /**
+                 * 訊息
+                 */
+                alert: function (title, message, iconType, buttonText) {
+                    Swal.fire({
+                        'title': title,
+                        'html': message,
+                        'icon': iconType,
+                        'confirmButtonText': buttonText,
+                    });
+                },
+
+                /**
+                 * 確認訊息
+                 */
+                confirm: function (title, message, iconType, feedback, confirmText, cancelText) {
+                    confirmText = (confirmText == undefined) ? '確定' : confirmText;
+                    cancelText = (cancelText == undefined) ? '取消' : cancelText;
+                    Swal.fire({
+                        'title': title,
+                        'html': message,
+                        'icon': iconType,
+                        'showCloseButton': true,
+                        'showCancelButton': true,
+                        'focusCancel': true,
+                        'confirmButtonText': confirmText,
+                        'cancelButtonText': cancelText
+                    }).then((response) => {
+                        if (feedback != undefined) {
+                            feedback(response);
+                        }
+                    });
                 }
             }
 
