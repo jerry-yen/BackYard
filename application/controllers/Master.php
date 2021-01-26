@@ -38,6 +38,11 @@ class Master extends CI_Controller
 	 */
 	public function page($code = null)
 	{
+		// 將頁面導到登入頁
+		if (is_null($code)) {
+			header('location: /index.php/master/page/login');
+		}
+
 		$this->backyard->loadPackage('frontend');
 		$htmlContent = $this->backyard->page->render($code);
 		echo $htmlContent;

@@ -168,7 +168,7 @@ class Master extends \backyard\Package
             $data['account'] == $master['login']['account']
             && $data['password'] == $master['login']['password']
         ) {
-            return array('status' => 'success', 'message' => '登入成功');
+            return array('status' => 'success', 'message' => '登入成功', 'landing_page' => 'page/login');
         } else {
             return array('status' => 'failed', 'message' => '帳號或密碼錯誤');
         }

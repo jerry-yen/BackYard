@@ -215,7 +215,7 @@
                     }, 'POST', function (response) {
                         console.log(response);
                         if (response.status == 'success') {
-                            location.href = '/index.php/' + settings.userType + '/page';
+                            location.href = '/index.php/' + settings.userType + '/' + response.landing_page;
                         }
                         else {
                             $.backyard().dialog.alert(
