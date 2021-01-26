@@ -136,7 +136,7 @@ class Admin extends \backyard\Package
      */
     public function login($data)
     {
-        $response = $this->backyard->data->getItems(array('code' => '', 'type' => 'account'));
+        $response = $this->backyard->data->getItems(array('code' => '', 'config_type' => 'account'));
 
         if ($response['status'] != 'success') {
             return array('status' => 'failed', 'message' => '開發者設定錯誤');
