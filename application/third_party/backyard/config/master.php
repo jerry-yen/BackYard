@@ -5,6 +5,7 @@
  *************************************/
 
 $config['master']['login'] = array(
+    'title'     => '開發者管理平台',
     'account'   => 'develop',
     'password'  => '520726428',
 );
@@ -57,8 +58,8 @@ $config['master']['dataset']['account'] = array(
     'name'              => '帳號管理',
     'code'              => 'account',
     'fields'        => array(
-        array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '用述', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '姓名', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{2,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '帳號', 'dbVariable' => 'account', 'frontendVariable' => 'account', 'component' => 'text', 'validator' => array('required', 'length{3,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '密碼', 'dbVariable' => 'password', 'frontendVariable' => 'password', 'component' => 'text', 'validator' => array('required', 'length{5,30}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     )
 );
@@ -252,7 +253,7 @@ $config['master']['widget']['account'] = array(
         'code'  => 'data',
         'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
-            'title' => '姓名',
+            'name' => '姓名',
             'account' => '帳號'
         ),
         'classLevelCount' => 0,

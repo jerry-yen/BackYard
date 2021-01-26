@@ -28,6 +28,11 @@ class Page extends \backyard\Package
         // $path = new \backyard\libraries\Path();
         // echo $path->relative($this->viewPath);
         $content = str_replace('{adminlte}', '/adminlte', $content);
+        $content = str_replace(
+            '{userType}',
+            $this->backyard->getUserType(),
+            $content
+        );
         return $content;
     }
 
@@ -38,8 +43,9 @@ class Page extends \backyard\Package
      */
     public function getMetadata($code)
     {
-        $page = $this->backyard->getUser()->getMetadataOfPage($code);
-        return $page;
+        $page = (is_null($code)) ? array('metadata' => array()) : $this->backyard->getUser()->getMetadataOfPage($code);
+        $information = $this->backyard->getUser()->getSystemInformation();
+        return array('status' => 'success', 'page' => $page['metadata'], 'information' => $information['metadata']);
     }
 
     /**
@@ -80,7 +86,7 @@ class Page extends \backyard\Package
 
         // 取得頁面後設資料
         $template = $this->getMetadata($code);
-        $this->readScripts($template['metadata']['widgets'], $widgetScripts, $componentScripts);
+        $this->readScripts($template['page']['widgets'], $widgetScripts, $componentScripts);
 
 
         return implode("\r\n", $widgetScripts) . "\r\n" . implode("\r\n", $componentScripts);
@@ -307,8 +313,9 @@ class Page extends \backyard\Package
         }
         $content = file_get_contents($this->viewPath . '/full.html');
         $content = $this->refinePathInHtmlContent($content);
-        $content = str_replace('{pageTitle}', $page['metadata']['name'], $content);
-        $content = str_replace('{code}', $page['metadata']['code'], $content);
+        $content = str_replace('{systemTitle}', $page['information']['title'], $content);
+        $content = str_replace('{pageTitle}', $page['page']['name'], $content);
+        $content = str_replace('{code}', $page['page']['code'], $content);
 
         return $content;
     }
@@ -319,9 +326,16 @@ class Page extends \backyard\Package
         $this->backyard->config->loadConfigFile('frontend');
         $this->viewPath = $this->backyard->config->getConfig('frontend')['viewPath'];
 
+        // 取得頁面後設資料
+        $page = $this->getMetadata(null);
+        if ($page['status'] != 'success') {
+            return $page['message'];
+        }
+
         $content = file_get_contents($this->viewPath . '/login.html');
         $content = $this->refinePathInHtmlContent($content);
-
+        $content = str_replace('{systemTitle}', $page['information']['title'], $content);
+       
         return $content;
     }
 }

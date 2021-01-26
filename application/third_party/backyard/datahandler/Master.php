@@ -53,7 +53,15 @@ class Master extends \backyard\Package
         if (!isset($master['page'][$code])) {
             return array('status' => 'failed', 'message' => '找不到此頁面');
         }
+
         return array('status' => 'success', 'metadata' => $master['page'][$code]);
+    }
+
+    public function getSystemInformation()
+    {
+        $this->backyard->config->loadConfigFile('master');
+        $master = $this->backyard->config->getConfig('master');
+        return array('status' => 'success', 'metadata' => $master['login']);
     }
 
     /**
@@ -161,12 +169,14 @@ class Master extends \backyard\Package
      */
     public function login($data)
     {
-        $this->backyard->config->loadConfigFile('master');
-        $master = $this->backyard->config->getConfig('master');
+        $metadata = $this->getSystemInformation();
+        if ($metadata['status'] != 'success') {
+            return array('status' => 'failed', 'message' => '設定檔錯誤');
+        }
 
         if (
-            $data['account'] == $master['login']['account']
-            && $data['password'] == $master['login']['password']
+            $data['account'] == $metadata['metadata']['account']
+            && $data['password'] == $metadata['metadata']['password']
         ) {
             return array('status' => 'success', 'message' => '登入成功', 'landing_page' => 'page/login');
         } else {

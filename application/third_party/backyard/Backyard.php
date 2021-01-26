@@ -31,6 +31,11 @@ class Backyard
     private $libraries = array();
 
     /**
+     * @var 使用者類型(admin|master)
+     */
+    private $userType = 'admin';
+
+    /**
      * 建構子
      */
     public function __construct()
@@ -172,6 +177,8 @@ class Backyard
      */
     public function setUser($userType = 'admin')
     {
+        $this->userType = $userType;
+
         $namespace = '\\backyard\\datahandler';
         $className = ucfirst($userType);
         require_once(dirname(__FILE__) . '/datahandler/' . $className . '.php');
@@ -188,6 +195,14 @@ class Backyard
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * 取得使用者類型
+     */
+    public function getUserType()
+    {
+        return $this->userType;
     }
 
     /**
@@ -231,9 +246,9 @@ class Backyard
         unset($security);
     }
 
-    public function getInputs()
+    public function getInputs($exValues = array())
     {
-        return $this->inputs;
+        return array_merge($this->inputs, $exValues);
     }
 
 

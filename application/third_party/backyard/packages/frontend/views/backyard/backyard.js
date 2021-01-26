@@ -108,6 +108,18 @@
              * @var 後設資料
              */
             metadata: {
+                system_information: function () {
+                    $.backyard({ 'userType': settings.userType }).process.api(
+                        '/index.php/api/information/user/' + settings.userType + '/code/' + code,
+                        {},
+                        'GET',
+                        function (response) {
+                            content = response;
+                        },
+                        null,
+                        false
+                    );
+                },
                 dataset: function (code) {
                     var content = '';
                     $.backyard({ 'userType': settings.userType }).process.api(
@@ -328,6 +340,7 @@
                  * 訊息
                  */
                 alert: function (title, message, iconType, buttonText) {
+                    buttonText = (buttonText == undefined) ? '確定' : buttonText;
                     Swal.fire({
                         'title': title,
                         'html': message,

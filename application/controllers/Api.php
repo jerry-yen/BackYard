@@ -140,7 +140,7 @@ class Api extends \chriskacerguis\RestServer\RestController
     {
         $this->backyard->loadPackage('frontend');
         $metadata = $this->backyard->page->getMetadata($this->get('code'));
-        $this->response($metadata['metadata'], 200);
+        $this->response($metadata['page'], 200);
     }
 
     /**

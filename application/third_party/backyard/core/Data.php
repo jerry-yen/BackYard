@@ -99,9 +99,9 @@ class Data extends \backyard\Package
      * 
      * @return array
      */
-    public function getItems($count = 10, $pagination = true)
+    public function getItems($exValues = array(), $count = 10, $pagination = true)
     {
-        $inputs = $this->backyard->getInputs();
+        $inputs = $this->backyard->getInputs($exValues);
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
@@ -195,10 +195,10 @@ class Data extends \backyard\Package
      * 
      * @return array
      */
-    public function getItem()
+    public function getItem($exValues = array())
     {
 
-        $inputs = $this->backyard->getInputs();
+        $inputs = $this->backyard->getInputs($exValues);
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }

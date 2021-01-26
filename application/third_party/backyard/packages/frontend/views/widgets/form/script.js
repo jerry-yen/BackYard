@@ -120,6 +120,9 @@
                                             }
                                         }
                                     }
+                                    else{
+                                        $.backyard({'userType':settings.userType}).dialog.alert('儲存成功','','success');
+                                    }
                                 }
                             );
                         });

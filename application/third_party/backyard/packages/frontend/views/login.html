@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>開發者管理平台 - 後花園</title>
+  <title>登入 - {systemTitle}</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,7 +17,7 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="login">
-    <h1>開發者管理平台</h1>
+    <h1>{systemTitle}</h1>
     <form method="post">
       <input type="text" name="account" placeholder="帳號" required="required" />
       <input type="password" name="password" placeholder="密碼" required="required" />
@@ -31,11 +31,9 @@
   <script>
     $('document').ready(function () {
       $('button[name="login"]').click(function () {
-
         var account = $('input[name="account"]').val();
         var password = $('input[name="password"]').val();
-
-        $.backyard({ 'userType': 'master' }).process.login(account, password, '');
+        $.backyard({ 'userType': '{userType}' }).process.login(account, password, '');
       });
     });
   </script>
