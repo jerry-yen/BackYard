@@ -32,7 +32,7 @@
 <script>
     $('document').ready(function() {
         $('div[widget="{code}"]').backyard_menu({
-            'userType': 'master'
+            'userType': '{userType}'
         });
     });
 </script>

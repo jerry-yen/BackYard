@@ -101,7 +101,7 @@ class Page extends \backyard\Package
             if ($widgetMetadata['status'] != 'success') {
                 continue;
             }
-            //print_r($widgetMetadata);
+
             $widgetName = $widgetMetadata['metadata']['widget']['code'];
             if (isset($widgetScripts[$widgetName])) {
                 continue;
@@ -120,6 +120,7 @@ class Page extends \backyard\Package
             // 取得資料集後設資料
             $datasetCode = $widgetMetadata['metadata']['dataset'];
             $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
+            
             if (isset($fieldDataset['dataset'])) {
                 foreach ($fieldDataset['dataset']['fields'] as $field) {
                     // 取得元件Script內容
@@ -177,9 +178,10 @@ class Page extends \backyard\Package
         /* 版面各區塊所使用的組件 */
 
         // Logo 區塊
+        /*
         $template = $this->backyard->getUser()->getMetadataOfTemplate('logo');
         $this->readCsses($template['metadata']['widgets'], $widgetScripts, $componentScripts);
-
+*/
         // 左側區塊
         $template = $this->backyard->getUser()->getMetadataOfTemplate('leftside');
         $this->readCsses($template['metadata']['widgets'], $widgetScripts, $componentScripts);
@@ -194,7 +196,7 @@ class Page extends \backyard\Package
 
         // 取得頁面後設資料
         $template = $this->getMetadata($code);
-        $this->readCsses($template['metadata']['widgets'], $widgetStyles, $componentStyles);
+        $this->readCsses($template['page']['widgets'], $widgetStyles, $componentStyles);
 
         /*
         foreach ($pageMetadata['metadata']['widgets'] as $widget) {
@@ -311,6 +313,7 @@ class Page extends \backyard\Package
         if ($page['status'] != 'success') {
             return $page['message'];
         }
+        
         $content = file_get_contents($this->viewPath . '/full.html');
         $content = $this->refinePathInHtmlContent($content);
         $content = str_replace('{systemTitle}', $page['information']['title'], $content);

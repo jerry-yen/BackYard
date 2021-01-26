@@ -74,9 +74,9 @@
                                         components[fieldName].setValue(response.item[fieldName]);
                                     }
                                 }
-
+                                
                                 // 如果預設有id，代表為修改模式
-                                if (response.item['id'] != undefined) {
+                                if (response.item['id'] != undefined  && response.item['id'] != null) {
                                     $('div.card-body', settings.instance).append('<input type="hidden" id="id" name="id" value="' + response.item['id'] + '"/>')
                                 }
                             }

@@ -15,10 +15,10 @@ $config['master']['login'] = array(
  *************************************/
 
 /**
- * 登入設定
+ * 登入資料集
  */
 $config['master']['dataset']['login'] = array(
-    'name'              => '登入設定',
+    'name'              => '登入資料集',
     'code'              => 'login',
     'fields'        => array(
         array('name' => '系統名稱', 'dbVariable' => 'title', 'frontendVariable' => 'title', 'component' => 'text', 'validator' => array('required', 'system.length{5,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
@@ -29,10 +29,10 @@ $config['master']['dataset']['login'] = array(
 );
 
 /**
- * 信箱設定
+ * 信箱資料集
  */
 $config['master']['dataset']['email'] = array(
-    'name'              => '信箱管理',
+    'name'              => '信箱資料集',
     'code'              => 'email',
     'fields'        => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
@@ -52,10 +52,10 @@ $config['master']['dataset']['email'] = array(
 );
 
 /**
- * 帳號管理
+ * 帳號資料集
  */
 $config['master']['dataset']['account'] = array(
-    'name'              => '帳號管理',
+    'name'              => '帳號資料集',
     'code'              => 'account',
     'fields'        => array(
         array('name' => '姓名', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{2,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
@@ -65,10 +65,10 @@ $config['master']['dataset']['account'] = array(
 );
 
 /**
- * 資料管理
+ * 資料資料集
  */
 $config['master']['dataset']['dataset'] = array(
-    'name'              => '資料管理',
+    'name'              => '資料資料集',
     'code'              => 'dataset',
     'fields'        => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
@@ -78,38 +78,35 @@ $config['master']['dataset']['dataset'] = array(
 );
 
 /**
- * 組件管理
+ * 組件資料集
  */
 $config['master']['dataset']['widget'] = array(
-    'name'              => '組件管理',
+    'name'              => '組件資料集',
     'code'              => 'widget',
     'fields'        => array(
         array('name' => '代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array('required', 'length{3,20}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '名稱', 'dbVariable' => 'name', 'frontendVariable' => 'name', 'component' => 'text', 'validator' => array('required', 'length{3,10}'), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '引用資料集', 'dbVariable' => 'source', 'frontendVariable' => 'source', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
+        array('name' => '引用資料集', 'dbVariable' => 'dataset', 'frontendVariable' => 'dataset', 'component' => 'widgetfields', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
         array('name' => '組件', 'dbVariable' => 'widget', 'frontendVariable' => 'widget', 'component' => 'widget', 'validator' => array(), 'converter' => array(), 'source' => 'api://widgetlist/user/master', 'fieldTip' => ''),
     )
 );
 
 /**
- * 頁頭組件
+ * 頁頭資料集
  */
 $config['master']['dataset']['header'] = array(
-    'name'              => '頁頭組件',
+    'name'              => '頁頭資料集',
     'code'              => 'header',
     'fields'        => array(
-        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '組件', 'dbVariable' => 'widgets', 'frontendVariable' => 'widgets', 'component' => 'pagewidgets', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     )
 );
 
 /**
- * 頁面組件
+ * 頁面資料集
  */
 $config['master']['dataset']['content'] = array(
-    'name'              => '頁面組件',
+    'name'              => '頁面資料集',
     'code'              => 'content',
     'fields'        => array(
         array('name' => '頁面代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'text', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
@@ -119,30 +116,24 @@ $config['master']['dataset']['content'] = array(
 );
 
 /**
- * 側欄組件
+ * 側欄資料集
  */
 $config['master']['dataset']['leftside'] = array(
-    'name'              => '頁面組件',
+    'name'              => '側欄資料集',
     'code'              => 'leftside',
     'fields'        => array(
-        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '組件', 'dbVariable' => 'widgets', 'frontendVariable' => 'widgets', 'component' => 'pagewidgets', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     )
 );
 
 /**
- * 頁尾組件
+ * 頁尾資料集
  */
 $config['master']['dataset']['footer'] = array(
-    'name'              => '頁尾組件',
+    'name'              => '頁尾資料集',
     'code'              => 'footer',
     'fields'        => array(
-        array('name' => '組件代碼', 'dbVariable' => '_code', 'frontendVariable' => '_code', 'component' => 'pagewidget', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
-        array('name' => '桌面', 'dbVariable' => 'desktop', 'frontendVariable' => 'desktop', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '平板', 'dbVariable' => 'pad', 'frontendVariable' => 'pad', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
-        array('name' => '手機', 'dbVariable' => 'mobile', 'frontendVariable' => 'mobile', 'component' => 'slider', 'validator' => array(), 'converter' => array(), 'source' => '{"min":1, "max":12}', 'fieldTip' => ''),
+        array('name' => '組件', 'dbVariable' => 'widgets', 'frontendVariable' => 'widgets', 'component' => 'pagewidgets', 'validator' => array(), 'converter' => array(), 'source' => '', 'fieldTip' => ''),
     )
 );
 
@@ -315,23 +306,13 @@ $config['master']['widget']['widget'] = array(
  * 頁頭組件
  */
 $config['master']['widget']['header'] = array(
-    'name'              => '頁頭組件',
+    'name'              => '頁頭管理',
     'code'              => 'header',
     'dataset'          => 'header',
     'widget'            => array(
-        'code'  => 'data',
-        'permission' => array('ADD', 'MODIFY', 'DELETE'),
-        'listfields' => array(
-            '_code' => '組件代碼',
-            'desktop' => '桌面',
-            'pad' => '平板',
-            'mobile' => '手機'
-        ),
-        'classLevelCount' => 0,
-        'event_add' => '',
-        'event_modify' => '',
-        'event_delete' => '',
-        'event_batchDelete' => '',
+        'code'  => 'form',
+        'event_submit' => '',
+        'event_cancel' => '',
         'event_dataSource' => ''
     ),
 );
@@ -362,23 +343,13 @@ $config['master']['widget']['content'] = array(
  * 側欄組件
  */
 $config['master']['widget']['leftside'] = array(
-    'name'              => '側欄組件',
+    'name'              => '側欄管理',
     'code'              => 'leftside',
     'dataset'          => 'leftside',
     'widget'            => array(
-        'code'  => 'data',
-        'permission' => array('ADD', 'MODIFY', 'DELETE'),
-        'listfields' => array(
-            '_code' => '組件代碼',
-            'desktop' => '桌面',
-            'pad' => '平板',
-            'mobile' => '手機'
-        ),
-        'classLevelCount' => 0,
-        'event_add' => '',
-        'event_modify' => '',
-        'event_delete' => '',
-        'event_batchDelete' => '',
+        'code'  => 'form',
+        'event_submit' => '',
+        'event_cancel' => '',
         'event_dataSource' => ''
     ),
 );
@@ -387,23 +358,13 @@ $config['master']['widget']['leftside'] = array(
  * 頁尾組件
  */
 $config['master']['widget']['footer'] = array(
-    'name'              => '頁尾組件',
+    'name'              => '頁尾管理',
     'code'              => 'footer',
     'dataset'          => 'footer',
     'widget'            => array(
-        'code'  => 'data',
-        'permission' => array('ADD', 'MODIFY', 'DELETE'),
-        'listfields' => array(
-            '_code' => '組件代碼',
-            'desktop' => '桌面',
-            'pad' => '平板',
-            'mobile' => '手機'
-        ),
-        'classLevelCount' => 0,
-        'event_add' => '',
-        'event_modify' => '',
-        'event_delete' => '',
-        'event_batchDelete' => '',
+        'code'  => 'form',
+        'event_submit' => '',
+        'event_cancel' => '',
         'event_dataSource' => ''
     ),
 );
@@ -412,7 +373,7 @@ $config['master']['widget']['footer'] = array(
  * 頁尾組件
  */
 $config['master']['widget']['pagefooter'] = array(
-    'name'              => '頁尾組件',
+    'name'              => '頁尾管理',
     'code'              => 'pagefooter',
     'dataset'          => '',
     'widget'            => array(

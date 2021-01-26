@@ -35,6 +35,7 @@ class Master extends \backyard\Package
     {
         $this->backyard->config->loadConfigFile('master');
         $master = $this->backyard->config->getConfig('master');
+
         if (!isset($master['widget'][$code])) {
             return array('status' => 'failed', 'message' => '找不到此組件');
         }
@@ -119,7 +120,7 @@ class Master extends \backyard\Package
             $module['code'] = $value['_code'];
         }
         if (isset($value['code'])) {
-            $module['type'] = $value['code'];
+            $module['config_type'] = $value['code'];
         }
         $table = get_instance()->db->dbprefix . 'module';
 
@@ -157,7 +158,7 @@ class Master extends \backyard\Package
             $module['updated_at'] = $value['updated_at'];
         }
         if (isset($value['code'])) {
-            $module['type'] = $value['code'];
+            $module['config_type'] = $value['code'];
         }
         $table = get_instance()->db->dbprefix . 'module';
         return array('table' => $table, 'where' => $module);

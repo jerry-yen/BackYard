@@ -108,6 +108,7 @@ class Data extends \backyard\Package
 
         $response = $this->backyard->getUser()->convertToWhere($inputs);
         $where = $response['where'];
+       // print_r($response);
 
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
@@ -202,9 +203,10 @@ class Data extends \backyard\Package
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-
+        
         $response = $this->backyard->getUser()->convertToWhere($inputs);
         $where = $response['where'];
+        
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
          */

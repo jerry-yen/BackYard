@@ -19,7 +19,7 @@
 <script>
     $('document').ready(function() {
         $('div[widget="{code}"]').backyard_form({
-            'userType': 'master'
+            'userType': '{userType}'
         });
     });
 </script>

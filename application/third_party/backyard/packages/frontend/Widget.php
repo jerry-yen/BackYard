@@ -53,8 +53,8 @@ class Widget extends \backyard\Package
         $widgets = array();
         if (file_exists($this->viewPath . 'widgets/')) {
             $dirs = scandir($this->viewPath . 'widgets/');
-            foreach($dirs as $dirOrFile){
-                if(in_array($dirOrFile, array('.','..'))){
+            foreach ($dirs as $dirOrFile) {
+                if (in_array($dirOrFile, array('.', '..'))) {
                     continue;
                 }
                 $widgets[] = $dirOrFile;
@@ -98,6 +98,10 @@ class Widget extends \backyard\Package
         // 取得組件後設資料
         $metadata = $this->getMetadata($code);
 
+        if ($metadata['status'] != 'success') {
+            return '';
+        }
+
         // 組件名稱
         $widget = $metadata['metadata']['widget']['code'];
 
@@ -105,7 +109,8 @@ class Widget extends \backyard\Package
         if (file_exists($this->viewPath . 'widgets/' . $widget . '/template.php')) {
             $content = file_get_contents($this->viewPath . 'widgets/' . $widget . '/template.php');
             $content = $this->refinePathInHtmlContent($content);
-            return str_replace('{code}', $code, $content);
+            $content = str_replace('{code}', $code, $content);
+            return str_replace('{userType}', $this->backyard->getUserType(), $content);
         } else {
             return '找不到' . $widget . '組件介面(' . $this->viewPath . 'widgets/' . $widget . '/template.php)';
         }

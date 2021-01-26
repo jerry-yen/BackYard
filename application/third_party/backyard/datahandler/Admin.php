@@ -18,10 +18,10 @@ class Admin extends \backyard\Package
      */
     public function getDataset($code)
     {
-        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'dataset'));
-        $dataset = ($response['status'] == 'success') ? $response['result'] : array();
-
-        return array('status' => 'success', 'dataset' => json_decode($dataset, true));
+        $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'dataset'));
+        $dataset = ($response['status'] == 'success') ? $response['item'] : array();
+        $dataset['fields'] = json_decode($dataset['fields'], true);
+        return array('status' => 'success', 'dataset' => $dataset);
     }
 
     /**
@@ -31,10 +31,10 @@ class Admin extends \backyard\Package
      */
     public function getMetadataOfWidget($code)
     {
-        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'widget'));
-        $metadata = ($response['status'] == 'success') ? $response['result'] : array();
+        $response = $this->backyard->data->getItem(array('code' => $code,'config_type' => 'widget'));
+        $metadata = ($response['status'] == 'success') ? $response['item'] : array();
 
-        return array('status' => 'success', 'metadata' => json_decode($metadata, true));
+        return array('status' => 'success', 'metadata' => $metadata);
     }
 
     /**
@@ -44,17 +44,13 @@ class Admin extends \backyard\Package
      */
     public function getMetadataOfPage($code)
     {
-        /*
-        $response = $this->backyard->data->getItem('module', array(), array('code' => $code, 'type' => 'page'));
-        $metadata = ($response['status'] == 'success') ? $response['result'] : array();
-
-        return array('status' => 'success', 'metadata' => json_decode($metadata, true));
-        */
+        $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'content'));
+        return array('status' => 'success', 'metadata' => $response['item']);
     }
 
     public function getSystemInformation()
     {
-        $response = $this->backyard->data->getItem(array('code' => '', 'type' => 'login'));
+        $response = $this->backyard->data->getItem(array('code' => '', 'config_type' => 'login'));
         return array('status' => 'success', 'metadata' => $response['item']);
     }
 
@@ -81,8 +77,8 @@ class Admin extends \backyard\Package
             $module['code'] = $value['code'];
         }
 
-        if (isset($value['type'])) {
-            $module['type'] = $value['type'];
+        if (isset($value['config_type'])) {
+            $module['config_type'] = $value['config_type'];
         }
         $table = get_instance()->db->dbprefix . 'module';
         return array('table' => $table, 'where' => $module);
@@ -94,11 +90,13 @@ class Admin extends \backyard\Package
      * 
      * @param strin $code 代碼
      */
-    public function getMetadataOfTemplate()
+    public function getMetadataOfTemplate($code)
     {
-        $this->backyard->config->loadConfigFile('master');
-        $master = $this->backyard->config->getConfig('master');
-        return array('status' => 'success', 'metadata' => $master['template']);
+        $response = $this->backyard->data->getItem(array('config_type' => $code));
+        if(is_null($response['item'])){
+            $response['item']['widgets'] = array();
+        }
+        return array('status' => 'success', 'metadata' => $response['item']);
     }
 
     /**

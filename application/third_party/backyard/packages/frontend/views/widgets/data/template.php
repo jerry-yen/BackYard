@@ -106,7 +106,7 @@
 <script>
     $('document').ready(function() {
         $('div[widget="{code}"]').backyard_data({
-            'userType': 'master'
+            'userType': '{userType}'
         });
     });
 </script>
