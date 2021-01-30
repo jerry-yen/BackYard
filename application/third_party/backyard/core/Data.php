@@ -57,13 +57,10 @@ class Data extends \backyard\Package
      * @param string $code 模組代碼(資料表名稱)
      * @param array $fields 欄位資訊
      */
-    public function createTable($exValues = array())
+    public function createTable($inputs = array())
     {
-        $inputs = $this->backyard->getInputs($exValues);
         $code = $inputs['_code'];
         $fields = json_decode($inputs['fields'], true);
-
-
 
         // 表單名稱
         $tableName = $this->database->dbprefix . $code;
@@ -177,9 +174,8 @@ class Data extends \backyard\Package
      * 
      * @return array
      */
-    public function getItems($exValues = array(), $count = 10, $pagination = true)
+    public function getItems($inputs = array(), $count = 10, $pagination = true)
     {
-        $inputs = $this->backyard->getInputs($exValues);
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
@@ -274,17 +270,15 @@ class Data extends \backyard\Package
      * 
      * @return array
      */
-    public function getItem($exValues = array())
+    public function getItem($inputs = array())
     {
-
-        $inputs = $this->backyard->getInputs($exValues);
+        /*
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-
+        */
         $response = $this->backyard->getUser()->convertToWhere($inputs);
         $where = $response['where'];
-        print_r($where);
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
          */
@@ -341,20 +335,14 @@ class Data extends \backyard\Package
      * 
      * @param string GUID 新增記錄的ID
      */
-    public function insertItem($exValues = array())
+    public function insertItem($inputs = array())
     {
-        $inputs = $this->backyard->getInputs();
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
         $response = $this->backyard->dataset->getItem($inputs['code']);
         if ($response['status'] == 'failed') {
             return $response;
-        }
-
-        // 額外處理過的欄位值
-        if (count($exValues) > 0) {
-            $inputs = array_merge($inputs, $exValues);
         }
 
         // 驗證輸入參數
@@ -395,9 +383,8 @@ class Data extends \backyard\Package
      * 
      * @param string GUID 更新記錄的ID
      */
-    public function updateItem($exValues = array())
+    public function updateItem($inputs = array())
     {
-        $inputs = $this->backyard->getInputs();
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
@@ -409,11 +396,6 @@ class Data extends \backyard\Package
         $response = $this->backyard->dataset->getItem($inputs['code']);
         if ($response['status'] == 'failed') {
             return $response;
-        }
-
-        // 額外處理過的欄位值
-        if (count($exValues) > 0) {
-            $inputs = array_merge($inputs, $exValues);
         }
 
         // 驗證輸入參數
@@ -441,10 +423,8 @@ class Data extends \backyard\Package
     /**
      * 刪除記錄
      */
-    public function deleteItem()
+    public function deleteItem($inputs = array())
     {
-
-        $inputs = $this->backyard->getInputs();
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }

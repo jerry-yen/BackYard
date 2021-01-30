@@ -36,6 +36,7 @@
 
                     // 呈現欄位元件
                     for (var key in fields) {
+                        console.log(fields[key]);
                         var componentName = fields[key].component + '_component';
                         var component = new $[componentName]({
                             'id': fields[key].frontendVariable,

@@ -10,6 +10,7 @@ class Api extends \chriskacerguis\RestServer\RestController
 {
 
     private $backyard = null;
+    private $inputs = array();
 
     /**
      * 建構子
@@ -19,6 +20,7 @@ class Api extends \chriskacerguis\RestServer\RestController
         parent::__construct();
         $this->backyard = new \backyard\Backyard();
         $this->backyard->setUser($this->get('user'));
+        $this->inputs = $this->backyard->getInputs();
     }
 
     public function login_post()
@@ -184,7 +186,7 @@ class Api extends \chriskacerguis\RestServer\RestController
      */
     public function item_get()
     {
-        $response = $this->backyard->data->getItem();
+        $response = $this->backyard->data->getItem($this->inputs);
         $this->response($response, 200);
     }
 
@@ -194,9 +196,9 @@ class Api extends \chriskacerguis\RestServer\RestController
     public function item_post()
     {
         if ($this->backyard->getUserType() == 'master' && $this->get('code') == 'dataset') {
-            $this->backyard->data->createTable();
+            $this->backyard->data->createTable($this->inputs);
         }
-        $response = $this->backyard->data->insertItem();
+        $response = $this->backyard->data->insertItem($this->inputs);
         $this->response($response, 200);
     }
 
@@ -206,9 +208,9 @@ class Api extends \chriskacerguis\RestServer\RestController
     public function item_put()
     {
         if ($this->backyard->getUserType() == 'master' && $this->get('code') == 'dataset') {
-            $this->backyard->data->createTable();
+            $this->backyard->data->createTable($this->inputs);
         }
-        $response = $this->backyard->data->updateItem();
+        $response = $this->backyard->data->updateItem($this->inputs);
         $this->response($response, 200);
     }
 
@@ -217,7 +219,7 @@ class Api extends \chriskacerguis\RestServer\RestController
      */
     public function item_delete()
     {
-        $response = $this->backyard->data->deleteItem();
+        $response = $this->backyard->data->deleteItem($this->inputs);
         $this->response($response, 200);
     }
 
@@ -226,7 +228,7 @@ class Api extends \chriskacerguis\RestServer\RestController
      */
     public function items_get()
     {
-        $response = $this->backyard->data->getItems();
+        $response = $this->backyard->data->getItems($this->inputs);
         $this->response($response, 200);
     }
 }

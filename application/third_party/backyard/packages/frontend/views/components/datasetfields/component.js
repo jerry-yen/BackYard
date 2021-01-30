@@ -43,7 +43,7 @@
                             <tr>\
                                 <td><i class="fas fa-grip-vertical"></i></td>\
                                 <td><input type="text" name="name" class="form-control field_component"></td>\
-                                <td><input type="text" name="fontendVariable" class="form-control"></td>\
+                                <td><input type="text" name="frontendVariable" class="form-control"></td>\
                                 <td><input type="text" name="dbVariable" class="form-control"></td>\
                                 <td>\
                                     <select name="component" class="form-control">\
@@ -157,7 +157,7 @@
                 $('tbody tr', settings.component).each(function () {
                     var item = {};
                     item.name = $('input[name="name"]', $(this)).val();
-                    item.fontendVariable = $('input[name="fontendVariable"]', $(this)).val();
+                    item.frontendVariable = $('input[name="frontendVariable"]', $(this)).val();
                     item.dbVariable = $('input[name="dbVariable"]', $(this)).val();
                     item.component = $('select[name="component"]', $(this)).val();
                     item.source = $('input[name="source"]', $(this)).val();
@@ -204,7 +204,7 @@
                     var item = $(settings.emptyItem).clone();
 
                     $('input[name="name"]', item).val(items[i].name);
-                    $('input[name="fontendVariable"]', item).val(items[i].fontendVariable);
+                    $('input[name="frontendVariable"]', item).val(items[i].frontendVariable);
                     $('input[name="dbVariable"]', item).val(items[i].dbVariable);
                     $('select[name="component"]', item).val(items[i].component);
 

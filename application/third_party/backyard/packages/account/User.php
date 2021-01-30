@@ -10,9 +10,8 @@ namespace backyard\packages\account;
 
 class User extends \backyard\Package
 {
-    public function login()
+    public function login($inputs = array())
     {
-        $inputs = $this->backyard->getInputs();
         $code = $inputs['code'];
         // 加密次數
         $count = substr($code, -1);

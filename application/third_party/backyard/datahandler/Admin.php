@@ -19,7 +19,7 @@ class Admin extends \backyard\Package
     public function getDataset($code)
     {
         $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'dataset'));
-        print_r($response);
+       // print_r($response);
         $dataset = ($response['status'] == 'success') ? $response['item'] : array();
         $dataset['fields'] = json_decode($dataset['fields'], true);
         return array('status' => 'success', 'dataset' => $dataset);
@@ -32,7 +32,7 @@ class Admin extends \backyard\Package
      */
     public function getMetadataOfWidget($code)
     {
-        $response = $this->backyard->data->getItem(array('code' => $code,'config_type' => 'widget'));
+        $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'widget'));
         $metadata = ($response['status'] == 'success') ? $response['item'] : array();
 
         return array('status' => 'success', 'metadata' => $metadata);
@@ -94,7 +94,10 @@ class Admin extends \backyard\Package
     public function getMetadataOfTemplate($code)
     {
         $response = $this->backyard->data->getItem(array('config_type' => $code));
-        if(is_null($response['item'])){
+        if ($response['status'] != 'success') {
+            return $response;
+        }
+        if (is_null($response['item'])) {
             $response['item']['widgets'] = array();
         }
         return array('status' => 'success', 'metadata' => $response['item']);
