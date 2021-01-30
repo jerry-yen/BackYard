@@ -147,11 +147,11 @@ class Data extends \backyard\Package
 
             // 新增
             if (!isset($dbFields[$field['dbVariable']]) && !isset($defualtFields[$field['dbVariable']])) {
-                $sql = 'ALTER TABLE ' . $tableName . ' ADD COLUMN ' . $field['dbVariable'] . ' ' . $fieldType . ((!$isNull) ? ' NOT' : '') . ' NULL;';
+                $sql = 'ALTER TABLE ' . $tableName . ' ADD COLUMN ' . $field['dbVariable'] . ' ' . $fieldType . ((!$isNull) ? ' NOT' : '') . ' NULL COMMENT "' . $field['name'] . '";';
             }
             // 修改
             else if (isset($dbFields[$field['dbVariable']])) {
-                $sql = 'ALTER TABLE ' . $tableName . ' MODIFY COLUMN ' . $field['dbVariable'] . ' ' . $fieldType . ((!$isNull) ? ' NOT' : '') . ' NULL;';
+                $sql = 'ALTER TABLE ' . $tableName . ' MODIFY COLUMN ' . $field['dbVariable'] . ' ' . $fieldType . ((!$isNull) ? ' NOT' : '') . ' NULL COMMENT "' . $field['name'] . '";';
             }
 
             $this->database->query($sql);
