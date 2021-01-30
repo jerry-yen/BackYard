@@ -19,6 +19,7 @@ class Admin extends \backyard\Package
     public function getDataset($code)
     {
         $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'dataset'));
+        print_r($response);
         $dataset = ($response['status'] == 'success') ? $response['item'] : array();
         $dataset['fields'] = json_decode($dataset['fields'], true);
         return array('status' => 'success', 'dataset' => $dataset);
@@ -125,8 +126,10 @@ class Admin extends \backyard\Package
      * 
      * @return array 資料庫資料
      */
-    public function convertToDatabase(&$table, $id, $value)
+    public function convertToDatabase($value)
     {
+        print_R($value);
+        exit;
         return $value;
     }
 

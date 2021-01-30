@@ -57,8 +57,14 @@ class Data extends \backyard\Package
      * @param string $code 模組代碼(資料表名稱)
      * @param array $fields 欄位資訊
      */
-    public function createTable($code, $fields = array())
+    public function createTable($exValues = array())
     {
+        $inputs = $this->backyard->getInputs($exValues);
+        $code = $inputs['_code'];
+        $fields = json_decode($inputs['fields'], true);
+
+
+
         // 表單名稱
         $tableName = $this->database->dbprefix . $code;
 
@@ -75,7 +81,6 @@ class Data extends \backyard\Package
                     sorted_at DATETIME NULL COMMENT "排序時間" COLLATE utf8_unicode_ci,
                     sequence INT(11) NULL COMMENT "排列順序" COLLATE utf8_unicode_ci,
                     top_at DATETIME NULL COMMENT "置頂時間" COLLATE utf8_unicode_ci,
-                    KEY `code_index` (`code`),
                     KEY `parent_id_index` (`parent_id`),
                     KEY `domain_id_index` (`domain_id`),
                     KEY `member_id_index` (`member_id`),
@@ -89,7 +94,80 @@ class Data extends \backyard\Package
 
         $this->database->query($sql);
 
-        // 新增及修改開發者的自訂欄位
+        $defualtFields = array();
+        $defualtFields['id'] = true;
+        $defualtFields['parent_id'] = true;
+        $defualtFields['domain_id'] = true;
+        $defualtFields['member_id'] = true;
+        $defualtFields['visibility'] = true;
+        $defualtFields['level'] = true;
+        $defualtFields['created_at'] = true;
+        $defualtFields['updated_at'] = true;
+        $defualtFields['sorted_at'] = true;
+        $defualtFields['sequence'] = true;
+        $defualtFields['top_at'] = true;
+
+        // 抓出這個表單的所有欄位
+        $dbFields = $this->database->list_fields($tableName);
+        foreach ($dbFields as $key => $field) {
+            $dbFields[$field] = $field;
+            unset($dbFields[$key]);
+        }
+        
+
+        // 刪除不在這次設定的欄位
+        foreach ($fields as $key => $field) {
+            $fieldType = 'varchar(10)';
+            switch ($field['component']) {
+                case 'slider':
+                case 'number':
+                    $fieldType = 'int(10)';
+                    break;
+                case 'select':
+                case 'text':
+                    $fieldType = 'varchar(100)';
+                    break;
+                case 'textarea':
+                    $fieldType = 'varchar(255)';
+                    break;
+                case 'switch':
+                    $fieldType = 'varchar(1)';
+                    break;
+                case 'text':
+                    $fieldType = 'varchar(100)';
+                    break;
+                default:
+                    $fieldType = 'varchar(100)';
+            }
+
+            $isNull = true;
+            foreach ($field['validator'] as $validator) {
+                if ($validator == 'required') {
+                    $isNull = false;
+                    break;
+                }
+            }
+
+            // 新增
+            if (!isset($dbFields[$field['dbVariable']]) && !isset($defualtFields[$field['dbVariable']])) {
+                $sql = 'ALTER TABLE ' . $tableName . ' ADD COLUMN ' . $field['dbVariable'] . ' ' . $fieldType . ((!$isNull) ? ' NOT' : '') . ' NULL;';
+            }
+            // 修改
+            else if (isset($dbFields[$field['dbVariable']])) {
+                $sql = 'ALTER TABLE ' . $tableName . ' MODIFY COLUMN ' . $field['dbVariable'] . ' ' . $fieldType . ((!$isNull) ? ' NOT' : '') . ' NULL;';
+            }
+
+            $this->database->query($sql);
+
+            $fields[$field['dbVariable']] = $field;
+        }
+
+        foreach ($dbFields as $field => $value) {
+            if (!isset($fields[$field]) && !isset($defualtFields[$field])) {
+                $sql = 'ALTER TABLE ' . $tableName . ' DROP COLUMN ' . $field . ';';
+                $this->database->query($sql);
+            }
+        }
     }
 
     /**
@@ -108,7 +186,7 @@ class Data extends \backyard\Package
 
         $response = $this->backyard->getUser()->convertToWhere($inputs);
         $where = $response['where'];
-       // print_r($response);
+        // print_r($response);
 
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
@@ -203,10 +281,10 @@ class Data extends \backyard\Package
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
         }
-        
+
         $response = $this->backyard->getUser()->convertToWhere($inputs);
         $where = $response['where'];
-        
+        print_r($where);
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
          */

@@ -193,6 +193,9 @@ class Api extends \chriskacerguis\RestServer\RestController
      */
     public function item_post()
     {
+        if ($this->backyard->getUserType() == 'master' && $this->get('code') == 'dataset') {
+            $this->backyard->data->createTable();
+        }
         $response = $this->backyard->data->insertItem();
         $this->response($response, 200);
     }
@@ -202,6 +205,9 @@ class Api extends \chriskacerguis\RestServer\RestController
      */
     public function item_put()
     {
+        if ($this->backyard->getUserType() == 'master' && $this->get('code') == 'dataset') {
+            $this->backyard->data->createTable();
+        }
         $response = $this->backyard->data->updateItem();
         $this->response($response, 200);
     }
