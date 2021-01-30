@@ -25,7 +25,6 @@
                     .attr('class', settings.class)
                     .attr('name', settings.name)
                     .val(settings.value);
-                console.log(settings);
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');

@@ -49,7 +49,7 @@
                     .attr('class', settings.class)
                     .attr('name', settings.name);
 
-               
+
             },
             tip: function () {
                 return $('<tip for="' + settings.id + '">' + settings.label + '</tip>');
@@ -65,38 +65,48 @@
             },
             elementConvertToComponent: function () {
 
-                $('body').on('change', '#source select[name="source"]', function () {
+                var _this = this;
+                _this.refresh();
 
-                    $('table tbody tr', settings.component).remove();
-
-                    var fieldsValue = $('option:selected', $(this)).attr('fields');
-                    if (fieldsValue == undefined) {
+                $('body').on('change', '#widget select[name="widgetlist"]', function () {
+                    if ($(this).val() != 'data') {
                         return;
                     }
-                    var fields = JSON.parse($('option:selected', $(this)).attr('fields'));
-                    for (var key in fields) {
-                        var emptyItem = $(settings.emptyItem);
-                        $('td.name', emptyItem).html(fields[key].name);
-                        $('td input[type="checkbox"]', emptyItem)
-                            .attr('id', '_' + fields[key].fontendVariable)
-                            .attr('title', fields[key].name)
-                            .attr('name', fields[key].fontendVariable);
-                        $('td label', emptyItem).attr('for', '_' + fields[key].fontendVariable);
-                        $('table tbody', settings.component).append(emptyItem);
-                    }
+                    _this.refresh();
                 });
+
+                
 
                 $('table tbody', settings.component).sortable({
                     handle: "td i.fa-grip-vertical"
                 });
+            },
+            refresh: function () {
+                $('#' + settings.id + ' table tbody tr').remove();
+
+                var fieldsValue = $('#dataset select[name="source"] option:selected').attr('fields');
+                if (fieldsValue == undefined) {
+                    return;
+                }
+                var fields = JSON.parse(fieldsValue);
+                for (var key in fields) {
+                    var emptyItem = $(settings.emptyItem);
+                    $('td.name', emptyItem).html(fields[key].name);
+                    $('td input[type="checkbox"]', emptyItem)
+                        .attr('id', '_' + fields[key].frontendVariable)
+                        .attr('title', fields[key].name)
+                        .attr('name', fields[key].frontendVariable);
+                    $('td label', emptyItem).attr('for', '_' + fields[key].frontendVariable);
+                    $('#' + settings.id + ' table tbody').append(emptyItem);
+                }
             },
             getName: function () {
                 return settings.name;
             },
             getValue: function () {
                 var fields = {};
-                $('input[type="checkbox"]', settings.component).each(function(){
-                    fields[$(this).attr('name')]={'status':$(this).prop('checked')?'Y':'N','name':$(this).attr('title')};
+                $('input[type="checkbox"]', settings.component).each(function () {
+                    fields[$(this).attr('name')] = { 'status': $(this).prop('checked') ? 'Y' : 'N', 'name': $(this).attr('title') };
                 });
 
                 return fields;
@@ -121,18 +131,18 @@
 
                 $('#source select[name="source"]').change();
                 var sortIndex = 0;
-                for(var key in value){
-                    $('input[name="' + key+ '"]').prop('checked',(value[key].status == 'Y'));
-                    $('input[name="' + key+ '"]').attr('sequence', sortIndex++);
+                for (var key in value) {
+                    $('input[name="' + key + '"]').prop('checked', (value[key].status == 'Y'));
+                    $('input[name="' + key + '"]').attr('sequence', sortIndex++);
                 }
 
-                $('table tbody tr', settings.component).sort(function(a, b){
+                $('table tbody tr', settings.component).sort(function (a, b) {
                     var seq1 = $('input[type="checkbox"]', a).attr('sequence');
                     var seq2 = $('input[type="checkbox"]', b).attr('sequence');
                     console.log(seq1 + '--' + seq2);
                     return (seq1 > seq2) ? 1 : -1;
                 }).appendTo($('table tbody', settings.component));
-               
+
             }
         };
 

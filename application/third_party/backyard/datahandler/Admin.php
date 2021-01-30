@@ -19,7 +19,6 @@ class Admin extends \backyard\Package
     public function getDataset($code)
     {
         $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'dataset'));
-       // print_r($response);
         $dataset = ($response['status'] == 'success') ? $response['item'] : array();
         $dataset['fields'] = json_decode($dataset['fields'], true);
         return array('status' => 'success', 'dataset' => $dataset);
@@ -64,25 +63,13 @@ class Admin extends \backyard\Package
      */
     public function convertToWhere($value)
     {
-        $module = array();
-        if (isset($value['id'])) {
-            $module['id'] = $value['id'];
-        }
-        if (isset($value['created_at'])) {
-            $module['created_at'] = $value['created_at'];
-        }
-        if (isset($value['updated_at'])) {
-            $module['updated_at'] = $value['updated_at'];
-        }
-        if (isset($value['code'])) {
-            $module['code'] = $value['code'];
+        if (isset($value['config_type'])) {
+            $table = get_instance()->db->dbprefix . 'module';
+        } else {
+            $table = get_instance()->db->dbprefix . $value['code'];
         }
 
-        if (isset($value['config_type'])) {
-            $module['config_type'] = $value['config_type'];
-        }
-        $table = get_instance()->db->dbprefix . 'module';
-        return array('table' => $table, 'where' => $module);
+        return array('table' => $table, 'where' => $value);
     }
 
 
@@ -131,9 +118,9 @@ class Admin extends \backyard\Package
      */
     public function convertToDatabase($value)
     {
-        print_R($value);
-        exit;
-        return $value;
+        $table = get_instance()->db->dbprefix .  $value['code'];
+        unset($value['code']);
+        return array('table' => $table, 'value' => $value);
     }
 
     /**

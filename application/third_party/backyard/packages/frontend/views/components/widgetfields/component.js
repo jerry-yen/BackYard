@@ -33,7 +33,7 @@
             'emptyItem': '\
                             <tr>\
                                 <td class="name"></td>\
-                                <td class="fontendVariable"></td>\
+                                <td class="frontendVariable"></td>\
                                 <td class="dbVariable"></td>\
                             </tr>'
         }, _settings);
@@ -85,7 +85,7 @@
                     for (var key in fields) {
                         var emptyItem = $(settings.emptyItem);
                         $('td.name', emptyItem).html(fields[key].name);
-                        $('td.fontendVariable', emptyItem).html(fields[key].fontendVariable);
+                        $('td.frontendVariable', emptyItem).html(fields[key].frontendVariable);
                         $('td.dbVariable', emptyItem).html(fields[key].dbVariable);
                         $('table tbody', settings.component).append(emptyItem);
                     }

@@ -66,9 +66,9 @@
                                 fieldContainer.append(component.invalid());
                                 fieldContainer.append('<br />');
                                 fieldContainer.append(component.element());
-                                component.elementConvertToComponent();
-
+                                
                                 settings.component.append(fieldContainer);
+                                component.elementConvertToComponent();
                                 components[response.metadata.fields[key].frontendVariable] = component;
                             });
 
