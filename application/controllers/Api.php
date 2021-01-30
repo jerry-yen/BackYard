@@ -26,7 +26,7 @@ class Api extends \chriskacerguis\RestServer\RestController
     public function login_post()
     {
         $this->backyard->loadPackage('account');
-        $response = $this->backyard->user->login($this->get('code'));
+        $response = $this->backyard->user->login($this->inputs);
         $this->response($response, 200);
     }
 
