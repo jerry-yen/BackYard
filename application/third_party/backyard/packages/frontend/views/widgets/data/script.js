@@ -58,11 +58,11 @@
 
                     // 取得資料集欄位資訊
                     listFields = response.metadata.widget.listfields;
-
+                    
                     // 呈現欄位元件
                     $('div.table table thead tr th', settings.instance).not(':first').remove();
                     for (var key in listFields) {
-                        $('div.table table thead tr', settings.instance).append('<th>' + listFields[key] + '</th>');
+                        $('div.table table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
                     }
 
                     // 增加原始欄位的清單按鈕

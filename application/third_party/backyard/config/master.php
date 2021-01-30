@@ -221,8 +221,8 @@ $config['master']['widget']['email'] = array(
         'code'  => 'data',
         'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
-            '_code' => '代碼',
-            'title' => '用述'
+            '_code' => array('status' => 'Y', 'name' => '代碼'),
+            'title' => array('status' => 'Y', 'name' => '用述')
         ),
         'classLevelCount' => 0,
         'event_add' => '',
@@ -244,8 +244,8 @@ $config['master']['widget']['account'] = array(
         'code'  => 'data',
         'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
-            'name' => '姓名',
-            'account' => '帳號'
+            'name' => array('status' => 'Y', 'name' => '姓名'),
+            'account' => array('status' => 'Y', 'name' => '帳號')
         ),
         'classLevelCount' => 0,
         'event_add' => '',
@@ -267,8 +267,8 @@ $config['master']['widget']['dataset'] = array(
         'code'  => 'data',
         'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
-            '_code' => '代碼',
-            'name' => '名稱'
+            '_code' => array('status' => 'Y', 'name' => '代碼'),
+            'name' => array('status' => 'Y', 'name' => '名稱')
         ),
         'classLevelCount' => 0,
         'event_add' => '',
@@ -290,8 +290,8 @@ $config['master']['widget']['widget'] = array(
         'code'  => 'data',
         'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
-            '_code' => '代碼',
-            'name' => '名稱'
+            '_code' => array('status' => 'Y', 'name' => '代碼'),
+            'name' => array('status' => 'Y', 'name' => '名稱')
         ),
         'classLevelCount' => 0,
         'event_add' => '',
@@ -328,8 +328,8 @@ $config['master']['widget']['content'] = array(
         'code'  => 'data',
         'permission' => array('ADD', 'MODIFY', 'DELETE'),
         'listfields' => array(
-            '_code' => '頁面代碼',
-            'name' => '頁面名稱'
+            '_code' => array('status' => 'Y', 'name' => '頁面代碼'),
+            'name' => array('status' => 'Y', 'name' => '頁面名稱')
         ),
         'event_add' => '',
         'event_modify' => '',

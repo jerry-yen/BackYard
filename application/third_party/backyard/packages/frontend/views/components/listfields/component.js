@@ -127,7 +127,6 @@
                     return;
                 }
 
-                console.log(value);
 
                 $('#source select[name="source"]').change();
                 var sortIndex = 0;
@@ -139,7 +138,7 @@
                 $('table tbody tr', settings.component).sort(function (a, b) {
                     var seq1 = $('input[type="checkbox"]', a).attr('sequence');
                     var seq2 = $('input[type="checkbox"]', b).attr('sequence');
-                    console.log(seq1 + '--' + seq2);
+
                     return (seq1 > seq2) ? 1 : -1;
                 }).appendTo($('table tbody', settings.component));
 
