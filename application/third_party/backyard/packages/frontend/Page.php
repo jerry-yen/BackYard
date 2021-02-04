@@ -36,6 +36,12 @@ class Page extends \backyard\Package
         return $content;
     }
 
+    public function getMetadatas()
+    {
+        $page = $this->backyard->getUser()->getMetadataOfPages();
+        return array('status' => 'success', 'page' => $page['metadata']);
+    }
+
     /**
      * 取得頁面後設資料
      * 

@@ -27,10 +27,10 @@
                         return;
                     }
 
-                    for (var i in response.metadata.menu) {
+                    for (var i in response.metadata.widget.menu) {
                         var item = $('li.nav-item.template', settings.instance).clone();
                         item.removeClass('template').removeClass('d-none');
-                        item = widget.menu.option.subItem(response.metadata.menu[i], item, 1);
+                        item = widget.menu.option.subItem(response.metadata.widget.menu[i], item, 1);
                         $('ul.nav:first', settings.instance).append(item);
                     }
 

@@ -150,48 +150,49 @@ $config['master']['widget']['menu'] = array(
     'dataset'          => '',
     'widget'            => array(
         'code'  => 'menu',
-        'event_dataSource' => '/api/menu'
+        'event_dataSource' => '/api/menu',
+        'menu'   => array(
+            // 一層
+            array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+                array('type' => 'page', 'icon' => '', 'title' => '帳戶管理', 'code' => 'account'),
+            )),
+
+            array('type' => 'pageClass', 'icon' => '', 'title' => '資訊管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => '', 'title' => '資料管理', 'code' => 'dataset'),
+                array('type' => 'page', 'icon' => '', 'title' => '組件管理', 'code' => 'widget'),
+            )),
+
+            array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
+                array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'content'),
+                array('type' => 'page', 'icon' => '', 'title' => '側欄管理', 'code' => 'leftside'),
+                array('type' => 'page', 'icon' => '', 'title' => '頁尾管理', 'code' => 'footer'),
+            )),
+
+            /*
+            // 二層
+            array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+            )),
+    
+            // 三層
+            array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理',  'subItems' => array(
+                array('type' => 'pageClass', 'icon' => '', 'title' => '網站管理',  'subItems' => array(
+                    array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+                    array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+                )),
+                array('type' => 'pageClass', 'icon' => '', 'title' => '不要管理', 'subItems' => array(
+                    array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
+                    array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
+                )),
+            )),
+    */
+        )
     ),
-    'menu'   => array(
-        // 一層
-        array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
-            array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
-            array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
-            array('type' => 'page', 'icon' => '', 'title' => '帳戶管理', 'code' => 'account'),
-        )),
 
-        array('type' => 'pageClass', 'icon' => '', 'title' => '資訊管理', 'subItems' => array(
-            array('type' => 'page', 'icon' => '', 'title' => '資料管理', 'code' => 'dataset'),
-            array('type' => 'page', 'icon' => '', 'title' => '組件管理', 'code' => 'widget'),
-        )),
-
-        array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
-            array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
-            array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'content'),
-            array('type' => 'page', 'icon' => '', 'title' => '側欄管理', 'code' => 'leftside'),
-            array('type' => 'page', 'icon' => '', 'title' => '頁尾管理', 'code' => 'footer'),
-        )),
-
-        /*
-        // 二層
-        array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
-            array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
-            array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
-        )),
-
-        // 三層
-        array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理',  'subItems' => array(
-            array('type' => 'pageClass', 'icon' => '', 'title' => '網站管理',  'subItems' => array(
-                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
-                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
-            )),
-            array('type' => 'pageClass', 'icon' => '', 'title' => '不要管理', 'subItems' => array(
-                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
-                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
-            )),
-        )),
-*/
-    )
 );
 
 

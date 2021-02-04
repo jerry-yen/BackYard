@@ -58,6 +58,17 @@ class Master extends \backyard\Package
         return array('status' => 'success', 'metadata' => $master['page'][$code]);
     }
 
+     /**
+     * 取得頁面後設資料
+     * 
+     * @param strin $code 代碼
+     */
+    public function getMetadataOfPages()
+    {
+        $response = $this->backyard->data->getItems(array('code' => 'content'));
+        return array('status' => 'success', 'metadata' => $response['results']);
+    }
+
     public function getSystemInformation()
     {
         $this->backyard->config->loadConfigFile('master');

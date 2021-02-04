@@ -145,6 +145,22 @@ class Api extends \chriskacerguis\RestServer\RestController
         $this->response($metadata['page'], 200);
     }
 
+
+    /**
+     * 取得內容後設資料
+     * 
+     * @param string code 代碼
+     * @param string user 使用者類型(master, admin)
+     * 
+     * @return json 組件資料
+     */
+    public function pages_get()
+    {
+        $this->backyard->loadPackage('frontend');
+        $metadata = $this->backyard->page->getMetadatas();
+        $this->response($metadata['page'], 200);
+    }
+
     /**
      * 取得整個頁面所需要的Javascript套件
      * @param string $code 元件名稱

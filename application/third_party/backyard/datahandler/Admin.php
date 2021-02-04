@@ -48,6 +48,17 @@ class Admin extends \backyard\Package
         return array('status' => 'success', 'metadata' => $response['item']);
     }
 
+    /**
+     * 取得頁面後設資料
+     * 
+     * @param strin $code 代碼
+     */
+    public function getMetadataOfPages()
+    {
+        $response = $this->backyard->data->getItem(array('config_type' => 'content'));
+        return array('status' => 'success', 'metadata' => $response['item']);
+    }
+
     public function getSystemInformation()
     {
         $response = $this->backyard->data->getItem(array('code' => '', 'config_type' => 'login'));
