@@ -172,7 +172,7 @@
                     level_1.push(item);
                 });
 
-                
+
                 return level_1;
             },
             setInvalid: function (message) {
@@ -186,8 +186,42 @@
                     invalid.hide();
                 }
             },
-            setValue: function (value) {
-                settings.component.val(value);
+            setValue: function (items) {
+                items = this.loadItem(items, 1);
+                for (var key in items) {
+                    $('div.root', settings.component).append(items[key]);
+                }
+            },
+            loadItem: function (items, level) {
+                var byard_items = [];
+                for (var key in items) {
+                    if (items[key].type == 'pageClass') {
+                        var subItems = this.loadItem(items[key].subItems, level + 1);
+                        var item = settings.emptyClass.clone();
+                        item.attr('level', level);
+                        $('input[name="title"]', item).val(items[key].title);
+                        $('input[name="icon"]', item).val(items[key].icon);
+                        if ($('div.list', item).length == 0) {
+                            item.append('<div class="list" style="margin-left:55px;"></div>')
+                        }
+                        for (var subKey in subItems) {
+                            $('div.list', item).append(subItems[subKey]);
+                        }
+                    }
+                    else if (items[key].type == 'page') {
+                        var item = settings.emptyItem.clone();
+                        item.attr('level', level);
+                        // $('select option[""]', item).val(items[key].title);
+                        $('select option', item).filter(function () {
+                            return this.text == items[key].title;
+                        }).prop('selected', true);
+                        $('input[name="icon"]', item).val(items[key].icon);
+                    }
+
+                    byard_items.push(item);
+                }
+
+                return byard_items;
             }
         };
 
