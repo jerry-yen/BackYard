@@ -72,7 +72,7 @@
             elementConvertToComponent: function () {
                 $.backyard().process.api('/index.php/api/pages/user/master', {}, 'GET', function (response) {
                     for (var key in response) {
-                        $('select', settings.emptyItem).append('<option value="' + response[key].id + '">' + response[key].name + '</option>');
+                        $('select', settings.emptyItem).append('<option value="' + response[key]._code + '">' + response[key].name + '</option>');
                     }
                     // settings.component.append(settings.emptyItem);
                 });
@@ -144,14 +144,18 @@
                             level_3.push({
                                 'type': $(this).hasClass('pageClass') ? 'pageClass' : 'page',
                                 'icon': $('input[name="icon"]', $(this)).val(),
-                                'title': $(this).hasClass('pageClass') ? $('input[name="title"]', $(this)).val() : $('select option:selected', $(this)).text()
+                                'title': $(this).hasClass('pageClass') ? $('input[name="title"]', $(this)).val() : $('select option:selected', $(this)).text(),
+                                'code': $(this).hasClass('pageClass') ? '' : $('select', $(this)).val()
                             });
+                            
+                            
                         });
 
                         var item = {
                             'type': $(this).hasClass('pageClass') ? 'pageClass' : 'page',
                             'icon': $('input[name="icon"]', $(this)).val(),
-                            'title': $(this).hasClass('pageClass') ? $('input[name="title"]', $(this)).val() : $('select option:selected', $(this)).text()
+                            'title': $(this).hasClass('pageClass') ? $('input[name="title"]', $(this)).val() : $('select option:selected', $(this)).text(),
+                            'code': $(this).hasClass('pageClass') ? '' : $('select', $(this)).val()
                         };
 
                         if ($(this).hasClass('pageClass')) {
@@ -163,7 +167,8 @@
                     var item = {
                         'type': $(this).hasClass('pageClass') ? 'pageClass' : 'page',
                         'icon': $('input[name="icon"]', $(this)).val(),
-                        'title': $(this).hasClass('pageClass') ? $('input[name="title"]', $(this)).val() : $('select option:selected', $(this)).text()
+                        'title': $(this).hasClass('pageClass') ? $('input[name="title"]', $(this)).val() : $('select option:selected', $(this)).text(),
+                        'code': $(this).hasClass('pageClass') ? '' : $('select', $(this)).val()
                     };
 
                     if ($(this).hasClass('pageClass')) {
@@ -211,10 +216,12 @@
                     else if (items[key].type == 'page') {
                         var item = settings.emptyItem.clone();
                         item.attr('level', level);
-                        // $('select option[""]', item).val(items[key].title);
+                        $('select', item).val(items[key].code);
+                        /*
                         $('select option', item).filter(function () {
                             return this.text == items[key].title;
                         }).prop('selected', true);
+                        */
                         $('input[name="icon"]', item).val(items[key].icon);
                     }
 

@@ -26,7 +26,7 @@
                     if (response.status != 'success') {
                         return;
                     }
-
+                    
                     for (var i in response.metadata.widget.menu) {
                         var item = $('li.nav-item.template', settings.instance).clone();
                         item.removeClass('template').removeClass('d-none');

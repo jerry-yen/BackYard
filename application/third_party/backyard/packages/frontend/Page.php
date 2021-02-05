@@ -126,19 +126,23 @@ class Page extends \backyard\Package
 
             // 取得資料集後設資料
             $datasetCode = $widgetMetadata['metadata']['dataset'];
-            $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
 
-            if (isset($fieldDataset['dataset'])) {
-                foreach ($fieldDataset['dataset']['fields'] as $field) {
-                    // 取得元件Script內容
-                    $scriptPath = $this->viewPath . '/components/' . $field['component'] . '/component.js';
-                    if (!file_exists($scriptPath)) {
-                        continue;
+            // 如果沒有指定dataset，就不需要往下處理，因為不是每個組件都會有資料來源
+            if ($datasetCode != '') {
+                $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
+
+                if (isset($fieldDataset['dataset'])) {
+                    foreach ($fieldDataset['dataset']['fields'] as $field) {
+                        // 取得元件Script內容
+                        $scriptPath = $this->viewPath . '/components/' . $field['component'] . '/component.js';
+                        if (!file_exists($scriptPath)) {
+                            continue;
+                        }
+
+                        $componentScript = file_get_contents($scriptPath) . "\r\n";
+                        $componentScript .= $this->readLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
+                        $componentScripts[$field['component']] = $componentScript;
                     }
-
-                    $componentScript = file_get_contents($scriptPath) . "\r\n";
-                    $componentScript .= $this->readLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
-                    $componentScripts[$field['component']] = $componentScript;
                 }
             }
         }
