@@ -14,7 +14,7 @@
                 'leftside': 'aside div.leftside',
                 'rightside': 'aside.control-sidebar',
                 'footer': 'footer.main-footer',
-                'header': 'ul.navbar-nav'
+                'header': 'ul.navbar-nav > li:not(.pushmenu)'
             }
         }, _settings);
 

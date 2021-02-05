@@ -153,7 +153,7 @@ $config['master']['widget']['menu'] = array(
         'event_dataSource' => '/api/menu',
         'menu'   => array(
             // 一層
-            array('type' => 'pageClass', 'icon' => '', 'title' => '系統管理', 'subItems' => array(
+            array('type' => 'pageClass', 'icon' => 'fas fa-cogs', 'title' => '系統管理', 'subItems' => array(
                 array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
                 array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
                 array('type' => 'page', 'icon' => '', 'title' => '帳戶管理', 'code' => 'account'),
