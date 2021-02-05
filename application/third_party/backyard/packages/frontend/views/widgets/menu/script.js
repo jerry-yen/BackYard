@@ -53,10 +53,10 @@
 
                 option: {
                     subItem: function (menu, item, level) {
-
-                        if (menu.icon != '') {
-                            $('i').addClass(menu.icon);
+                        if (menu.icon.trim() != '') {
+                            $('i',item).attr('class', menu.icon);
                         }
+                       
                         $('a:first', item).css({ 'padding-left': (level * 15) + 'px' });
                         if (menu.type == 'page') {
                             $('p', item).html(menu.title);

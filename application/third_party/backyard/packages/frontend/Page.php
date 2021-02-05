@@ -271,17 +271,19 @@ class Page extends \backyard\Package
 
             // 取得資料集後設資料
             $datasetCode = $widgetMetadata['metadata']['dataset'];
-            $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
-            if (isset($fieldDataset['dataset']['fields'])) {
-                foreach ($fieldDataset['dataset']['fields'] as $field) {
-                    // 取得元件Style內容
-                    $componentStyle = '';
-                    $stylePath = $this->viewPath . '/components/' . $field['component'] . '/component.css';
-                    if (file_exists($stylePath)) {
-                        $componentStyle = file_get_contents($stylePath) . "\r\n";
+            if ($datasetCode != '') {
+                $fieldDataset = $this->backyard->dataset->getItem($datasetCode);
+                if (isset($fieldDataset['dataset']['fields'])) {
+                    foreach ($fieldDataset['dataset']['fields'] as $field) {
+                        // 取得元件Style內容
+                        $componentStyle = '';
+                        $stylePath = $this->viewPath . '/components/' . $field['component'] . '/component.css';
+                        if (file_exists($stylePath)) {
+                            $componentStyle = file_get_contents($stylePath) . "\r\n";
+                        }
+                        $componentStyle .= $this->readCSSLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
+                        $componentStyles[$field['component']] = $componentStyle;
                     }
-                    $componentStyle .= $this->readCSSLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
-                    $componentStyles[$field['component']] = $componentStyle;
                 }
             }
         }

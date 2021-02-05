@@ -154,21 +154,21 @@ $config['master']['widget']['menu'] = array(
         'menu'   => array(
             // 一層
             array('type' => 'pageClass', 'icon' => 'fas fa-cogs', 'title' => '系統管理', 'subItems' => array(
-                array('type' => 'page', 'icon' => '', 'title' => '登入設定', 'code' => 'login'),
-                array('type' => 'page', 'icon' => '', 'title' => '信箱管理', 'code' => 'email'),
-                array('type' => 'page', 'icon' => '', 'title' => '帳戶管理', 'code' => 'account'),
+                array('type' => 'page', 'icon' => 'fas fa-sign-in-alt', 'title' => '登入設定', 'code' => 'login'),
+                array('type' => 'page', 'icon' => 'fas fa-envelope', 'title' => '信箱管理', 'code' => 'email'),
+                array('type' => 'page', 'icon' => 'fas fa-users', 'title' => '帳戶管理', 'code' => 'account'),
             )),
 
-            array('type' => 'pageClass', 'icon' => '', 'title' => '資訊管理', 'subItems' => array(
-                array('type' => 'page', 'icon' => '', 'title' => '資料管理', 'code' => 'dataset'),
-                array('type' => 'page', 'icon' => '', 'title' => '組件管理', 'code' => 'widget'),
+            array('type' => 'pageClass', 'icon' => 'fas fa-info', 'title' => '資訊管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => 'fas fa-database', 'title' => '資料管理', 'code' => 'dataset'),
+                array('type' => 'page', 'icon' => 'far fa-window-restore', 'title' => '組件管理', 'code' => 'widget'),
             )),
 
-            array('type' => 'pageClass', 'icon' => '', 'title' => '版面管理', 'subItems' => array(
-                array('type' => 'page', 'icon' => '', 'title' => '頁頭管理', 'code' => 'header'),
-                array('type' => 'page', 'icon' => '', 'title' => '頁面管理', 'code' => 'content'),
-                array('type' => 'page', 'icon' => '', 'title' => '側欄管理', 'code' => 'leftside'),
-                array('type' => 'page', 'icon' => '', 'title' => '頁尾管理', 'code' => 'footer'),
+            array('type' => 'pageClass', 'icon' => 'fab fa-artstation', 'title' => '版面管理', 'subItems' => array(
+                array('type' => 'page', 'icon' => 'far fa-window-maximize', 'title' => '頁頭管理', 'code' => 'header'),
+                array('type' => 'page', 'icon' => 'far fa-window-maximize', 'title' => '頁面管理', 'code' => 'content'),
+                array('type' => 'page', 'icon' => 'far fa-window-maximize', 'title' => '側欄管理', 'code' => 'leftside'),
+                array('type' => 'page', 'icon' => 'far fa-window-maximize', 'title' => '頁尾管理', 'code' => 'footer'),
             )),
 
             /*
