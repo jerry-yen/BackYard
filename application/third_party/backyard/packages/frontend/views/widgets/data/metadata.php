@@ -2,6 +2,16 @@
 $metadata = array(
     'fields'   => array(
         array(
+            'name' => '分類層數', 
+            'dbVariable' => 'classLevel', 
+            'frontendVariable' => 'classLevel', 
+            'component' => 'number', 
+            'validator' => array(), 
+            'converter' => array(), 
+            'source' => '', 
+            'fieldTip' => ''
+        ),
+        array(
             'name' => '操作權限', 
             'dbVariable' => 'permission', 
             'frontendVariable' => 'permission', 
