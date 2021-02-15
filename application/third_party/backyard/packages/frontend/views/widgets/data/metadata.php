@@ -31,6 +31,16 @@ $metadata = array(
             'source' => '', 
             'fieldTip' => ''
         ),
+        array(
+            'name' => '子項目', 
+            'dbVariable' => 'sublist', 
+            'frontendVariable' => 'sublist', 
+            'component' => 'sublist', 
+            'validator' => array(), 
+            'converter' => array(), 
+            'source' => '', 
+            'fieldTip' => ''
+        ),
     ),
     'events' => array(
         array(

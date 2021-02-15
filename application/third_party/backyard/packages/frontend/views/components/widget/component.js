@@ -145,12 +145,12 @@
                 }
             },
             setValue: function (value) {
-                console.log(value);
+                
                 $('select[name="widgetlist"]', settings.component).val(value.code);
                 $('select[name="widgetlist"]', settings.component).change();
-                console.log(components);
+
                 for(var key in components){
-                    console.log(value[key]);
+                    value[key] = (value[key] == undefined) ? '' : value[key];
                     components[key].setValue(value[key]);
                 }
             }

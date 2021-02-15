@@ -225,7 +225,6 @@
                     this.api('/index.php/api/login/user/' + settings.userType, {
                         'code': code
                     }, 'POST', function (response) {
-                        console.log(response);
                         if (response.status == 'success') {
                             location.href = '/index.php/' + settings.userType + '/' + response.landing_page;
                         }

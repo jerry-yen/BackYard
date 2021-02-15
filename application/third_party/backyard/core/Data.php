@@ -238,7 +238,7 @@ class Data extends \backyard\Package
 
 
         foreach ($sort as $key => $method) {
-            if(!isset($tableFields[$key])){
+            if (!isset($tableFields[$key])) {
                 continue;
             }
             $this->database = $this->database->order_by($key, $method);
@@ -248,7 +248,10 @@ class Data extends \backyard\Package
         // 取得總筆數
         $total = $this->database->count_all_results('', false);
 
+
         // 分頁處理
+        $totalPage = 1;
+        $current_page = 1;
         if ($pagination) {
             $inputPage = get_instance()->input->get('page');
             $page = isset($inputPage) ?
@@ -263,14 +266,17 @@ class Data extends \backyard\Package
             if ($count > $total || $count == -1) {
                 $count = $total;
             }
-
+            $count = ($count == 0) ? 10 : $count;
             $totalPage = ceil($total / $count);
+            $totalPage = ($totalPage == 0)? 1 : $totalPage;
             $page = isset($page) ? $page : 1;
             $page = ($page < 1) ? 1 : $page;
             $page = ($page > $totalPage) ? $totalPage : $page;
 
             $offset = ($page - 1) * $count;
             $this->database = $this->database->limit($count, $offset);
+
+            $current_page = (int)(isset($page) ? $page : 1);
         }
 
         // 取得結果
@@ -284,8 +290,8 @@ class Data extends \backyard\Package
         return array(
             'status' => 'success',
             'total' => $total,
-            'total_page' => ceil($total / $count),
-            'current_page' => (int)(isset($page) ? $page : 1),
+            'total_page' => $totalPage,
+            'current_page' => $current_page,
             'results' => $results
         );
     }
@@ -469,7 +475,7 @@ class Data extends \backyard\Package
 
         $response = $this->backyard->getUser()->convertToDatabase($inputs);
         $value = $response['value'];
-        
+
         // 更新記錄
         $this->database->where('id', $value['id']);
         $this->database->update($response['table'], $value);

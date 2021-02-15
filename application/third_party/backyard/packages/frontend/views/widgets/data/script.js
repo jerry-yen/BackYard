@@ -129,8 +129,10 @@
                         $('button.return', settings.instance).addClass('d-none');
                     }
 
+                    $('tr td button.list', settings.instance).not('.d-none').remove();
+
                     // 分類按鈕
-                    if (response.metadata.widget.classLevel > 0) {
+                    if (response.metadata.widget.classLevel > 0 && widget.util.level.getLevel() < response.metadata.widget.classLevel) {
                         if ($('button.list[widget="' + settings.code + '"]').length == 0) {
                             var listbutton = $('tr.d-none td button.list.d-none', settings.instance).clone();
                             listbutton
@@ -142,18 +144,19 @@
                     }
 
                     // 增加原始欄位的清單按鈕
-                    if (response.metadata.widget.sub_buttons != undefined) {
-                        for (var key in response.metadata.widget.sub_buttons) {
+                    if (response.metadata.widget.sublist != undefined) {
+                        response.metadata.widget.sublist = JSON.parse(response.metadata.widget.sublist);
+                        for (var key in response.metadata.widget.sublist) {
                             var listbutton = $('div.table tr.d-none td button.list.d-none', settings.instance).clone();
                             listbutton
                                 .removeClass('d-none')
-                                .attr('widget', response.metadata.widget.sub_buttons[key].widget)
-                                .attr('linkfield', response.metadata.widget.sub_buttons[key].linkfield);
-                            if (response.metadata.widget.sub_buttons[key].icon == '') {
-                                response.metadata.widget.sub_buttons[key].icon = 'fas fa-bars';
+                                .attr('widget', response.metadata.widget.sublist[key].widget)
+                                .attr('linkfield', response.metadata.widget.sublist[key].linkfield);
+                            if (response.metadata.widget.sublist[key].icon == '') {
+                                response.metadata.widget.sublist[key].icon = 'fas fa-bars';
                             }
-                            $('i', listbutton).attr('class', response.metadata.widget.sub_buttons[key].icon);
-                            $('span.btitle', listbutton).html(response.metadata.widget.sub_buttons[key].name);
+                            $('i', listbutton).attr('class', response.metadata.widget.sublist[key].icon);
+                            $('span.btitle', listbutton).html(response.metadata.widget.sublist[key].name);
 
                             $('div.table tr.d-none td', settings.instance).append(listbutton);
                         }
