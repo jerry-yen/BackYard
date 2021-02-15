@@ -10,15 +10,19 @@
             'userType': 'admin',
             'code': $(this).attr('widget'),
             'instance': this,
-            'params': {},
+            'params': { 'parent_id': '' },
             'add_button_selector': 'button.add',
             'modify_button_selector': 'button.modify',
             'delete_button_selector': 'button.delete',
             'sort_button_selector': 'button.sort',
-            'sort_cancel_button_selector': 'button.return',
+            'sort_cancel_button_selector': 'button.sort-return',
             'sort_check_button_selector': 'button.check-sort',
             'submit_button_selector': 'button.submit',
-            'list_button_selector': 'button.list'
+            'list_button_selector': 'button.list',
+            'return_button_selector': 'button.return',
+            'page_button_selector': 'li.page-item.number',
+            'prev_page_button_selector': 'li.page-item.prev',
+            'next_page_button_selector': 'li.page-item.next',
         }, _settings);
 
         var components = [];
@@ -26,21 +30,50 @@
         var tableLoaded = false;
         var formLoaded = false;
         var sortLoaded = false;
-        var levelParams = [];
-        /**
-         * 其實可以在這個組件，直接做 history url 功能
-         */
-        var historyUrls = [];
 
         // 自定義函式
         var widget = {
-            history: {
-                addParams: function (widget, params) {
-                    historyUrls.push({ 'widget': widget, 'params': params });
-                }
+            util: {
+                /**
+                 * URL History
+                 */
+                history: {
+                    urls: [],
+                    push: function (widget, params) {
+                        var item = {};
+                        item['widget'] = widget;
+                        item['params'] = params;
+                        this.urls.push(item);
+                    },
+                    pop: function () {
+                        return this.urls.pop();
+                    }
+                },
+                level: {
+                    urls: [],
+                    test: function () {
+                        console.log(this.urls);
+                    },
+                    push: function (widget, params) {
+                        var item = {};
+                        item['widget'] = widget;
+                        item['params'] = params;
+                        this.urls.push(item);
+                    },
+                    pop: function () {
+                        return this.urls.pop();
+                    },
+                    getLevel: function () {
+                        return this.urls.length;
+                    }
+                },
             },
+
             table: {
+
                 initial: function () {
+
+                    widget.util.history.push(settings.code, settings.params);
 
                     if (tableLoaded) {
                         return;
@@ -65,17 +98,53 @@
                         $('div.table table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
                     }
 
+                    if (response.metadata.widget.permission.indexOf('ADD') > -1) {
+                        $('button.add', settings.instance).removeClass('d-none');
+                    }
+
+                    if (response.metadata.widget.permission.indexOf('MODIFY') > -1) {
+                        $('button.modify', settings.instance).removeClass('d-none');
+                    }
+
+                    if (response.metadata.widget.permission.indexOf('DELETE') > -1) {
+                        $('button.batch_delete, button.delete', settings.instance).removeClass('d-none');
+                    }
+
+                    if (response.metadata.widget.permission.indexOf('SORT') > -1) {
+                        $('button.sort', settings.instance).removeClass('d-none');
+                    }
+
+                    if (response.metadata.widget.permission.indexOf('EXPORT') > -1) {
+                        $('button.export', settings.instance).removeClass('d-none');
+                    }
+
+                    if (response.metadata.widget.permission.indexOf('IMPORT') > -1) {
+                        $('button.import', settings.instance).removeClass('d-none');
+                    }
+
+                    if (widget.util.level.getLevel() > 0) {
+                        $('button.return', settings.instance).removeClass('d-none');
+                    }
+                    else {
+                        $('button.return', settings.instance).addClass('d-none');
+                    }
+
                     // 分類按鈕
                     if (response.metadata.widget.classLevel > 0) {
-                        var listbutton = $('tr.d-none td button.list.d-none', settings.instance).clone();
-                        listbutton.removeClass('d-none');
-                        $('tr.d-none td', settings.instance).append(listbutton);
+                        if ($('button.list[widget="' + settings.code + '"]').length == 0) {
+                            var listbutton = $('tr.d-none td button.list.d-none', settings.instance).clone();
+                            listbutton
+                                .removeClass('d-none')
+                                .attr('widget', settings.code)
+                                .attr('linkfield', 'parent_id');
+                            $('div.table tr.d-none td', settings.instance).append(listbutton);
+                        }
                     }
 
                     // 增加原始欄位的清單按鈕
                     if (response.metadata.widget.sub_buttons != undefined) {
                         for (var key in response.metadata.widget.sub_buttons) {
-                            var listbutton = $('tr.d-none td button.list.d-none', settings.instance).clone();
+                            var listbutton = $('div.table tr.d-none td button.list.d-none', settings.instance).clone();
                             listbutton
                                 .removeClass('d-none')
                                 .attr('widget', response.metadata.widget.sub_buttons[key].widget)
@@ -86,8 +155,7 @@
                             $('i', listbutton).attr('class', response.metadata.widget.sub_buttons[key].icon);
                             $('span.btitle', listbutton).html(response.metadata.widget.sub_buttons[key].name);
 
-
-                            $('tr.d-none td', settings.instance).append(listbutton);
+                            $('div.table tr.d-none td', settings.instance).append(listbutton);
                         }
                     }
 
@@ -107,6 +175,11 @@
                     widget.table.listener.sort();
                     // 清單瀏覽事件
                     widget.table.listener.list();
+                    // 清單回上一層事件
+                    widget.table.listener.return();
+                    // 分頁事件
+                    widget.table.listener.page();
+
                 },
 
                 loadData: function () {
@@ -129,6 +202,33 @@
 
                                     $('div.table table tbody', settings.instance).append(tr);
                                 }
+
+                                var totalPage = response.total_page;
+                                $('li.page-item.number', settings.instance).not('.d-none').remove();
+                                for (var page = 1; page <= totalPage; page++) {
+                                    var pageItem = $('li.page-item.number.d-none', settings.instance).clone();
+                                    pageItem.removeClass('d-none');
+                                    $('a.page-link', pageItem).html(page);
+                                    $('a.page-link', pageItem).attr('page', page);
+                                    pageItem.insertBefore($('li.page-item.next', settings.instance));
+                                }
+
+                                var currentPage = response.current_page;
+                                if (currentPage > 1) {
+                                    $('li.page-item.prev a', settings.instance).attr('page', currentPage - 1);
+                                    $('li.page-item.prev', settings.instance).removeClass('d-none');
+                                }
+                                else {
+                                    $('li.page-item.prev', settings.instance).addClass('d-none');
+                                }
+
+                                if (currentPage < totalPage) {
+                                    $('li.page-item.next a', settings.instance).attr('page', currentPage + 1);
+                                    $('li.page-item.next', settings.instance).removeClass('d-none');
+                                }
+                                else {
+                                    $('li.page-item.next', settings.instance).addClass('d-none');
+                                }
                             }
                         }
                     );
@@ -136,10 +236,8 @@
 
                 listener: {
                     sort: function () {
+                        $('body').off('click', settings.sort_button_selector);
                         $('body').on('click', settings.sort_button_selector, function () {
-
-
-
                             // 切換到排序介面
                             widget.sort.loadData();
                             widget.interface.turn('sort');
@@ -152,7 +250,8 @@
                      * 新增資料
                      */
                     add: function () {
-                        $(settings.add_button_selector).click(function () {
+                        $('body').off('click', settings.add_button_selector);
+                        $('body').on('click', settings.add_button_selector, function () {
                             // 清空所有欄位
                             for (var key in components) {
                                 components[key].setValue('');
@@ -168,6 +267,7 @@
                      * 修改資料
                      */
                     modify: function () {
+                        $('body').off('click', settings.modify_button_selector);
                         $('body').on('click', settings.modify_button_selector, function () {
 
                             // 切換到表單介面
@@ -180,6 +280,7 @@
                     },
 
                     delete: function () {
+                        $('body').off('click', settings.delete_button_selector);
                         $('body').on('click', settings.delete_button_selector, function () {
                             var id = $(this).closest('tr').attr('id');
                             Swal.fire({
@@ -226,24 +327,69 @@
                      * 清單瀏覽資料
                      */
                     list: function () {
-                        $('body').on('click', settings.list_button_selector, function () {
 
+                        $('body').off('click', settings.list_button_selector);
+                        $('body').on('click', settings.list_button_selector, function () {
 
                             // 切換到下一個組件
                             tableLoaded = false;
+
+                            widget.util.level.push(settings.code, settings.params);
+
                             var widgetCode = $(this).attr('widget');
                             var linkfield = $(this).attr('linkfield');
                             var id = $(this).closest('tr').attr('id');
 
-                            levelParams.push({ 'widget': settings.code, 'params': settings.params });
+                            settings.params = {};
                             settings.code = widgetCode;
                             settings.params[linkfield] = id;
+
                             widget.table.initial();
                             widget.table.loadData();
 
+                        });
+                    },
+
+                    return: function () {
+                        $('body').off('click', settings.return_button_selector);
+                        $('body').on('click', settings.return_button_selector, function () {
+
+                            // 切換到下一個組件
+                            tableLoaded = false;
+
+                            var param = widget.util.level.pop();
+
+                            settings.code = param.widget;
+                            settings.params = param.params;
+
+                            widget.table.initial();
+                            widget.table.loadData();
 
                         });
                     },
+
+                    page: function () {
+                        $('body').off('click', settings.page_button_selector);
+                        $('body').on('click', settings.page_button_selector, function () {
+                            var page = $('a', $(this)).attr('page');
+                            settings.params['page'] = page;
+                            widget.table.loadData();
+                        });
+
+                        $('body').off('click', settings.prev_page_button_selector);
+                        $('body').on('click', settings.prev_page_button_selector, function () {
+                            var page = $('a', $(this)).attr('page');
+                            settings.params['page'] = page;
+                            widget.table.loadData();
+                        });
+
+                        $('body').off('click', settings.next_page_button_selector);
+                        $('body').on('click', settings.next_page_button_selector, function () {
+                            var page = $('a', $(this)).attr('page');
+                            settings.params['page'] = page;
+                            widget.table.loadData();
+                        });
+                    }
                 }
 
 
@@ -338,6 +484,14 @@
                                 data[$(this).attr('name')] = $(this).val();
                             });
 
+                            var lastKey = '';
+                            var lastValue = '';
+                            for (var key in settings.params) {
+                                lastKey = key;
+                                lastValue = settings.params[key];
+                            }
+                            data[lastKey] = lastValue;
+
                             // 取得各欄位(元件)的值
                             for (var key in components) {
                                 data[components[key].getName()] = components[key].getValue();
@@ -389,7 +543,7 @@
                     $('h3.card-title', settings.instance).html(response.metadata.name);
 
                     // 取得資料集欄位資訊
-                    listFields = response.metadata.listfields;
+                    listFields = response.metadata.widget.listfields;
 
                     // 呈現欄位元件
                     $('div.sort table thead tr th', settings.instance).not(':first').remove();
@@ -412,9 +566,10 @@
                 },
 
                 loadData: function () {
+                    var params = $.extend({ 'count': '-1' }, settings.params);
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/items/user/' + settings.userType + '/code/' + settings.code,
-                        {},
+                        params,
                         'GET',
                         function (response) {
                             // 將資料代入到各個欄位
@@ -425,7 +580,7 @@
                                     var tr = $('div.sort table tbody tr.d-none', settings.instance).clone();
                                     for (var key in listFields) {
                                         tr.removeClass('d-none');
-                                        tr.append('<td>' + response.results[index][listFields[key].frontendVariable] + '</td>');
+                                        tr.append('<td>' + response.results[index][key] + '</td>');
                                     }
                                     tr.attr('id', response.results[index]['id']);
                                     $('div.sort table tbody', settings.instance).append(tr);
@@ -440,29 +595,32 @@
                 listener: {
                     check: function () {
                         $('body').on('click', settings.sort_check_button_selector, function () {
+                            var data = { 'condition': [], 'value': [] };
+                            $('div.sort table tbody tr', settings.instance).each(function (sequence) {
+                                var date = new Date();
+                                var year = date.getFullYear();
+                                var month = (date.getMonth() + 1) < 10 ? ('0' + (date.getMonth() + 1)) : (date.getMonth() + 1);
+                                var day = date.getDate() < 10 ? ('0' + date.getDate()) : date.getDate();
+                                var hour = date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours();
+                                var min = date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes();
+                                var sec = date.getSeconds() < 10 ? ('0' + date.getSeconds()) : date.getSeconds();
+                                currentDatetime = year + '-' + month + '-' + day;
+                                currentDatetime += ' ' + hour + ':' + min + ':' + sec;
+                                data['condition'].push($(this).attr("id"));
+                                data['value'].push({ 'sequence': sequence, 'sorted_at': currentDatetime });
+                            });
+
                             $.backyard({ 'userType': settings.userType }).process.api(
-                                '/index.php/api/item/user/' + settings.userType + '/code/' + settings.code,
+                                '/index.php/api/items/user/' + settings.userType + '/code/' + settings.code,
                                 data,
                                 'PUT',
                                 function (response) {
-                                    if (response.status != 'success') {
-                                        // 欄位驗證失敗
-                                        if (response.code == 'validator') {
-                                            for (var fieldName in response.message) {
-                                                components[fieldName].setInvalid(response.message[fieldName]);
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        // 切換到清單介面
-                                        widget.interface.turn('table');
-                                        widget.table.initial();
-                                        widget.table.loadData();
-                                    }
+                                    // 切換到清單介面
+                                    widget.interface.turn('table');
+                                    widget.table.initial();
+                                    widget.table.loadData();
                                 }
                             );
-                            // 切換到表單介面
-                            widget.interface.turn('table');
                         });
                     },
 

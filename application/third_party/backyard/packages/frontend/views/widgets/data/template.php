@@ -6,20 +6,12 @@
     <!-- /.card-header -->
     <div class="card-body table-responsive p-0">
         <div class="card-tools" style="padding:5px;">
-            <button type="button" class="add btn bg-green"><i class="fas fa-plus"></i> 新增</button>
-            <button type="button" class="btn bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
-            <button type="button" class="sort btn bg-gradient-info"><i class="fas fa-sort-amount-down-alt"></i> 排序</button>
-            <div class="btn-group">
-                <button type="button" class="btn bg-yellow"><i class="fas fa-bars"></i> 其它</button>
-                <button type="button" class="btn bg-yellow dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item" href="#"><i class="fas fa-download"></i> 匯出</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="fas fa-upload"></i> 匯入</a>
-                </div>
-            </div>
+            <button type="button" class="add btn bg-green d-none"><i class="fas fa-plus"></i> 新增</button>
+            <button type="button" class="batch_delete btn bg-red d-none"><i class="fas fa-trash-alt"></i> 刪除</button>
+            <button type="button" class="sort btn bg-gradient-info d-none"><i class="fas fa-sort-amount-down-alt"></i> 排序</button>
+            <button type="button" class="export btn bg-maroon d-none"><i class="fas fa-download"></i> 匯出</button>
+            <button type="button" class="import btn bg-purple d-none"><i class="fas fa-upload"></i> 匯入</button>
+            <button type="button" class="return btn bg-yellow d-none"><i class="fas fa-arrow-alt-circle-left"></i> 回上一層</button>
         </div>
         <table class="table table-hover text-nowrap">
             <thead>
@@ -30,8 +22,8 @@
             <tbody>
                 <tr class="d-none">
                     <td> 
-                        <button type="button" class="modify btn btn-xs bg-blue"><i class="far fa-edit"></i> 修改</button>
-                        <button type="button" class="delete btn btn-xs bg-red"><i class="fas fa-trash-alt"></i> 刪除</button>
+                        <button type="button" class="modify btn btn-xs bg-blue d-none"><i class="far fa-edit"></i> 修改</button>
+                        <button type="button" class="delete btn btn-xs bg-red d-none"><i class="fas fa-trash-alt"></i> 刪除</button>
                         <button type="button" class="list btn btn-xs bg-gradient-info d-none"><i class="fas fa-bars"></i> <span class="btitle">瀏覽</span></button>
                     </td>
                 </tr>
@@ -41,11 +33,9 @@
     <!-- /.card-body -->
     <div class="card-footer clearfix">
         <ul class="pagination pagination-sm m-0 float-right">
-            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+            <li class="page-item prev d-none"><a class="page-link" href="javascript:void(0);">&laquo;</a></li>
+            <li class="page-item number d-none"><a class="page-link" href="javascript:void(0);">1</a></li>
+            <li class="page-item next d-none"><a class="page-link" href="javascript:void(0);">&raquo;</a></li>
         </ul>
     </div>
 </div>
@@ -80,7 +70,7 @@
     <div class="card-body table-responsive p-0">
         <div class="card-tools" style="padding:5px;">
             <button type="button" class="check-sort btn bg-blue"><i class="fas fa-check"></i> 修改順序</button>
-            <button type="button" class="return btn bg-yellow"><i class="fas fa-times"></i> 取消</button>
+            <button type="button" class="sort-return btn bg-yellow"><i class="fas fa-times"></i> 取消</button>
         </div>
         <table class="table table-hover text-nowrap">
             <thead>

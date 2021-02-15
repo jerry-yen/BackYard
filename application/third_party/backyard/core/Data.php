@@ -110,7 +110,7 @@ class Data extends \backyard\Package
             $dbFields[$field] = $field;
             unset($dbFields[$key]);
         }
-        
+
 
         // 刪除不在這次設定的欄位
         foreach ($fields as $key => $field) {
@@ -174,7 +174,7 @@ class Data extends \backyard\Package
      * 
      * @return array
      */
-    public function getItems($inputs = array(), $count = 10, $pagination = true)
+    public function getItems($inputs = array(), $sort = array(), $count = 10, $pagination = true)
     {
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
@@ -182,7 +182,7 @@ class Data extends \backyard\Package
 
         $response = $this->backyard->getUser()->convertToWhere($inputs);
         $where = $response['where'];
-        // print_r($response);
+
 
         /*
          * 搜尋條件要過濾掉資料表中沒有的欄位
@@ -226,11 +226,24 @@ class Data extends \backyard\Package
         $this->database = $this->database->where($where);
 
         // 排序
-        if (isset($sort) && count($sort) > 0) {
-            foreach ($sort as $key => $method) {
-                $this->database = $this->database->order_by($key, $method);
-            }
+        if (!isset($sort) || !is_array($sort) || count($sort) == 0) {
+            $sort = array(
+                'top_at' => 'DESC',
+                'sorted_at' => 'ASC',
+                'sequence' => 'ASC',
+                'created_at' => 'DESC',
+                'updated_at' => 'DESC',
+            );
         }
+
+
+        foreach ($sort as $key => $method) {
+            if(!isset($tableFields[$key])){
+                continue;
+            }
+            $this->database = $this->database->order_by($key, $method);
+        }
+
 
         // 取得總筆數
         $total = $this->database->count_all_results('', false);
@@ -241,7 +254,21 @@ class Data extends \backyard\Package
             $page = isset($inputPage) ?
                 get_instance()->input->get('page') :
                 get_instance()->input->post('page');
+
+            $inputCount = get_instance()->input->get('count');
+            $inputCount = isset($inputCount) ?
+                get_instance()->input->get('count') :
+                get_instance()->input->post('count');
+            $count = isset($inputCount) ? $inputCount : $count;
+            if ($count > $total || $count == -1) {
+                $count = $total;
+            }
+
+            $totalPage = ceil($total / $count);
             $page = isset($page) ? $page : 1;
+            $page = ($page < 1) ? 1 : $page;
+            $page = ($page > $totalPage) ? $totalPage : $page;
+
             $offset = ($page - 1) * $count;
             $this->database = $this->database->limit($count, $offset);
         }
@@ -258,8 +285,35 @@ class Data extends \backyard\Package
             'status' => 'success',
             'total' => $total,
             'total_page' => ceil($total / $count),
+            'current_page' => (int)(isset($page) ? $page : 1),
             'results' => $results
         );
+    }
+
+    /**
+     * 更新多筆資料記錄
+     * 
+     * @return array
+     */
+    public function updateItems($inputs = array())
+    {
+        foreach ($inputs['condition'] as $key => $input) {
+            $data = array(
+                'code' => $inputs['code'],
+                'id'   => $input,
+            );
+
+            foreach ($inputs['value'][$key] as $fieldName => $value) {
+                $data[$fieldName] = $value;
+            }
+
+            $response = $this->updateItem($data, true);
+            if ($response['status'] != 'success') {
+                return $response;
+            }
+        }
+
+        return array('status' => 'success');
     }
 
     /**
@@ -383,7 +437,7 @@ class Data extends \backyard\Package
      * 
      * @param string GUID 更新記錄的ID
      */
-    public function updateItem($inputs = array())
+    public function updateItem($inputs = array(), $ignoreValidation = false)
     {
         if (!isset($inputs['code'])) {
             return array('status' => 'failed', 'message' => '尚未設定模組代碼');
@@ -398,12 +452,15 @@ class Data extends \backyard\Package
             return $response;
         }
 
-        // 驗證輸入參數
-        $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
-        if ($response['status'] == 'failed') {
-            return $response;
+        if (!$ignoreValidation) {
+            // 驗證輸入參數
+            $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
+            if ($response['status'] == 'failed') {
+                return $response;
+            }
+
+            $inputs = $response['fields'];
         }
-        $inputs = $response['fields'];
 
         // 預設更新時間
         if (!isset($value['updated_at'])) {
@@ -412,7 +469,7 @@ class Data extends \backyard\Package
 
         $response = $this->backyard->getUser()->convertToDatabase($inputs);
         $value = $response['value'];
-
+        
         // 更新記錄
         $this->database->where('id', $value['id']);
         $this->database->update($response['table'], $value);
