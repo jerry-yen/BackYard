@@ -97,7 +97,7 @@
                     for (var key in listFields) {
                         $('div.table table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
                     }
-                    
+
                     if (response.metadata.widget.permission.indexOf('ADD') > -1) {
                         $('button.add', settings.instance).removeClass('d-none');
                     }
@@ -132,7 +132,7 @@
                     $('tr td button.list', settings.instance).not('.d-none').remove();
 
                     // 分類按鈕
-                    if (response.metadata.widget.classLevel > 0 && widget.util.level.getLevel() < response.metadata.widget.classLevel) {
+                    if (response.metadata.widget.classLevel > 0 && widget.util.level.getLevel() < response.metadata.widget.classLevel - 1) {
                         if ($('button.list[widget="' + settings.code + '"]').length == 0) {
                             var listbutton = $('tr.d-none td button.list.d-none', settings.instance).clone();
                             listbutton
@@ -146,19 +146,35 @@
                     // 增加原始欄位的清單按鈕
                     if (response.metadata.widget.sublist != undefined) {
                         response.metadata.widget.sublist = JSON.parse(response.metadata.widget.sublist);
-                        for (var key in response.metadata.widget.sublist) {
-                            var listbutton = $('div.table tr.d-none td button.list.d-none', settings.instance).clone();
-                            listbutton
-                                .removeClass('d-none')
-                                .attr('widget', response.metadata.widget.sublist[key].widget)
-                                .attr('linkfield', response.metadata.widget.sublist[key].linkfield);
-                            if (response.metadata.widget.sublist[key].icon == '') {
-                                response.metadata.widget.sublist[key].icon = 'fas fa-bars';
-                            }
-                            $('i', listbutton).attr('class', response.metadata.widget.sublist[key].icon);
-                            $('span.btitle', listbutton).html(response.metadata.widget.sublist[key].name);
 
-                            $('div.table tr.d-none td', settings.instance).append(listbutton);
+                        if(response.metadata.widget.sublist_level == undefined){
+                            response.metadata.widget.sublist_level = '-1';
+                        }
+                        var levels = response.metadata.widget.sublist_level.split(',');
+                        console.log(levels);
+                        
+                        console.log(widget.util.level.getLevel() + 1);
+                        console.log(levels.indexOf((widget.util.level.getLevel() + 1).toString()));
+                        
+                        if (
+                            (levels.indexOf('-1') > -1 && widget.util.level.getLevel() == response.metadata.widget.classLevel - 1) ||
+                            (levels.indexOf((widget.util.level.getLevel() + 1).toString()) > -1)
+                        ) {
+
+                            for (var key in response.metadata.widget.sublist) {
+                                var listbutton = $('div.table tr.d-none td button.list.d-none', settings.instance).clone();
+                                listbutton
+                                    .removeClass('d-none')
+                                    .attr('widget', response.metadata.widget.sublist[key].widget)
+                                    .attr('linkfield', response.metadata.widget.sublist[key].linkfield);
+                                if (response.metadata.widget.sublist[key].icon == '') {
+                                    response.metadata.widget.sublist[key].icon = 'fas fa-bars';
+                                }
+                                $('i', listbutton).attr('class', response.metadata.widget.sublist[key].icon);
+                                $('span.btitle', listbutton).html(response.metadata.widget.sublist[key].name);
+
+                                $('div.table tr.d-none td', settings.instance).append(listbutton);
+                            }
                         }
                     }
 

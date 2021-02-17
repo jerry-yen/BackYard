@@ -41,6 +41,16 @@ $metadata = array(
             'source' => '', 
             'fieldTip' => ''
         ),
+        array(
+            'name' => '子項目層數', 
+            'dbVariable' => 'sublist_level', 
+            'frontendVariable' => 'sublist_level', 
+            'component' => 'text', 
+            'validator' => array(), 
+            'converter' => array(), 
+            'source' => '', 
+            'fieldTip' => '-1:最後一層,可使用「,」來指定多個層數，例如：1,3，代表1、3層要出現子項目清單鈕'
+        ),
     ),
     'events' => array(
         array(
