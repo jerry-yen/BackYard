@@ -47,13 +47,13 @@ class Validator
             'sorted_at' => array('input' => false, 'name' => '排序時間', 'validators' => array('datetime')),                        // 排序時間
             'sequence'  => array('input' => false, 'name' => '排列順序', 'validators' => array('number')),                          // 排列順序
             'top_at'    => array('input' => false, 'name' => '置頂時間', 'validators' => array('datetime')),                         // 置頂時間
-            'code'    => array('input' => false, 'name' => '模組代碼', 'validators' => array('length{5,30}'))                       // 模組代碼
+            'code'    => array('input' => false, 'name' => '模組代碼', 'validators' => array('length{3,30}'))                       // 模組代碼
         );
 
         $flag = true;
         $this->invalid = array();
         $validFields = array();
-
+       
         foreach ($fields as $field) {
 
             if (isset($buildinFields[$field['dbVariable']])) {
@@ -71,11 +71,8 @@ class Validator
             // 欄位值
             $value = $inputs[$field['frontendVariable']];
 
-            $flag = $flag & $this->validate($name, $variable, $value, $field['validator']);
+            $flag = $flag && $this->validate($name, $variable, $value, $field['validator']);
         }
-
-
-
 
         foreach ($buildinFields as $key => $field) {
             if ($field['input'] != false) {
@@ -88,7 +85,7 @@ class Validator
 
             $validFields[$key] = $inputs[$key];
 
-            $flag = $flag & $this->validate($field['name'], $key, $inputs[$key], $field['validators']);
+            $flag = $flag && $this->validate($field['name'], $key, $inputs[$key], $field['validators']);
         }
 
         return array('status' => $flag ? 'success' : 'failed', 'code' => 'validator', 'fields' => $validFields, 'message' => $this->invalid);

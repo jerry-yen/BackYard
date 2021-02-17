@@ -97,7 +97,7 @@
                     for (var key in listFields) {
                         $('div.table table thead tr', settings.instance).append('<th>' + listFields[key].name + '</th>');
                     }
-
+                    
                     if (response.metadata.widget.permission.indexOf('ADD') > -1) {
                         $('button.add', settings.instance).removeClass('d-none');
                     }
@@ -186,6 +186,7 @@
                 },
 
                 loadData: function () {
+                    console.log(settings);
                     $.backyard({ 'userType': settings.userType }).process.api(
                         '/index.php/api/items/user/' + settings.userType + '/code/' + settings.code,
                         settings.params,
@@ -506,6 +507,7 @@
                                 data,
                                 httpType,
                                 function (response) {
+                                    console.log(response);
                                     if (response.status != 'success') {
                                         // 欄位驗證失敗
                                         if (response.code == 'validator') {

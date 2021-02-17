@@ -404,7 +404,7 @@ class Data extends \backyard\Package
         if ($response['status'] == 'failed') {
             return $response;
         }
-
+        
         // 驗證輸入參數
         $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
         if ($response['status'] == 'failed') {
