@@ -151,10 +151,6 @@
                             response.metadata.widget.sublist_level = '-1';
                         }
                         var levels = response.metadata.widget.sublist_level.split(',');
-                        console.log(levels);
-                        
-                        console.log(widget.util.level.getLevel() + 1);
-                        console.log(levels.indexOf((widget.util.level.getLevel() + 1).toString()));
                         
                         if (
                             (levels.indexOf('-1') > -1 && widget.util.level.getLevel() == response.metadata.widget.classLevel - 1) ||
@@ -450,7 +446,9 @@
                             'name': fields[key].frontendVariable,
                             'tip': fields[key].fieldTip,
                             'source': fields[key].source,
-                            'label': fields[key].name
+                            'label': fields[key].name,
+                            'userType' : settings.userType,
+                            'code': settings.code
                         });
                         component.initial();
 
@@ -460,9 +458,9 @@
                         fieldContainer.append(component.invalid());
                         fieldContainer.append('<br />');
                         fieldContainer.append(component.element());
-                        component.elementConvertToComponent();
-
+                        
                         $('div.form div.card-body', settings.instance).append(fieldContainer);
+                        component.elementConvertToComponent();
 
                         components[fields[key].frontendVariable] = component;
                     }

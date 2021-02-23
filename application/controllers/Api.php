@@ -256,4 +256,16 @@ class Api extends \chriskacerguis\RestServer\RestController
         $response = $this->backyard->data->updateItems($this->inputs);
         $this->response($response, 200);
     }
+
+    public function files_get()
+    {
+        $response = $this->backyard->file->getItems($this->inputs);
+        $this->response($response, 200);
+    }
+
+    public function file_post()
+    {
+        $response = $this->backyard->file->upload($this->inputs);
+        $this->response($response, 200);
+    }
 }

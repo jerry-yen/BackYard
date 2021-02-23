@@ -163,6 +163,12 @@ class Page extends \backyard\Package
                 $libraryPath = $this->viewPath . '/libraries/' . $libraryName . '/' . $libraryName . '.js';
                 if (file_exists($libraryPath)) {
                     $script .= file_get_contents($libraryPath) . "\r\n";
+                    continue;
+                }
+
+                $libraryPath = $this->viewPath . '/libraries/' . $libraryName;
+                if (file_exists($libraryPath)) {
+                    $script .= file_get_contents($libraryPath) . "\r\n";
                 }
             }
         }
@@ -302,6 +308,12 @@ class Page extends \backyard\Package
 
             foreach ($libraries as $libraryName) {
                 $libraryPath = $this->viewPath . '/libraries/' . $libraryName . '/' . $libraryName . '.css';
+                if (file_exists($libraryPath)) {
+                    $style .= file_get_contents($libraryPath) . "\r\n";
+                    continue;
+                }
+
+                $libraryPath = $this->viewPath . '/libraries/' . $libraryName;
                 if (file_exists($libraryPath)) {
                     $style .= file_get_contents($libraryPath) . "\r\n";
                 }

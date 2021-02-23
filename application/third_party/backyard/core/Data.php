@@ -241,7 +241,7 @@ class Data extends \backyard\Package
             if (!isset($tableFields[$key])) {
                 continue;
             }
-            $this->database = $this->database->order_by($key, $method);
+            $this->database->order_by($key, $method);
         }
 
 
@@ -268,7 +268,7 @@ class Data extends \backyard\Package
             }
             $count = ($count == 0) ? 10 : $count;
             $totalPage = ceil($total / $count);
-            $totalPage = ($totalPage == 0)? 1 : $totalPage;
+            $totalPage = ($totalPage == 0) ? 1 : $totalPage;
             $page = isset($page) ? $page : 1;
             $page = ($page < 1) ? 1 : $page;
             $page = ($page > $totalPage) ? $totalPage : $page;
@@ -384,6 +384,19 @@ class Data extends \backyard\Package
 
         // 根據不同使用者，進行資料格式的轉換
         $item = $this->backyard->getUser()->convertToData($item);
+        if (is_null($item)) {
+            return array('status' => 'success', 'item' => $item);
+        }
+        // 取得檔案
+
+        $files = $this->getFiles($item['id']);
+        foreach ($files as $file) {
+            if (!isset($item[$file['own_field']]) || !is_array($item[$file['own_field']])) {
+                $item[$file['own_field']] = array();
+            }
+            $item[$file['own_field']][] = $file;
+        }
+
 
         return array('status' => 'success', 'item' => $item);
     }
@@ -395,22 +408,48 @@ class Data extends \backyard\Package
      * 
      * @param string GUID 新增記錄的ID
      */
-    public function insertItem($inputs = array())
+    public function insertItem($inputs = array(), $code = null)
     {
-        if (!isset($inputs['code'])) {
-            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
+        $tmpFiles = array();
+        $tmpRelations = array();
+
+        if (isset($code) && !is_null($code)) {
+            $inputs['code'] = $code;
+        } else {
+            if (!isset($inputs['code'])) {
+                return array('status' => 'failed', 'message' => '尚未設定模組代碼');
+            }
+
+            $response = $this->backyard->dataset->getItem($inputs['code']);
+            if ($response['status'] == 'failed') {
+                return $response;
+            }
+
+            // 取得多對多選項及檔案類型的欄位，資料庫要另外存
+            foreach ($response['dataset']['fields'] as $field) {
+                $parts = explode(';', $field['source']);
+                // 檔案元件
+                if (in_array('file', $parts)) {
+                    $tmpFiles[$field['dbVariable']] = json_decode($inputs[$field['dbVariable']], true);
+                    $inputs[$field['dbVariable']] = '';
+                }
+
+                // 多對多元件
+                if (in_array('relation', $parts)) {
+                    $tmpRelations[$field['dbVariable']] = json_decode($inputs[$field['dbVariable']], true);
+                    $inputs[$field['dbVariable']] = '';
+                }
+            }
+
+            // 驗證輸入參數
+            $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
+            if ($response['status'] == 'failed') {
+                return $response;
+            }
+            $inputs = $response['fields'];
         }
-        $response = $this->backyard->dataset->getItem($inputs['code']);
-        if ($response['status'] == 'failed') {
-            return $response;
-        }
-        
-        // 驗證輸入參數
-        $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
-        if ($response['status'] == 'failed') {
-            return $response;
-        }
-        $inputs = $response['fields'];
+
+
 
         // 預設ID
         if (!isset($inputs['id'])) {
@@ -432,7 +471,9 @@ class Data extends \backyard\Package
 
         // 新增記錄
         $this->database->insert($response['table'], $response['value']);
-
+        foreach ($tmpFiles as $fieldName => $files) {
+            $this->saveFiles($inputs['id'], $fieldName, $files);
+        }
         return array('status' => 'success', 'id' => $inputs['id']);
     }
 
@@ -443,29 +484,52 @@ class Data extends \backyard\Package
      * 
      * @param string GUID 更新記錄的ID
      */
-    public function updateItem($inputs = array(), $ignoreValidation = false)
+    public function updateItem($inputs = array(), $ignoreValidation = false, $code = null)
     {
-        if (!isset($inputs['code'])) {
-            return array('status' => 'failed', 'message' => '尚未設定模組代碼');
-        }
 
-        if (!isset($inputs['id']) || is_null($inputs['id'])) {
-            return array('status' => 'failed', 'message' => '更新資料表記錄:缺少識別碼');
-        }
+        $tmpFiles = array();
+        $tmpRelations = array();
 
-        $response = $this->backyard->dataset->getItem($inputs['code']);
-        if ($response['status'] == 'failed') {
-            return $response;
-        }
+        if (isset($code) && !is_null($code)) {
+            $inputs['code'] = $code;
+        } else {
+            if (!isset($inputs['code'])) {
+                return array('status' => 'failed', 'message' => '尚未設定模組代碼');
+            }
 
-        if (!$ignoreValidation) {
-            // 驗證輸入參數
-            $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
+            if (!isset($inputs['id']) || is_null($inputs['id'])) {
+                return array('status' => 'failed', 'message' => '更新資料表記錄:缺少識別碼');
+            }
+
+            $response = $this->backyard->dataset->getItem($inputs['code']);
             if ($response['status'] == 'failed') {
                 return $response;
             }
 
-            $inputs = $response['fields'];
+            // 取得多對多選項及檔案類型的欄位，資料庫要另外存
+            foreach ($response['dataset']['fields'] as $field) {
+                $parts = explode(';', $field['source']);
+                // 檔案元件
+                if (in_array('file', $parts)) {
+                    $tmpFiles[$field['dbVariable']] = json_decode($inputs[$field['dbVariable']], true);
+                    $inputs[$field['dbVariable']] = '';
+                }
+
+                // 多對多元件
+                if (in_array('relation', $parts)) {
+                    $tmpRelations[$field['dbVariable']] = json_decode($inputs[$field['dbVariable']], true);
+                    $inputs[$field['dbVariable']] = '';
+                }
+            }
+            if (!$ignoreValidation) {
+                // 驗證輸入參數
+                $response = $this->backyard->validator->checkInputs($response['dataset'], $inputs);
+                if ($response['status'] == 'failed') {
+                    return $response;
+                }
+
+                $inputs = $response['fields'];
+            }
         }
 
         // 預設更新時間
@@ -479,6 +543,9 @@ class Data extends \backyard\Package
         // 更新記錄
         $this->database->where('id', $value['id']);
         $this->database->update($response['table'], $value);
+        foreach ($tmpFiles as $fieldName => $files) {
+            $this->saveFiles($value['id'], $fieldName, $files);
+        }
 
         return array('status' => 'success', 'id' => $value['id']);
     }
@@ -504,5 +571,78 @@ class Data extends \backyard\Package
         $this->database->delete($response['table']);
 
         return array('status' => 'success');
+    }
+
+    public function getFiles($itemId)
+    {
+        $table = get_instance()->db->dbprefix . 'file';
+        $this->database = $this->database->select('id,own_field,name,ext,file_type,path,file_size,created_at,sorted_at,sequence');
+        $this->database = $this->database->from($table);
+        $this->database->where('own_id', $itemId);
+        $this->database->order_by('sorted_at', 'ASC');
+        $this->database->order_by('sequence', 'ASC');
+        $this->database->order_by('created_at', 'DESC');
+        $files = $this->database->get()->result_array();
+        return $files;
+    }
+
+    public function saveFiles($itemId, $fieldName, $files)
+    {
+        $this->backyard->loadLibrary('Code');
+
+        // 原本就存在的檔案
+        $oriFiles = $this->getFiles($itemId);
+        foreach ($oriFiles as $key => $file) {
+            $oriFiles[$file['id']] = $file;
+            unset($oriFiles[$key]);
+        }
+
+        $table = get_instance()->db->dbprefix . 'file';
+        foreach ($files as $sequence => $file) {
+
+            // 存在於原本資料庫中的檔案
+            if (isset($oriFiles[$file['id']])) {
+                $this->database->where('id', $file['id']);
+                $this->database->update($table, array(
+                    'sorted_at' => date('Y-m-d H:i:s'),
+                    'sequence' => $sequence
+                ));
+            } else {
+
+                // 將檔案從暫存資料夾移至正式上傳資料夾
+                $this->backyard->file->moveTemporaryToUploadDirectory($file['path']);
+
+                // 將檔案資訊儲存至資料庫
+                $created_at = date('Y-m-d H:i:s');
+                $this->database->insert($table, array(
+                    'id'        => $file['id'],
+                    'own_id' => $itemId,
+                    'own_field' => $fieldName,
+                    'name'      => $file['name'],
+                    'ext'       => $file['ext'],
+                    'file_type' => $file['file_type'],
+                    'path'      => $file['path'],
+                    'file_size' => $file['file_size'],
+                    'created_at' => $created_at,
+                    'updated_at' => $created_at,
+                    'sorted_at' => $created_at,
+                    'sequence' => $sequence,
+                ));
+            }
+
+            if (isset($file['id']) && isset($oriFiles[$file['id']])) {
+                unset($oriFiles[$file['id']]);
+            }
+        }
+
+        // 沒被新增或更新的檔案，刪除
+        foreach ($oriFiles as $file) {
+            $response = $this->backyard->file->delete($file);
+            if ($response['status'] == 'success') {
+                // 刪除記錄
+                $this->database->where('id', $file['id']);
+                $this->database->delete($table);
+            }
+        }
     }
 }

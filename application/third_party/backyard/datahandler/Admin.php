@@ -19,6 +19,10 @@ class Admin extends \backyard\Package
     public function getDataset($code)
     {
         $response = $this->backyard->data->getItem(array('code' => $code, 'config_type' => 'dataset'));
+        if($response['status'] != 'success'){
+            return $response;
+        }
+
         $dataset = ($response['status'] == 'success') ? $response['item'] : array();
         $dataset['fields'] = json_decode($dataset['fields'], true);
         return array('status' => 'success', 'dataset' => $dataset);

@@ -58,6 +58,7 @@
                                         </optgroup>\
                                         <optgroup label="jQuery套件">\
                                             <option value="switch">開關閘</option>\
+                                            <option value="fileupload">檔案上傳</option>\
                                         </optgroup>\
                                     </select>\
                                 </td>\

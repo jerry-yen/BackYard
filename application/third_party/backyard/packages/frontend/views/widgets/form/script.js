@@ -42,7 +42,9 @@
                             'name': fields[key].frontendVariable,
                             'tip': fields[key].fieldTip,
                             'source': fields[key].source,
-                            'label': fields[key].name
+                            'label': fields[key].name,
+                            'userType' : settings.userType,
+                            'code': settings.code
                         });
                         component.initial();
 
