@@ -141,6 +141,8 @@ class Page extends \backyard\Package
 
                         $componentScript = file_get_contents($scriptPath) . "\r\n";
                         $componentScript .= $this->readLibraries($this->viewPath . '/components/' . $field['component'] . '/libraries.json');
+                        
+                        $componentScript = str_replace('{adminlte}', '/adminlte', $componentScript);
                         $componentScripts[$field['component']] = $componentScript;
                     }
                 }

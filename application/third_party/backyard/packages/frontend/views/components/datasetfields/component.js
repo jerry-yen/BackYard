@@ -56,9 +56,12 @@
                                         <optgroup label="區塊元件">\
                                             <option value="grouplabel">群組標籤</option>\
                                         </optgroup>\
-                                        <optgroup label="jQuery套件">\
+                                        <optgroup label="jQuery元件">\
                                             <option value="switch">開關閘</option>\
                                             <option value="fileupload">檔案上傳</option>\
+                                        </optgroup>\
+                                        <optgroup label="其他元件">\
+                                            <option value="htmleditor">HTML編輯器</option>\
                                         </optgroup>\
                                     </select>\
                                 </td>\
